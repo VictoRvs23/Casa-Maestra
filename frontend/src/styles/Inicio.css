@@ -1,0 +1,130 @@
+.inicio-container {
+  background-color: #e8e6e1;
+  min-height: 100vh;
+  font-family: 'Clear Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+.hero-section {
+  text-align: center;
+  padding: 4rem 2rem;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border-top: 2px dashed #8c8271; 
+  border-bottom: 2px dashed #8c8271;
+}
+
+.hero-title {
+  font-family: 'Roca Two', serif;
+  color: #5A4E45;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+}
+
+.hero-subtitle {
+  color: #5A4E45;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.hero-btn {
+  background-color: #5A4E45;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-family: 'Clear Sans', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.hero-btn:hover {
+  background-color: #433932;
+}
+
+.categories-section {
+  padding: 4rem 10%;
+  position: relative;
+}
+
+.categories-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.category-card {
+  width: 300px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+}
+
+.category-img-wrapper {
+  width: 100%;
+  height: 120px;
+  border-radius: 15px;
+  overflow: hidden;
+  border: 3px solid #8c8271; 
+  background-color: #ccc; 
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.category-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-title {
+  font-family: 'Roca Two', serif;
+  color: #333;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.empty-categories {
+  text-align: center;
+  color: #8C8271;
+  font-size: 1.2rem;
+  font-style: italic;
+  padding: 2rem 0;
+}
+
+.inicio-footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 2px dashed #8c8271; 
+  color: #333;
+  font-weight: 500;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+}
+
+.footer-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
