@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext.jsx';
 import Login from './pages/Login.jsx';
 import Registro from './pages/Registro.jsx';
 import Inicio from './pages/Inicio.jsx';

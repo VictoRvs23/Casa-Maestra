@@ -1,5 +1,5 @@
 {
-  "name": "frontend-drivingubb",
+  "name": "frontend-casa-maestra",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -25,10 +25,10 @@
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react": "^4.2.0",
-    "eslint": "^10.8.0",
-    "eslint-plugin-react": "^7.22.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
-    "vite": "^8.2.0"
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "vite": "^7.0.0"
   }
 }

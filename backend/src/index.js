@@ -5,7 +5,7 @@ import cors from "cors";
 import morgan from "morgan";
 import { connectDB } from "./config/configDb.js";
 import indexRoutes from "./routes/index.routes.js"; 
-import { PORT, HOST, FRONTEND_URL } from "./config/configEnv.js";
+import { PORT, HOST } from "./config/configEnv.js";
 import { createUsuarios } from "./config/InitDb.js";
 
 const app = express();
