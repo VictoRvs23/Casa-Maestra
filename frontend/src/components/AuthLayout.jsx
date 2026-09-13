@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
-import logoCasaMaestra from '../assets/logoCasaMaestra.png';
-import '../styles/AuthLayout.css';
+import logoCasaMaestra from "../assets/logoCasaMaestra.png";
+import "../styles/AuthLayout.css";
 
 const AuthLayout = ({ children }) => {
   return (

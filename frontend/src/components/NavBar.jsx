@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logoCasaMaestra from '../assets/logoCasaMaestra.png';
 import { IoIosNotifications } from "react-icons/io";
@@ -9,8 +9,22 @@ import '../styles/Navbar.css';
 const Navbar = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    // Cierra el menú si se hace clic afuera
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setMenuOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const handleLogout = () => {
+        setMenuOpen(false);
         logout();
         navigate('/');
     };
@@ -27,7 +41,7 @@ const Navbar = () => {
                     <li><Link to="/residentes">Residentes</Link></li>
                     <li><a href="#soporte">Soporte</a></li>
                     {(user?.rol === 'Admin' || user?.rol === 'Fundador/a') && (
-                        <li><Link to="/usuarios">Usuarios</Link></li>
+                        <li><Link to="/usuario">Usuario</Link></li>
                     )}
                 </ul>
             </div>
@@ -38,13 +52,35 @@ const Navbar = () => {
                 </button>
 
                 {user ? (
-                    <div className="navbar-account">
-                        <Link to="/perfil" className="nav-account-btn">
-                            <IoPersonCircleOutline size={22} /> {user.nombre_usuario || user.nombre}
-                        </Link>
-                        <button className="nav-logout-btn" onClick={handleLogout}>
-                            Cerrar sesión
+                    <div className="account-menu" ref={menuRef}>
+                        <button className="nav-account-btn" onClick={() => setMenuOpen((v) => !v)}>
+                            <IoPersonCircleOutline size={22} /> Mi Cuenta
                         </button>
+
+                        {menuOpen && (
+                            <div className="account-dropdown">
+                                <div className="account-dropdown-username">
+                                    {user.nombre_usuario || user.nombre}
+                                </div>
+                                <div className="account-dropdown-divider"></div>
+                                <Link to="/perfil" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Datos Personales
+                                </Link>
+                                <Link to="/perfil?tab=seguridad" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Seguridad
+                                </Link>
+                                <Link to="/perfil?tab=reservas" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Mis Reservas
+                                </Link>
+                                <Link to="/perfil?tab=favoritos" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Mis favoritos
+                                </Link>
+                                <div className="account-dropdown-divider"></div>
+                                <button className="account-dropdown-item account-dropdown-logout" onClick={handleLogout}>
+                                    Cerrar Sesión
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <Link to="/login" className="nav-login-btn">

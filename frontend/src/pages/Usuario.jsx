@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
-import Header from "../components/Header";
-import { getUsuarios, updateUsuario, deleteUsuario } from "../services/usuario.service";
-import "./Usuario.css";
+import Navbar from "../components/NavBar.jsx";
+import { getUsuarios, updateUsuario, deleteUsuario } from "../services/usuario.services.js";
+import "../styles/Usuario.css";
 
 const ROLES = ["Admin", "Fundador/a", "Residente", "Artista", "Cliente"];
 
@@ -13,7 +13,7 @@ const ROL_DISPLAY = {
   Cliente: { label: "Usuario", cls: "rol-cliente" },
 };
 
-export default function Usuarios() {
+export default function Usuario() {
   const [usuarios, setUsuarios] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -90,7 +90,7 @@ export default function Usuarios() {
 
   return (
     <div className="usuarios-page">
-      <Header active="Usuario" />
+      <Navbar />
 
       <div className="usuarios-hero">
         <h1>Usuarios</h1>
