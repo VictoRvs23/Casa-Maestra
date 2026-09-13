@@ -1,6 +1,10 @@
-import { useEffect, useState, useCallback } from "react";
-import Navbar from "../components/NavBar.jsx";
+import React, { useEffect, useState, useCallback } from "react";
+import Navbar from "../components/Navbar.jsx";
 import { getUsuarios, updateUsuario, deleteUsuario } from "../services/usuario.services.js";
+import { IoFilterSharp  } from "react-icons/io5";
+import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
+
 import "../styles/Usuario.css";
 
 const ROLES = ["Admin", "Fundador/a", "Residente", "Artista", "Cliente"];
@@ -51,6 +55,14 @@ export default function Usuario() {
     fetchUsuarios();
   }, [fetchUsuarios]);
 
+const usuariosOrdenados = Array.isArray(usuarios) 
+    ? [...usuarios].sort((a, b) => {
+        const indexA = ROLES.indexOf(a.rol) !== -1 ? ROLES.indexOf(a.rol) : 99;
+        const indexB = ROLES.indexOf(b.rol) !== -1 ? ROLES.indexOf(b.rol) : 99;
+        return indexA - indexB;
+      })
+    : [];
+
   const applyFilters = () => {
     setBusquedaAplicada(busquedaInput);
     setPage(1);
@@ -100,7 +112,7 @@ export default function Usuario() {
       <div className="usuarios-wrap">
         <div className="usuarios-toolbar">
           <button className="filter-btn" onClick={() => setShowFilter((v) => !v)} aria-label="Filtrar">
-            ▽
+            <IoFilterSharp size={18} />
           </button>
 
           {showFilter && (
@@ -145,8 +157,8 @@ export default function Usuario() {
               </tr>
             </thead>
             <tbody>
-              {!loading && !error && usuarios.length > 0 &&
-                usuarios.map((u) => {
+              {!loading && !error && usuariosOrdenados.length > 0 &&
+                usuariosOrdenados.map((u) => {
                   const rolInfo = ROL_DISPLAY[u.rol] || { label: u.rol, cls: "rol-cliente" };
                   return (
                     <tr key={u.id_usuario}>
@@ -161,14 +173,14 @@ export default function Usuario() {
                       <td>
                         <div className="acciones-cell">
                           <button className="icon-btn" onClick={() => setEditando(u)} aria-label="Editar">
-                            ✎
+                            <AiOutlineEdit size={18} />
                           </button>
                           <button
                             className="icon-btn danger"
                             onClick={() => handleDelete(u)}
                             aria-label="Eliminar"
                           >
-                            🗑
+                            <AiOutlineDelete size={20} />
                           </button>
                         </div>
                       </td>

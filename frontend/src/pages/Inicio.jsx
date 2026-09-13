@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../components/NavBar";
+import Navbar from "../components/Navbar";
 import { FaInstagram } from "react-icons/fa";
 import { FaPhone } from "react-icons/fa6";
 import { SiGmail } from "react-icons/si";

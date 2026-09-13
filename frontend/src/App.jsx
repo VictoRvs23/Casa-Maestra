@@ -1,9 +1,9 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login.jsx';
-import Registro from './pages/Registro.jsx';
-import Inicio from './pages/Inicio.jsx';
-import Usuario from './pages/Usuario.jsx';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login.jsx";
+import Registro from "./pages/Registro.jsx";
+import Inicio from "./pages/Inicio.jsx";
+import Usuario from "./pages/Usuario.jsx";
 
 function App() {
   return (

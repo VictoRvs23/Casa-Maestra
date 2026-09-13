@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import logoCasaMaestra from '../assets/logoCasaMaestra.png';
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logoCasaMaestra from "../assets/logoCasaMaestra.png";
 import { IoIosNotifications } from "react-icons/io";
 import { IoPersonCircleOutline } from "react-icons/io5";
-import { useAuth } from '../context/AuthContext.jsx';
-import '../styles/Navbar.css';
+import { useAuth } from "../context/AuthContext.jsx";
+import "../styles/Navbar.css";
 
 const Navbar = () => {
     const { user, logout } = useAuth();
@@ -12,21 +12,20 @@ const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
 
-    // Cierra el menú si se hace clic afuera
     useEffect(() => {
         const handleClickOutside = (e) => {
             if (menuRef.current && !menuRef.current.contains(e.target)) {
                 setMenuOpen(false);
             }
         };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const handleLogout = () => {
         setMenuOpen(false);
         logout();
-        navigate('/');
+        navigate("/");
     };
 
     return (
@@ -40,8 +39,8 @@ const Navbar = () => {
                     <li><Link to="/estudio0">Estudio 0</Link></li>
                     <li><Link to="/residentes">Residentes</Link></li>
                     <li><a href="#soporte">Soporte</a></li>
-                    {(user?.rol === 'Admin' || user?.rol === 'Fundador/a') && (
-                        <li><Link to="/usuario">Usuario</Link></li>
+                    {(user?.rol === "Admin" || user?.rol === "Fundador/a") && (
+                        <li><Link to="/usuarios">Usuarios</Link></li>
                     )}
                 </ul>
             </div>
