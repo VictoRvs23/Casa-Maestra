@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AuthLayout from '../components/AuthLayout';
-import '../styles/Login.css';
-import { useAuth } from '../context/AuthContext'; 
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AuthLayout from "../components/AuthLayout";
+import "../styles/Login.css";
+import { useAuth } from "../context/AuthContext"; 
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(''); 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); 
   
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     
     try {
       await login(email, password);
-      navigate('/'); 
+      navigate("/"); 
     } catch (err) {
       setError(err);
     }
@@ -31,7 +31,7 @@ const Login = () => {
         <p className="login-subtitle">
           Ingresa para agendar hora con tus artistas favoritos, revisar talleres y más
         </p>
-        {error && <p style={{ color: 'red', marginBottom: '1rem' }}>{error}</p>}
+        {error && <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>}
 
         <form className="login-form" onSubmit={handleLogin}>
           

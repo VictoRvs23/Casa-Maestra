@@ -1,0 +1,363 @@
+.usuarios-page {
+  background-color: #e8e6e1;
+  min-height: 100vh;
+  font-family: 'Clear Sans', sans-serif;
+  color: #5A4E45;
+}
+
+.usuarios-hero {
+  padding: 3rem 2rem 2.5rem;
+  text-align: center;
+  border-bottom: 2px dashed #8c8271;
+}
+
+.usuarios-hero h1 {
+  font-family: 'Roca Two', serif;
+  font-size: 2.4rem;
+  margin: 0 0 0.5rem;
+  color: #5A4E45;
+  letter-spacing: 1px;
+}
+
+.usuarios-hero p {
+  margin: 0;
+  color: #8c8c8c;
+  font-size: 0.95rem;
+}
+
+.usuarios-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+}
+
+.usuarios-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.filter-btn {
+  display: flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: none;
+  background-color: #5A4E45;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.filter-btn:hover {
+  background-color: #433932;
+}
+
+.filter-popover {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 1.2rem;
+  width: 270px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.filter-popover label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #8c8c8c;
+  margin-bottom: 0.4rem;
+}
+
+.filter-popover select,
+.filter-popover input {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  outline: none;
+  font-size: 0.95rem;
+  color: #5A4E45;
+  font-family: 'Clear Sans', sans-serif;
+  margin-bottom: 1rem;
+}
+
+.filter-popover select:focus,
+.filter-popover input:focus {
+  border-color: #5A4E45;
+}
+
+.filter-apply-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #5A4E45;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.filter-apply-btn:hover {
+  background-color: #433932;
+}
+
+.usuarios-table-wrap {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+table.usuarios-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  font-family: 'Clear Sans', sans-serif;
+}
+
+table.usuarios-table thead th {
+  text-align: left;
+  background-color: #5A4E45;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  padding: 0.9rem 1.1rem;
+}
+
+table.usuarios-table tbody td {
+  padding: 0.9rem 1.1rem;
+  border-bottom: 1px solid #e8e6e1;
+  color: #5A4E45;
+}
+
+table.usuarios-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+table.usuarios-table tbody tr:hover {
+  background-color: #f7f6f3;
+}
+
+.rol-pill {
+  display: inline-block;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: 'Clear Sans', sans-serif;
+}
+
+.rol-pill.rol-admin {
+  background-color: #f3ddd6;
+  color: #a8452c;
+}
+
+.rol-pill.rol-fundador {
+  background-color: #e6def0;
+  color: #7a5fa8;
+}
+
+.rol-pill.rol-residente {
+  background-color: #f1e6c9;
+  color: #a8843a;
+}
+
+.rol-pill.rol-artista {
+  background-color: #dcece3;
+  color: #4a8a72;
+}
+
+.rol-pill.rol-cliente {
+  background-color: #dbe6ec;
+  color: #5a7686;
+}
+
+.acciones-cell {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #8c8271;
+  padding: 2px;
+  transition: color 0.3s ease;
+}
+
+.icon-btn:hover {
+  color: #5A4E45;
+}
+
+.icon-btn.danger:hover {
+  color: #a8452c;
+}
+
+.table-empty,
+.table-loading,
+.table-error {
+  text-align: center;
+  padding: 3rem 1.2rem;
+  color: #8c8c8c;
+  font-size: 0.9rem;
+}
+
+.table-error {
+  color: #a8452c;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.pagination span {
+  font-size: 0.9rem;
+  color: #8c8c8c;
+}
+
+.pagination button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: #5A4E45;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #433932;
+}
+
+.pagination button:disabled {
+  background-color: #cfccc4;
+  cursor: not-allowed;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(90, 78, 69, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  padding: 1.2rem;
+}
+
+.modal-box {
+  background-color: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 460px;
+  padding: 2rem 2.2rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.modal-box h2 {
+  font-family: 'Roca Two', serif;
+  font-size: 1.6rem;
+  margin: 0 0 1.2rem;
+  color: #5A4E45;
+}
+
+.modal-field {
+  margin-bottom: 1.1rem;
+}
+
+.modal-field label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #8c8c8c;
+  margin-bottom: 0.4rem;
+}
+
+.modal-field input,
+.modal-field select {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  outline: none;
+  font-size: 0.95rem;
+  color: #5A4E45;
+  font-family: 'Clear Sans', sans-serif;
+}
+
+.modal-field input:focus,
+.modal-field select:focus {
+  border-color: #5A4E45;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  margin-top: 1.3rem;
+}
+
+.btn-ghost {
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: none;
+  color: #7a7a7a;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-family: 'Clear Sans', sans-serif;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-ghost:hover {
+  border-color: #5A4E45;
+  color: #5A4E45;
+}
+
+.btn-primary {
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #5A4E45;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Clear Sans', sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #433932;
+}

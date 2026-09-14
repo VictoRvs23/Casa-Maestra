@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 import { createContext, useState, useContext, useEffect } from "react";
-import { loginService } from "../services/auth.services"; 
+import { loginService } from "../services/auth.services";
 
 const AuthContext = createContext();
 
@@ -21,16 +21,16 @@ export const AuthProvider = ({ children }) => {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
     }
-    
+
     setLoading(false);
   }, []);
 
   const login = async (email, password) => {
     const data = await loginService({ email, contraseña: password });
     localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.user));
-    setUser(data.user);
-    return data.user;
+    localStorage.setItem("user", JSON.stringify(data.usuario));
+    setUser(data.usuario);
+    return data.usuario;
   };
 
   const logout = () => {

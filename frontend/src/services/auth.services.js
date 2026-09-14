@@ -1,21 +1,19 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:3000/api/auth'; 
+import api from "./api";
 
 export const loginService = async (credenciales) => {
   try {
-    const response = await axios.post(`${API_URL}/login`, credenciales);
+    const response = await api.post("/auth/login", credenciales);
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || 'Error al iniciar sesión';
+    throw error.response?.data?.message || "Error al iniciar sesión";
   }
 };
 
 export const registroService = async (datosUsuario) => {
   try {
-    const response = await axios.post(`${API_URL}/registro`, datosUsuario);
+    const response = await api.post("/auth/registro", datosUsuario);
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || 'Error al registrar usuario';
+    throw error.response?.data?.message || "Error al registrar usuario";
   }
 };

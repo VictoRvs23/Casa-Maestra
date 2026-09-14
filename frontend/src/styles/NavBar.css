@@ -49,8 +49,8 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 42px;    
-  height: 42px;   
+  width: 42px;
+  height: 42px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -67,9 +67,9 @@
   background-color: #5A4E45;
   color: white;
   text-decoration: none;
-  height: 42px;        
-  padding: 0 1.5rem;   
-  border-radius: 21px; 
+  height: 42px;
+  padding: 0 1.5rem;
+  border-radius: 21px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -80,4 +80,84 @@
 
 .nav-login-btn:hover {
   background-color: #433932;
+}
+
+.account-menu {
+  position: relative;
+}
+
+.nav-account-btn {
+  background-color: #5A4E45;
+  color: white;
+  border: none;
+  height: 42px;
+  padding: 0 1.5rem;
+  border-radius: 21px;
+  font-weight: 600;
+  font-family: 'Clear Sans', sans-serif;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-sizing: border-box;
+}
+
+.nav-account-btn:hover {
+  background-color: #433932;
+}
+
+.account-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background-color: #e8e6e1;
+  border: 1px solid #8c8271;
+  border-radius: 10px;
+  min-width: 200px;
+  padding: 0.9rem 0;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+}
+
+.account-dropdown-username {
+  text-align: center;
+  font-weight: 700;
+  color: #5A4E45;
+  font-size: 0.95rem;
+  padding: 0 1.2rem 0.7rem;
+}
+
+.account-dropdown-divider {
+  border-top: 1px dashed #8c8271;
+  margin: 0.3rem 1rem;
+}
+
+.account-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 0.65rem 1.2rem;
+  background: none;
+  border: none;
+  color: #5A4E45;
+  font-family: 'Clear Sans', sans-serif;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.account-dropdown-item:hover {
+  background-color: #ddd9d0;
+}
+
+.account-dropdown-logout {
+  color: #a8452c;
+  font-weight: 600;
+}
+
+.account-dropdown-logout:hover {
+  background-color: #f3ddd6;
 }
