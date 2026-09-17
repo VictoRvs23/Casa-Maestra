@@ -7,6 +7,11 @@ import {
   updateEstudio,
   deleteEstudio,
 } from "../services/estudio.services.js";
+import { IoSearchSharp } from "react-icons/io5";
+import { IoMdPerson } from "react-icons/io";
+import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { FaRulerCombined, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+
 import "../styles/Estudio.css";
 
 const ESTADO_INICIAL_FORM = {
@@ -161,7 +166,7 @@ export default function Estudios() {
           </div>
 
           <button className="search-btn" onClick={aplicarBusqueda} aria-label="Buscar">
-            🔍
+            <IoSearchSharp size={20} />
           </button>
 
           {puedeGestionar && (
@@ -186,14 +191,16 @@ export default function Estudios() {
               >
                 <span className="estudio-badge">{estudio.nombre}</span>
                 <span className={`estado-icono ${estudio.disponible ? "libre" : "ocupado"}`}>
-                  {estudio.disponible ? "✓" : "✕"}
+                  {estudio.disponible ? <FaCheckCircle size={22} /> : <FaTimesCircle size={22} />}
                 </span>
               </div>
 
               <div className="estudio-info">
-                <p><span className="ico">👤</span> {estudio.capacidad} Personas</p>
                 <p>
-                  <span className="ico">📐</span> {estudio.ancho_metros} x {estudio.largo_metros} metros
+                  <span className="ico"><IoMdPerson size={18} /></span> {estudio.capacidad} Personas
+                </p>
+                <p>
+                  <span className="ico"><FaRulerCombined size={18} /></span> {estudio.ancho_metros} x {estudio.largo_metros} metros
                   {" "}({(estudio.ancho_metros * estudio.largo_metros).toFixed(0)} m²)
                 </p>
 
@@ -208,8 +215,12 @@ export default function Estudios() {
 
                 {puedeGestionar && (
                   <div className="admin-actions">
-                    <button onClick={() => abrirEditar(estudio)}>✎ Editar</button>
-                    <button onClick={() => handleEliminar(estudio)} className="danger">🗑 Eliminar</button>
+                    <button onClick={() => abrirEditar(estudio)}>
+                      <AiOutlineEdit size={18} /> Editar
+                    </button>
+                    <button onClick={() => handleEliminar(estudio)} className="danger">
+                      <AiOutlineDelete size={18} /> Eliminar
+                    </button>
                   </div>
                 )}
               </div>
