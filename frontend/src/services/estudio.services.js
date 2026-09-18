@@ -20,12 +20,20 @@ export const getEstudio = async (id_estudio) => {
 };
 
 export const createEstudio = async (payload) => {
-  const { data } = await api.post("/estudios", payload);
+  const { data } = await api.post("/estudios", payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return data;
 };
 
 export const updateEstudio = async (id_estudio, payload) => {
-  const { data } = await api.put(`/estudios/${id_estudio}`, payload);
+  const { data } = await api.put(`/estudios/${id_estudio}`, payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return data;
 };
 
