@@ -4,6 +4,7 @@ import Login from "./pages/Login.jsx";
 import Registro from "./pages/Registro.jsx";
 import Inicio from "./pages/Inicio.jsx";
 import Usuario from "./pages/Usuario.jsx";
+import Estudio from "./pages/Estudio.jsx";
 
 function App() {
   return (
@@ -17,6 +18,9 @@ function App() {
 
         {/* Ruta de Registro */}
         <Route path="/registro" element={<Registro />} />
+
+        {/* Ruta de Estudios */}
+        <Route path="/estudios" element={<Estudio />} />
 
         {/* Ruta de Usuarios */}
         <Route path="/usuarios" element={<Usuario />} />
