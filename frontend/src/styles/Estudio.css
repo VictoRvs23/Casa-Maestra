@@ -89,7 +89,7 @@
   padding: 0.75rem 1.4rem;
   border-radius: 21px;
   border: none;
-  background-color: #8c8271;
+  background-color: #5A4E45;
   color: white;
   font-weight: 600;
   font-size: 0.9rem;
@@ -98,7 +98,7 @@
 }
 
 .create-btn:hover {
-  background-color: #6f6759;
+  background-color: #433932;
 }
 
 .estado-msg {
@@ -243,7 +243,6 @@
   color: #a8452c;
 }
 
-/* ---------- Modal crear/editar ---------- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -312,7 +311,7 @@
   border-color: #5A4E45;
 }
 
-/* ---------- Subida de Archivos (Multer) ---------- */
+
 .file-upload-container {
   display: flex;
   align-items: center;
