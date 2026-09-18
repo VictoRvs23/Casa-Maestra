@@ -27,9 +27,8 @@ app.get("/", (req, res) => {
 async function startServer() {
   try {
     await connectDB();
-    await createUsuarios();
 
-    app.use("/uploads", express.static("src/upload"));
+    app.use("/uploads", express.static("uploads"));
     
     app.use("/api", indexRoutes);
 
