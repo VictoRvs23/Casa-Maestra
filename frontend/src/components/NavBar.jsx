@@ -35,9 +35,8 @@ const Navbar = () => {
                     <img src={logoCasaMaestra} alt="Logo Casa Maestra" className="navbar-logo" />
                 </Link>
                 <ul className="navbar-links">
-                    <li><Link to="/estudios">Estudios</Link></li>
-                    <li><Link to="/estudio0">Estudio 0</Link></li>
                     <li><Link to="/residentes">Residentes</Link></li>
+                    <li><Link to="/estudios">Estudios</Link></li>
                     <li><a href="#soporte">Soporte</a></li>
                     {(user?.rol === "Admin" || user?.rol === "Fundador/a") && (
                         <li><Link to="/usuarios">Usuarios</Link></li>

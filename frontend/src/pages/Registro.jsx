@@ -33,9 +33,6 @@ const Registro = () => {
       return;
     }
 
-    // El backend valida con .unknown(false): confirmar_contraseña no existe
-    // en la BD, así que no debe enviarse en el payload. Esta línea se había
-    // perdido y causaba "ReferenceError: payload is not defined".
     const { confirmar_contraseña, ...payload } = formData;
 
     try {
