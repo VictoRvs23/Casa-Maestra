@@ -6,12 +6,12 @@ import {
   createEstudio,
   updateEstudio,
   deleteEstudio,
+  getImagenUrl,
 } from "../services/estudio.services.js";
 import { IoSearchSharp } from "react-icons/io5";
 import { IoMdPerson } from "react-icons/io";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { FaRulerCombined, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-
 import "../styles/Estudio.css";
 
 const ESTADO_INICIAL_FORM = {
@@ -21,7 +21,6 @@ const ESTADO_INICIAL_FORM = {
   ancho_metros: "",
   largo_metros: "",
   precio: "",
-  imagen: "",
   disponible: true,
 };
 
@@ -39,7 +38,9 @@ export default function Estudios() {
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
+
   const [form, setForm] = useState(ESTADO_INICIAL_FORM);
+  const [imagenArchivo, setImagenArchivo] = useState(null);
 
   const fetchEstudios = useCallback(async () => {
     setLoading(true);
@@ -69,6 +70,7 @@ export default function Estudios() {
   const abrirCrear = () => {
     setEditandoId(null);
     setForm(ESTADO_INICIAL_FORM);
+    setImagenArchivo(null);
     setModalAbierto(true);
   };
 
@@ -81,9 +83,9 @@ export default function Estudios() {
       ancho_metros: estudio.ancho_metros,
       largo_metros: estudio.largo_metros,
       precio: estudio.precio,
-      imagen: estudio.imagen || "",
       disponible: estudio.disponible,
     });
+    setImagenArchivo(null);
     setModalAbierto(true);
   };
 
@@ -92,22 +94,35 @@ export default function Estudios() {
     setForm((f) => ({ ...f, [name]: type === "checkbox" ? checked : value }));
   };
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImagenArchivo(file);
+    }
+  };
+
   const handleGuardar = async (e) => {
     e.preventDefault();
-    const payload = {
-      ...form,
-      tipo_arriendo: "mensual",
-      capacidad: Number(form.capacidad),
-      ancho_metros: Number(form.ancho_metros),
-      largo_metros: Number(form.largo_metros),
-      precio: Number(form.precio),
-    };
+
+    const formData = new FormData();
+    formData.append("nombre", form.nombre);
+    formData.append("descripcion", form.descripcion);
+    formData.append("capacidad", Number(form.capacidad));
+    formData.append("ancho_metros", Number(form.ancho_metros));
+    formData.append("largo_metros", Number(form.largo_metros));
+    formData.append("precio", Number(form.precio));
+    formData.append("tipo_arriendo", "mensual");
+    formData.append("disponible", form.disponible);
+
+    if (imagenArchivo) {
+      formData.append("imagen", imagenArchivo);
+    }
 
     try {
       if (editandoId) {
-        await updateEstudio(editandoId, payload);
+        await updateEstudio(editandoId, formData);
       } else {
-        await createEstudio(payload);
+        await createEstudio(formData);
       }
       setModalAbierto(false);
       fetchEstudios();
@@ -187,7 +202,7 @@ export default function Estudios() {
             <div className="estudio-card" key={estudio.id_estudio}>
               <div
                 className="estudio-img"
-                style={estudio.imagen ? { backgroundImage: `url(${estudio.imagen})` } : undefined}
+                style={estudio.imagen ? { backgroundImage: `url(${getImagenUrl(estudio.imagen)})` } : undefined}
               >
                 <span className="estudio-badge">{estudio.nombre}</span>
                 <span className={`estado-icono ${estudio.disponible ? "libre" : "ocupado"}`}>
@@ -267,8 +282,21 @@ export default function Estudios() {
               </div>
 
               <div className="form-group">
-                <label>URL de imagen (opcional)</label>
-                <input name="imagen" value={form.imagen} onChange={handleFormChange} placeholder="https://..." />
+                <label>Imagen del estudio (opcional)</label>
+                <div className="file-upload-container">
+                  <label className="custom-file-upload">
+                    Subir Imagen
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      style={{ display: "none" }}
+                    />
+                  </label>
+                  <span className="file-upload-name">
+                    {imagenArchivo ? imagenArchivo.name : "Ningún archivo seleccionado"}
+                  </span>
+                </div>
               </div>
 
               <label className="checkbox-row">

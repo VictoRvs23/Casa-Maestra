@@ -89,7 +89,7 @@
   padding: 0.75rem 1.4rem;
   border-radius: 21px;
   border: none;
-  background-color: #8c8271;
+  background-color: #5A4E45;
   color: white;
   font-weight: 600;
   font-size: 0.9rem;
@@ -98,7 +98,7 @@
 }
 
 .create-btn:hover {
-  background-color: #6f6759;
+  background-color: #433932;
 }
 
 .estado-msg {
@@ -243,7 +243,6 @@
   color: #a8452c;
 }
 
-/* ---------- Modal crear/editar ---------- */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -310,6 +309,42 @@
 .form-group input:focus,
 .form-group textarea:focus {
   border-color: #5A4E45;
+}
+
+
+.file-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.custom-file-upload {
+  background-color: #e8e6e1;
+  color: #5A4E45;
+  border: 1px solid #ccc;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Clear Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #d1cfca;
+  border-color: #5A4E45;
+}
+
+.file-upload-name {
+  font-family: 'Clear Sans', sans-serif;
+  font-size: 0.85rem;
+  color: #8c8c8c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
 .checkbox-row {
