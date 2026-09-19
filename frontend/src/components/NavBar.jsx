@@ -70,8 +70,8 @@ const Navbar = () => {
                                 <Link to="/perfil?tab=reservas" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
                                     Mis Reservas
                                 </Link>
-                                <Link to="/perfil?tab=favoritos" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
-                                    Mis favoritos
+                                <Link to="/perfil?tab=seguidos" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Mis Seguidos
                                 </Link>
                                 <div className="account-dropdown-divider"></div>
                                 <button className="account-dropdown-item account-dropdown-logout" onClick={handleLogout}>
