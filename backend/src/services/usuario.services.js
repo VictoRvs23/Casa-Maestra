@@ -56,14 +56,28 @@ export const getUsuariosService = async (query) => {
 
 export const updateUsuarioService = async (id_usuario, data) => {
     const usuario = await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
-
+ 
     if (!usuario) throw { status: 404, message: "Usuario no encontrado" };
-    
-    if(data.contraseña) {
-        data.contraseña = await bcrypt.hash(data.contraseña, 10);
-    }
-    
+ 
+    delete data.contraseña;
+ 
     await usuarioRepository.update(id_usuario, data);
+    return await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
+};
+
+export const cambiarContrasenaService = async (id_usuario, contraseñaActual, contraseñaNueva) => {
+    const usuario = await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
+ 
+    if (!usuario) throw { status: 404, message: "Usuario no encontrado" };
+ 
+    const coincide = await bcrypt.compare(contraseñaActual, usuario.contraseña);
+    if (!coincide) {
+        throw { status: 401, message: "La contraseña actual es incorrecta" };
+    }
+ 
+    const nuevaEncriptada = await bcrypt.hash(contraseñaNueva, 10);
+    await usuarioRepository.update(id_usuario, { contraseña: nuevaEncriptada });
+ 
     return true;
 };
 
