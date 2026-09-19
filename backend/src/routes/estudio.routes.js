@@ -12,6 +12,7 @@ import { uploadImagenEstudio } from "../upload/estudio.upload.js";
 import { validateBody } from "../middleware/validateBody.js";
 import { CrearEstudioValidation, ActualizarEstudioValidation } from "../validations/estudio.validation.js";
 import { handleMulterError } from "../middleware/multerError.middleware.js";
+import disponibilidadRoutes from "./disponibilidad.routes.js";
 
 const router = Router();
 
@@ -23,5 +24,7 @@ router.get("/:id_estudio", getEstudio);
 router.post("/", verifyToken, GestionEstudios, uploadImagenEstudio.single("imagen"),handleMulterError, validateBody(CrearEstudioValidation), createEstudio);
 router.put("/:id_estudio", verifyToken, GestionEstudios, uploadImagenEstudio.single("imagen"), handleMulterError, validateBody(ActualizarEstudioValidation), updateEstudio);
 router.delete("/:id_estudio", verifyToken, GestionEstudios, deleteEstudio);
+
+router.use("/:id_estudio/disponibilidad", disponibilidadRoutes);
 
 export default router;
