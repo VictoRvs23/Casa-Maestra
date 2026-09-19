@@ -3,7 +3,8 @@ import { Router } from "express";
 import { getUsuario,
     getUsuarios,
     updateUsuario,
-    deleteUsuario 
+    cambiarContrasena,
+    deleteUsuario
 } from "../controllers/usuario.controller.js";
 import { verifyToken, authorizeRoles } from "../middleware/auth.middleware.js";
 
@@ -23,8 +24,10 @@ const canEditarPerfil = (req, res, next) => {
 };
 
 router.get("/", verifyToken, accesosPermitidos, getUsuarios);
-router.get("/:id_usuario", verifyToken, accesosPermitidos, getUsuario);
+router.get("/:id_usuario", verifyToken, canEditarPerfil, getUsuario);
 router.put("/:id_usuario", verifyToken, canEditarPerfil, updateUsuario);
-router.delete("/:id_usuario", verifyToken, accesosPermitidos, deleteUsuario);
+router.put("/:id_usuario/contrasena", verifyToken, canEditarPerfil, cambiarContrasena);
 
-export default router;
+router.delete("/:id_usuario", verifyToken, canEditarPerfil, deleteUsuario);
+
+export default router;accesosPermitidos
