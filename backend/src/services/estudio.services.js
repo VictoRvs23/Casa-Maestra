@@ -1,7 +1,20 @@
 import { AppDataSource } from "../config/configDb.js";
 import EstudioEntity from "../entities/estudio.entity.js";
+import fs from "fs";
+import path from "path";
 
 const estudioRepository = AppDataSource.getRepository(EstudioEntity);
+
+const borrarImagenLocal = (rutaImagen) => {
+    if (!rutaImagen || !rutaImagen.startsWith("/uploads/estudios/")) return;
+
+    const rutaFisica = path.resolve("." + rutaImagen);
+    fs.unlink(rutaFisica, (err) => {
+        if (err && err.code !== "ENOENT") {
+            console.error("No se pudo borrar la imagen huérfana:", rutaFisica, err.message);
+        }
+    });
+};
 
 export const getEstudiosService = async (query = {}) => {
     const { tipo_arriendo, disponible, busqueda, page = 1, limit = 6 } = query;
@@ -53,6 +66,10 @@ export const updateEstudioService = async (id_estudio, data) => {
 
     if (!estudio) throw { status: 404, message: "Estudio no encontrado" };
 
+    if (data.imagen !== undefined && data.imagen !== estudio.imagen) {
+        borrarImagenLocal(estudio.imagen);
+    }
+
     await estudioRepository.update(id_estudio, data);
     return await estudioRepository.findOneBy({ id_estudio: parseInt(id_estudio) });
 };
@@ -62,6 +79,7 @@ export const deleteEstudioService = async (id_estudio) => {
 
     if (!estudio) throw { status: 404, message: "Estudio no encontrado" };
 
+    borrarImagenLocal(estudio.imagen);
     await estudioRepository.delete(id_estudio);
     return true;
 };
