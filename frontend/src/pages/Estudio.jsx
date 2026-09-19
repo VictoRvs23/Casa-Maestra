@@ -6,13 +6,12 @@ import {
   createEstudio,
   updateEstudio,
   deleteEstudio,
+  getImagenUrl,
 } from "../services/estudio.services.js";
-
 import { IoSearchSharp } from "react-icons/io5";
 import { IoMdPerson } from "react-icons/io";
 import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { FaRulerCombined, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-
 import "../styles/Estudio.css";
 
 const ESTADO_INICIAL_FORM = {
@@ -39,7 +38,7 @@ export default function Estudios() {
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
-  
+
   const [form, setForm] = useState(ESTADO_INICIAL_FORM);
   const [imagenArchivo, setImagenArchivo] = useState(null);
 
@@ -116,7 +115,7 @@ export default function Estudios() {
     formData.append("disponible", form.disponible);
 
     if (imagenArchivo) {
-      formData.append("imagen", imagenArchivo); 
+      formData.append("imagen", imagenArchivo);
     }
 
     try {
@@ -203,7 +202,7 @@ export default function Estudios() {
             <div className="estudio-card" key={estudio.id_estudio}>
               <div
                 className="estudio-img"
-                style={estudio.imagen ? { backgroundImage: `url(${estudio.imagen})` } : undefined}
+                style={estudio.imagen ? { backgroundImage: `url(${getImagenUrl(estudio.imagen)})` } : undefined}
               >
                 <span className="estudio-badge">{estudio.nombre}</span>
                 <span className={`estado-icono ${estudio.disponible ? "libre" : "ocupado"}`}>
