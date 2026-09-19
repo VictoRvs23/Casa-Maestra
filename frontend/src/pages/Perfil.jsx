@@ -5,7 +5,9 @@ import { getUsuario } from "../services/usuario.services.js";
 import { IoPersonOutline, IoLockClosedOutline, IoCalendarOutline, IoHeartOutline } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
 import DatosPersonales from "../components/perfil/DatosPersonales.jsx";
+import Seguridad from "../components/perfil/Serguridad.jsx";
 import "../styles/Perfil.css";
+
 
 export default function Perfil() {
   const { user } = useAuth();
