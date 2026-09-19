@@ -43,6 +43,10 @@ const UsuarioEntity = new EntitySchema({
             length: 20,
             nullable: true,
         },
+        fecha_nacimiento: {
+            type: "date",
+            nullable: true,
+        },
         avatar: {
             type: "varchar",
             length: 200,
