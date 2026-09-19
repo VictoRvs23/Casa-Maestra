@@ -1,9 +1,5 @@
 "use strict";
 import * as estudioService from "../services/estudio.services.js";
-import {
-    CrearEstudioValidation,
-    ActualizarEstudioValidation,
-} from "../validations/estudio.validation.js";
 
 export const getEstudios = async (req, res) => {
     try {
@@ -28,12 +24,13 @@ export const getEstudio = async (req, res) => {
 
 export const createEstudio = async (req, res) => {
     try {
-        const { error, value } = CrearEstudioValidation.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
+        const data = { ...req.body };
+
+        if (req.file) {
+            data.imagen = `/uploads/estudios/${req.file.filename}`;
         }
 
-        const estudio = await estudioService.createEstudioService(value);
+        const estudio = await estudioService.createEstudioService(data);
         res.status(201).json({ message: "Estudio creado", estudio });
     } catch (error) {
         console.error("Error en createEstudio:", error);
@@ -43,12 +40,13 @@ export const createEstudio = async (req, res) => {
 
 export const updateEstudio = async (req, res) => {
     try {
-        const { error, value } = ActualizarEstudioValidation.validate(req.body);
-        if (error) {
-            return res.status(400).json({ message: error.details[0].message });
+        const data = { ...req.body };
+
+        if (req.file) {
+            data.imagen = `/uploads/estudios/${req.file.filename}`;
         }
 
-        const estudio = await estudioService.updateEstudioService(req.params.id_estudio, value);
+        const estudio = await estudioService.updateEstudioService(req.params.id_estudio, data);
         res.status(200).json({ message: "Estudio actualizado", estudio });
     } catch (error) {
         if (error.status) return res.status(error.status).json({ message: error.message });
