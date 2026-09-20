@@ -7,6 +7,8 @@ import { IoPersonOutline, IoLockClosedOutline, IoCalendarOutline, IoHeartOutline
 import { AiOutlineEdit } from "react-icons/ai";
 import DatosPersonales from "../components/perfil/DatosPersonales.jsx";
 import Seguridad from "../components/perfil/Seguridad.jsx";
+import MisReservas from "../components/perfil/MisReservas.jsx";
+import Seguidos from "../components/perfil/Seguidos.jsx";
 import "../styles/Perfil.css";
 
 const TABS_VALIDAS = ["datos-personales", "seguridad", "reservas", "seguidos"];
