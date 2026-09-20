@@ -1,0 +1,67 @@
+.perfil-content h2 {
+  font-family: 'Roca Two', serif;
+  font-size: 1.5rem;
+  margin: 0 0 0.3rem;
+  color: #5A4E45;
+}
+
+.perfil-sub {
+  color: #8c8c8c;
+  font-size: 0.88rem;
+  margin: 0 0 1.6rem;
+}
+
+.lista-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.item-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.item-sub {
+  color: #8c8c8c;
+  font-size: 0.8rem;
+}
+
+.estado-pill {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+}
+
+.estado-pill.estado-próxima {
+  background-color: #dbe6ec;
+  color: #3e5c6b;
+}
+
+.estado-pill.estado-completada {
+  background-color: #dcece3;
+  color: #4a8a72;
+}
+
+.estado-pill.estado-cancelada {
+  background-color: #f3ddd6;
+  color: #a8452c;
+}

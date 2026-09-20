@@ -5,6 +5,7 @@ import Registro from "./pages/Registro.jsx";
 import Inicio from "./pages/Inicio.jsx";
 import Usuario from "./pages/Usuario.jsx";
 import Estudio from "./pages/Estudio.jsx";
+import Perfil from "./pages/Perfil.jsx";
 
 function App() {
   return (
@@ -24,6 +25,9 @@ function App() {
 
         {/* Ruta de Usuarios */}
         <Route path="/usuarios" element={<Usuario />} />
+
+        {/* Ruta de Perfil */}
+        <Route path="/perfil" element={<Perfil />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
