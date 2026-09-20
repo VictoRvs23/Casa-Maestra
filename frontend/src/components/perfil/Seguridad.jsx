@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/AuthContext.jsx";
 import { cambiarContrasena, deleteUsuario } from "../../services/usuario.services.js";
 import "../../styles/perfil/Seguridad.css";
 

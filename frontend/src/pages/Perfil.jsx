@@ -1,18 +1,34 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/AuthContext";
 import { getUsuario } from "../services/usuario.services.js";
 import { IoPersonOutline, IoLockClosedOutline, IoCalendarOutline, IoHeartOutline } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
 import DatosPersonales from "../components/perfil/DatosPersonales.jsx";
-import Seguridad from "../components/perfil/Serguridad.jsx";
+import Seguridad from "../components/perfil/Seguridad.jsx";
 import "../styles/Perfil.css";
 
+const TABS_VALIDAS = ["datos-personales", "seguridad", "reservas", "seguidos"];
 
 export default function Perfil() {
   const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabInicial = TABS_VALIDAS.includes(searchParams.get("tab")) ? searchParams.get("tab") : "datos-personales";
+  const [tab, setTab] = useState(tabInicial);
 
-  const [tab, setTab] = useState("datos");
+  useEffect(() => {
+    const tabDeUrl = searchParams.get("tab");
+    if (TABS_VALIDAS.includes(tabDeUrl) && tabDeUrl !== tab) {
+      setTab(tabDeUrl);
+    }
+  }, [searchParams]);
+
+  const cambiarTab = (nuevaTab) => {
+    setTab(nuevaTab);
+    setSearchParams({ tab: nuevaTab });
+  };
+
   const [perfil, setPerfil] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -51,23 +67,23 @@ export default function Perfil() {
           </div>
 
           <div className="perfil-tabs">
-            <button className={tab === "datos" ? "active" : ""} onClick={() => setTab("datos")}>
+            <button className={tab === "datos-personales" ? "active" : ""} onClick={() => cambiarTab("datos-personales")}>
               <IoPersonOutline size={17} /> Datos Personales
             </button>
-            <button className={tab === "seguridad" ? "active" : ""} onClick={() => setTab("seguridad")}>
+            <button className={tab === "seguridad" ? "active" : ""} onClick={() => cambiarTab("seguridad")}>
               <IoLockClosedOutline size={17} /> Seguridad
             </button>
-            <button className={tab === "reservas" ? "active" : ""} onClick={() => setTab("reservas")}>
+            <button className={tab === "reservas" ? "active" : ""} onClick={() => cambiarTab("reservas")}>
               <IoCalendarOutline size={17} /> Mis reservas
             </button>
-            <button className={tab === "seguidos" ? "active" : ""} onClick={() => setTab("seguidos")}>
+            <button className={tab === "seguidos" ? "active" : ""} onClick={() => cambiarTab("seguidos")}>
               <IoHeartOutline size={17} /> Seguidos
             </button>
           </div>
         </div>
 
         <div className="perfil-content">
-          {tab === "datos" && <DatosPersonales perfil={perfil} onGuardado={setPerfil} />}
+          {tab === "datos-personales" && <DatosPersonales perfil={perfil} onGuardado={setPerfil} />}
           {tab === "seguridad" && <Seguridad userId={perfil.id_usuario} />}
           {tab === "reservas" && <MisReservas />}
           {tab === "seguidos" && <Seguidos />}
