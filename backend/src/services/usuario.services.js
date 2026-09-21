@@ -1,8 +1,6 @@
 import { AppDataSource } from "../config/configDb.js";
 import UsuarioEntity from "../entities/usuario.entity.js";
 import bcrypt from "bcrypt";
-import crypto from "crypto";
-import { ILike, In } from "typeorm";
 
 const usuarioRepository = AppDataSource.getRepository(UsuarioEntity);
 
