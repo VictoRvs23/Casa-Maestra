@@ -1,5 +1,13 @@
 import api from "./api";
 
+const SERVER_ORIGIN = (import.meta.env.VITE_API_URL || "http://localhost:3000/api").replace(/\/api\/?$/, "");
+
+export const getAvatarUrl = (ruta) => {
+  if (!ruta) return null;
+  if (ruta.startsWith("http")) return ruta;
+  return `${SERVER_ORIGIN}${ruta}`;
+};
+
 export const getUsuarios = async ({ rol = "", busqueda = "", page = 1, limit = 6 } = {}) => {
   const params = {};
   if (rol) params.rol = rol;
@@ -25,6 +33,16 @@ export const cambiarContrasena = async (id_usuario, contraseña_actual, contrase
   const { data } = await api.put(`/usuarios/${id_usuario}/contrasena`, {
     contraseña_actual,
     contraseña_nueva,
+  });
+  return data;
+};
+
+export const uploadAvatar = async (id_usuario, file) => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+
+  const { data } = await api.put(`/usuarios/${id_usuario}/avatar`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
   });
   return data;
 };
