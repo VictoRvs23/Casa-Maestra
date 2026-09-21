@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/NavBar.jsx";
+import Navbar from "../components/Navbar.jsx";
 import { FaInstagram } from "react-icons/fa";
 import { FaPhone } from "react-icons/fa6";
 import { SiGmail } from "react-icons/si";
