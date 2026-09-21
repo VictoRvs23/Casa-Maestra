@@ -8,8 +8,8 @@ import { getUsuario,
     deleteUsuario
 } from "../controllers/usuario.controller.js";
 import { verifyToken, authorizeRoles } from "../middleware/auth.middleware.js";
-import { uploadAvatar } from "../middleware/multer.middleware.js";
-import { handleMulterError } from "../middleware/multer.middleware.js";
+import { uploadAvatar } from "../upload/usuario.upload.js";
+import { handleMulterError } from "../middleware/multerError.middleware.js";
 
 const router = Router();
 
