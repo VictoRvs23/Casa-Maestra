@@ -37,7 +37,7 @@ const Navbar = () => {
                 <ul className="navbar-links">
                     <li><Link to="/residentes">Residentes</Link></li>
                     <li><Link to="/estudios">Estudios</Link></li>
-                    <li><a href="#soporte">Soporte</a></li>
+                    <li><Link to="/soporte">Soporte</Link></li>
                     {(user?.rol === "Admin" || user?.rol === "Fundador/a") && (
                         <li><Link to="/usuarios">Usuarios</Link></li>
                     )}

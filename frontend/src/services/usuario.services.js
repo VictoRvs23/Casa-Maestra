@@ -21,6 +21,14 @@ export const updateUsuario = async (id_usuario, payload) => {
   return data;
 };
 
+export const cambiarContrasena = async (id_usuario, contraseña_actual, contraseña_nueva) => {
+  const { data } = await api.put(`/usuarios/${id_usuario}/contrasena`, {
+    contraseña_actual,
+    contraseña_nueva,
+  });
+  return data;
+};
+
 export const deleteUsuario = async (id_usuario) => {
   const { data } = await api.delete(`/usuarios/${id_usuario}`);
   return data;
