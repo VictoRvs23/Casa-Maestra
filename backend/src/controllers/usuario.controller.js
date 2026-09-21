@@ -60,6 +60,23 @@ export const cambiarContrasena = async (req, res) => {
     }
 };
 
+export const subirAvatar = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: "No se recibió ninguna imagen." });
+        }
+
+        const rutaPublica = `/uploads/avatars/${req.file.filename}`;
+        const usuario = await usuarioService.updateUsuarioService(req.params.id_usuario, { avatar: rutaPublica });
+
+        res.status(200).json({ message: "Avatar actualizado", usuario });
+    } catch (error) {
+        if (error.status) return res.status(error.status).json({ message: error.message });
+        console.error("Error en subirAvatar:", error);
+        res.status(500).json({ message: "Error interno al subir el avatar" });
+    }
+};
+
 export const deleteUsuario = async (req, res) => {
     try {
         await usuarioService.deleteUsuarioService(req.params.id_usuario);

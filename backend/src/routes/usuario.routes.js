@@ -4,9 +4,12 @@ import { getUsuario,
     getUsuarios,
     updateUsuario,
     cambiarContrasena,
+    subirAvatar,
     deleteUsuario
 } from "../controllers/usuario.controller.js";
 import { verifyToken, authorizeRoles } from "../middleware/auth.middleware.js";
+import { uploadAvatar } from "../upload/usuario.upload.js";
+import { handleMulterError } from "../middleware/multerError.middleware.js";
 
 const router = Router();
 
@@ -25,8 +28,10 @@ const canEditarPerfil = (req, res, next) => {
 
 router.get("/", verifyToken, accesosPermitidos, getUsuarios);
 router.get("/:id_usuario", verifyToken, canEditarPerfil, getUsuario);
+
 router.put("/:id_usuario", verifyToken, canEditarPerfil, updateUsuario);
 router.put("/:id_usuario/contrasena", verifyToken, canEditarPerfil, cambiarContrasena);
+router.put("/:id_usuario/avatar", verifyToken, canEditarPerfil, uploadAvatar.single("avatar"), handleMulterError, subirAvatar);
 
 router.delete("/:id_usuario", verifyToken, canEditarPerfil, deleteUsuario);
 
