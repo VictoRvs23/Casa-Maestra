@@ -1,14 +1,28 @@
 .inicio-container {
-  background-color: #e8e6e1;
+  
   min-height: 100vh;
   font-family: 'Clear Sans', sans-serif;
   overflow-x: hidden;
+  position: relative;
+}
+
+.inicio-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.png");
+  background-color: #e8e6e1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.12;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .hero-section {
   text-align: center;
   padding: 4rem 2rem;
-  position: relative;
   background-size: cover;
   background-position: center;
   border-top: 2px dashed #8c8271; 

@@ -3,7 +3,7 @@ import { DataSource } from "typeorm";
 import { DATABASE, DB_USERNAME, HOST, DB_PASSWORD, DB_PORT } from "./configEnv.js";
 import UsuarioEntity from "../entities/usuario.entity.js"
 import EstudioEntity from "../entities/estudio.entity.js";
-import DisponibilidadEntity from "../entities/disponibilidad.entity.js";
+import AgendaEntity from "../entities/agenda.entity.js";
 import { createUsuarios } from "./InitDb.js";
 
 export const AppDataSource = new DataSource({
@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
   entities: [
     UsuarioEntity,
     EstudioEntity,
-    DisponibilidadEntity
+    AgendaEntity
   ],
   synchronize: true,
   logging: false,

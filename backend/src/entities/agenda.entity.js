@@ -2,11 +2,11 @@
 
 import { EntitySchema } from "typeorm";
 
-const DisponibilidadEntity = new EntitySchema({
-    name: "Disponibilidad",
-    tableName: "disponibilidades",
+const AgendaEntity = new EntitySchema({
+    name: "Agenda",
+    tableName: "agendas",
     columns: {
-        id_disponibilidad: {
+        id_agenda: {
             primary: true,
             type: "int",
             generated: true,
@@ -47,4 +47,4 @@ const DisponibilidadEntity = new EntitySchema({
     },
 });
 
-export default DisponibilidadEntity;
+export default AgendaEntity;

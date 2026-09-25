@@ -7,12 +7,13 @@ import {
     updateEstudio,
     deleteEstudio,
 } from "../controllers/estudio.controller.js";
-import { verifyToken, authorizeRoles } from "../middleware/auth.middleware.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
+import { authorizeRoles } from "../middleware/authorization.middleware.js";
 import { uploadImagenEstudio } from "../upload/estudio.upload.js";
 import { validateBody } from "../middleware/validateBody.js";
 import { CrearEstudioValidation, ActualizarEstudioValidation } from "../validations/estudio.validation.js";
 import { handleMulterError } from "../middleware/multerError.middleware.js";
-import disponibilidadRoutes from "./disponibilidad.routes.js";
+import agendaRoutes from "./agenda.routes.js";
 
 const router = Router();
 
@@ -25,6 +26,6 @@ router.post("/", verifyToken, GestionEstudios, uploadImagenEstudio.single("image
 router.put("/:id_estudio", verifyToken, GestionEstudios, uploadImagenEstudio.single("imagen"), handleMulterError, validateBody(ActualizarEstudioValidation), updateEstudio);
 router.delete("/:id_estudio", verifyToken, GestionEstudios, deleteEstudio);
 
-router.use("/:id_estudio/disponibilidad", disponibilidadRoutes);
+router.use("/:id_estudio/agenda", agendaRoutes);
 
 export default router;

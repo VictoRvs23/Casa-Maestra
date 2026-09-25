@@ -7,7 +7,8 @@ import { getUsuario,
     subirAvatar,
     deleteUsuario
 } from "../controllers/usuario.controller.js";
-import { verifyToken, authorizeRoles } from "../middleware/auth.middleware.js";
+import { verifyToken} from "../middleware/auth.middleware.js";
+import { authorizeRoles } from "../middleware/authorization.middleware.js";
 import { uploadAvatar } from "../upload/usuario.upload.js";
 import { handleMulterError } from "../middleware/multerError.middleware.js";
 
