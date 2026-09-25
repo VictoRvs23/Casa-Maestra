@@ -7,7 +7,8 @@ import {
     updateEstudio,
     deleteEstudio,
 } from "../controllers/estudio.controller.js";
-import { verifyToken, authorizeRoles } from "../middleware/auth.middleware.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
+import { authorizeRoles } from "../middleware/authorization.middleware.js";
 import { uploadImagenEstudio } from "../upload/estudio.upload.js";
 import { validateBody } from "../middleware/validateBody.js";
 import { CrearEstudioValidation, ActualizarEstudioValidation } from "../validations/estudio.validation.js";
