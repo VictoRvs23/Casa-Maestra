@@ -31,6 +31,11 @@ export const createEstudio = async (req, res) => {
         }
 
         const estudio = await estudioService.createEstudioService(data);
+
+        if (!estudio || !estudio.id_estudio) {
+            return res.status(500).json({ message: "El estudio no se pudo guardar correctamente." });
+        }
+
         res.status(201).json({ message: "Estudio creado", estudio });
     } catch (error) {
         console.error("Error en createEstudio:", error);
@@ -47,6 +52,11 @@ export const updateEstudio = async (req, res) => {
         }
 
         const estudio = await estudioService.updateEstudioService(req.params.id_estudio, data);
+
+        if (!estudio || !estudio.id_estudio) {
+            return res.status(500).json({ message: "Los cambios no se pudieron guardar correctamente." });
+        }
+
         res.status(200).json({ message: "Estudio actualizado", estudio });
     } catch (error) {
         if (error.status) return res.status(error.status).json({ message: error.message });
