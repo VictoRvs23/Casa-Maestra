@@ -35,6 +35,6 @@ const BloqueValidation = Joi.object({
     return value;
 });
 
-export const SemanaDisponibilidadValidation = Joi.object({
+export const SemanaAgendaValidation = Joi.object({
     bloques: Joi.array().items(BloqueValidation).min(0).required(),
 });
