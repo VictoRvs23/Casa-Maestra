@@ -3,8 +3,25 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 4rem;
+  background-color: #ffffff;
+  font-family: "Montserrat", sans-serif;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.navbar-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
   background-color: #e8e6e1;
-  font-family: 'Clear Sans', sans-serif;
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .navbar-left {
@@ -14,7 +31,16 @@
 }
 
 .navbar-logo {
+  width: 80px;
   height: 80px;
+  display: inline-block;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  background-color: #845736;
   cursor: pointer;
 }
 
@@ -28,14 +54,14 @@
 
 .navbar-links a {
   text-decoration: none;
-  color: #333;
+  color: #845736;
   font-weight: 600;
   font-size: 0.95rem;
   transition: color 0.3s;
 }
 
 .navbar-links a:hover {
-  color: #8C8271;
+  color: #845736;
 }
 
 .navbar-right {
@@ -45,7 +71,7 @@
 }
 
 .campana-btn {
-  background-color: #5A4E45;
+  background-color: #845736;
   color: white;
   border: none;
   border-radius: 50%;
@@ -60,11 +86,11 @@
 }
 
 .campana-btn:hover {
-  background-color: #433932;
+  background-color: #694328;
 }
 
 .nav-login-btn {
-  background-color: #5A4E45;
+  background-color: #845736;
   color: white;
   text-decoration: none;
   height: 42px;
@@ -79,7 +105,7 @@
 }
 
 .nav-login-btn:hover {
-  background-color: #433932;
+  background-color: #694328;
 }
 
 .account-menu {
@@ -87,14 +113,14 @@
 }
 
 .nav-account-btn {
-  background-color: #5A4E45;
+  background-color: #845736;
   color: white;
   border: none;
   height: 42px;
   padding: 0 1.5rem;
   border-radius: 21px;
   font-weight: 600;
-  font-family: 'Clear Sans', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 0.95rem;
   display: flex;
   align-items: center;
@@ -105,7 +131,7 @@
 }
 
 .nav-account-btn:hover {
-  background-color: #433932;
+  background-color: #694328;
 }
 
 .account-dropdown {
@@ -113,7 +139,7 @@
   top: calc(100% + 10px);
   right: 0;
   background-color: #e8e6e1;
-  border: 1px solid #8c8271;
+  border: 1px solid #845736;
   border-radius: 10px;
   min-width: 200px;
   padding: 0.9rem 0;
@@ -124,13 +150,13 @@
 .account-dropdown-username {
   text-align: center;
   font-weight: 700;
-  color: #5A4E45;
+  color: #845736;
   font-size: 0.95rem;
   padding: 0 1.2rem 0.7rem;
 }
 
 .account-dropdown-divider {
-  border-top: 1px dashed #8c8271;
+  border-top: 1px dashed #845736;
   margin: 0.3rem 1rem;
 }
 
@@ -141,8 +167,8 @@
   padding: 0.65rem 1.2rem;
   background: none;
   border: none;
-  color: #5A4E45;
-  font-family: 'Clear Sans', sans-serif;
+  color: #845736;
+  font-family: "Montserrat", sans-serif;
   font-size: 0.9rem;
   text-decoration: none;
   cursor: pointer;
