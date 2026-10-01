@@ -3,7 +3,7 @@
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background-color: #cfccc4; 
+  background-color: #cfccc4;
   padding: 2rem;
 }
 
@@ -23,7 +23,7 @@
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  color: #8c8c8c;
+  color: #845736;
   background: none;
   border: none;
   cursor: pointer;
@@ -32,12 +32,11 @@
 }
 
 .close-modal-btn:hover {
-  color: #5A4E45;
+  color: #845736;
 }
-
 .auth-layout-left {
   flex: 1;
-  background-color: #8C8271;
+  background-color: #845736;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,28 +49,33 @@
 }
 
 .auth-layout-right {
-  flex: 1.2; 
+  flex: 1.2;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 3rem;
+  background-color: #e1d1b8;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-layout-right::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
   background-color: #ffffff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .auth-form-wrapper {
   width: 100%;
   max-width: 380px;
-}
-
-@media (max-width: 768px) {
-  .auth-layout-left {
-    display: none;
-  }
-  .auth-layout-backdrop {
-    padding: 1rem;
-  }
-  .auth-modal-box {
-    min-height: auto;
-    padding: 2rem 0;
-  }
+  position: relative;
+  z-index: 1;
 }
