@@ -1,7 +1,7 @@
 .inicio-container {
   
   min-height: 100vh;
-  font-family: 'Clear Sans', sans-serif;
+  font-family: "Montserrat", sans-serif;
   overflow-x: hidden;
   position: relative;
 }
@@ -10,12 +10,12 @@
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("../assets/hojaArrugada.png");
+  background-image: url("../assets/hojaArrugada.jpg");
   background-color: #e8e6e1;
   background-size: cover;
   background-position: center;
   background-repeat: repeat;
-  opacity: 0.12;
+  opacity: 0.13;
   z-index: -1;
   pointer-events: none;
 }
@@ -25,20 +25,20 @@
   padding: 4rem 2rem;
   background-size: cover;
   background-position: center;
-  border-top: 2px dashed #8c8271; 
-  border-bottom: 2px dashed #8c8271;
+  border-top: 2px dashed #845736; 
+  border-bottom: 2px dashed #845736;
 }
 
 .hero-title {
-  font-family: 'Roca Two', serif;
-  color: #5A4E45;
+  font-family: "League Spartan", sans-serif;
+  color: #845736;
   font-size: 3rem;
   margin-bottom: 0.5rem;
   letter-spacing: 2px;
 }
 
 .hero-subtitle {
-  color: #5A4E45;
+  color: #845736;
   font-size: 1.1rem;
   margin-bottom: 2rem;
 }
@@ -50,19 +50,19 @@
 }
 
 .hero-btn {
-  background-color: #5A4E45;
+  background-color: #845736;
   color: white;
   border: none;
   padding: 0.8rem 2rem;
   border-radius: 25px;
-  font-family: 'Clear Sans', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .hero-btn:hover {
-  background-color: #433932;
+  background-color: #694328;
 }
 
 .categories-section {
@@ -95,7 +95,7 @@
   height: 120px;
   border-radius: 15px;
   overflow: hidden;
-  border: 3px solid #8c8271; 
+  border: 3px solid #845736; 
   background-color: #ccc; 
   margin-bottom: 1rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -108,15 +108,15 @@
 }
 
 .category-title {
-  font-family: 'Roca Two', serif;
-  color: #333;
+  font-family: "League Spartan", sans-serif;
+  color: #845736;
   font-size: 1.2rem;
   margin: 0;
 }
 
 .empty-categories {
   text-align: center;
-  color: #8C8271;
+  color: #845736;
   font-size: 1.2rem;
   font-style: italic;
   padding: 2rem 0;
@@ -125,8 +125,8 @@
 .inicio-footer {
   text-align: center;
   padding: 2rem;
-  border-top: 2px dashed #8c8271; 
-  color: #333;
+  border-top: 2px dashed #845736; 
+  color: #845736;
   font-weight: 500;
 }
 
