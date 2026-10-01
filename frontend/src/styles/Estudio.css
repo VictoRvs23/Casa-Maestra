@@ -1,27 +1,30 @@
 .estudios-page {
-  background-color: #e8e6e1;
+  background-color: #ffffff;
   min-height: 100vh;
-  font-family: 'Clear Sans', sans-serif;
-  color: #5A4E45;
+  font-family: "Montserrat", sans-serif;
+  color: #845736;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
 }
 
 .estudios-hero {
   text-align: center;
   padding: 3rem 2rem;
-  border-top: 2px dashed #8c8271;
-  border-bottom: 2px dashed #8c8271;
+  border-top: 2px dashed #845736;
+  border-bottom: 2px dashed #845736;
 }
 
 .estudios-hero h1 {
-  font-family: 'Roca Two', serif;
-  color: #5A4E45;
+  font-family: "League Spartan", sans-serif;
+  color: #845736;
   font-size: 2.6rem;
   margin: 0 0 0.5rem;
   letter-spacing: 1px;
 }
 
 .estudios-hero p {
-  color: #5A4E45;
+  color: #845736;
   font-size: 1rem;
   margin: 0;
 }
@@ -49,7 +52,7 @@
 
 .filter-field label {
   font-size: 0.8rem;
-  color: #5A4E45;
+  color: #845736;
   font-weight: 600;
 }
 
@@ -59,13 +62,13 @@
   border-radius: 8px;
   border: 1px solid #ccc;
   font-size: 0.9rem;
-  font-family: 'Clear Sans', sans-serif;
+  font-family: "Montserrat", sans-serif;
   outline: none;
 }
 
 .filter-field select:focus,
 .filter-field input:focus {
-  border-color: #5A4E45;
+  border-color: #845736;
 }
 
 .search-btn {
@@ -73,7 +76,7 @@
   height: 44px;
   border-radius: 10px;
   border: none;
-  background-color: #5A4E45;
+  background-color: #845736;
   color: white;
   cursor: pointer;
   font-size: 1rem;
@@ -81,7 +84,7 @@
 }
 
 .search-btn:hover {
-  background-color: #433932;
+  background-color: #694328;
 }
 
 .create-btn {
@@ -89,7 +92,7 @@
   padding: 0.75rem 1.4rem;
   border-radius: 21px;
   border: none;
-  background-color: #5A4E45;
+  background-color: #845736;
   color: white;
   font-weight: 600;
   font-size: 0.9rem;
@@ -98,12 +101,12 @@
 }
 
 .create-btn:hover {
-  background-color: #433932;
+  background-color: #6f6759;
 }
 
 .estado-msg {
   text-align: center;
-  color: #8c8c8c;
+  color: #845736;
   padding: 2rem 0;
 }
 
@@ -115,12 +118,6 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.8rem;
-}
-
-@media (max-width: 800px) {
-  .estudios-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .estudio-card {
@@ -145,7 +142,7 @@
 .estudio-badge {
   background-color: rgba(90, 78, 69, 0.75);
   color: white;
-  font-family: 'Roca Two', serif;
+  font-family: "League Spartan", sans-serif;
   font-size: 0.85rem;
   padding: 0.3rem 0.8rem;
   border-radius: 6px;
@@ -181,7 +178,7 @@
   gap: 0.5rem;
   margin: 0.3rem 0;
   font-size: 0.88rem;
-  color: #5A4E45;
+  color: #845736;
 }
 
 .estudio-info .ico {
@@ -199,11 +196,11 @@
 
 .estudio-precio {
   font-weight: 700;
-  color: #5A4E45;
+  color: #845736;
 }
 
 .reservar-btn {
-  background-color: #5A4E45;
+  background-color: #845736;
   color: white;
   border: none;
   padding: 0.55rem 1.2rem;
@@ -215,7 +212,7 @@
 }
 
 .reservar-btn:hover {
-  background-color: #433932;
+  background-color: #694328;
 }
 
 .admin-actions {
@@ -229,14 +226,14 @@
 .admin-actions button {
   background: none;
   border: none;
-  color: #8c8271;
+  color: #845736;
   font-size: 0.82rem;
   cursor: pointer;
   padding: 0;
 }
 
 .admin-actions button:hover {
-  color: #5A4E45;
+  color: #845736;
 }
 
 .admin-actions button.danger:hover {
@@ -266,10 +263,10 @@
 }
 
 .modal-box h2 {
-  font-family: 'Roca Two', serif;
+  font-family: "League Spartan", sans-serif;
   font-size: 1.6rem;
   margin: 0 0 1.2rem;
-  color: #5A4E45;
+  color: #845736;
 }
 
 .form-group {
@@ -288,7 +285,7 @@
 .form-group label {
   display: block;
   margin-bottom: 0.4rem;
-  color: #5A4E45;
+  color: #845736;
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -302,49 +299,13 @@
   box-sizing: border-box;
   outline: none;
   font-size: 0.9rem;
-  font-family: 'Clear Sans', sans-serif;
+  font-family: "Montserrat", sans-serif;
   resize: vertical;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-  border-color: #5A4E45;
-}
-
-
-.file-upload-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-.custom-file-upload {
-  background-color: #e8e6e1;
-  color: #5A4E45;
-  border: 1px solid #ccc;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-family: 'Clear Sans', sans-serif;
-  font-size: 0.95rem;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.custom-file-upload:hover {
-  background-color: #d1cfca;
-  border-color: #5A4E45;
-}
-
-.file-upload-name {
-  font-family: 'Clear Sans', sans-serif;
-  font-size: 0.85rem;
-  color: #8c8c8c;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 200px;
+  border-color: #845736;
 }
 
 .checkbox-row {
@@ -352,7 +313,7 @@
   align-items: center;
   gap: 0.6rem;
   font-size: 0.9rem;
-  color: #5A4E45;
+  color: #845736;
   margin-bottom: 1.2rem;
 }
 
@@ -373,15 +334,15 @@
 }
 
 .btn-ghost:hover {
-  border-color: #5A4E45;
-  color: #5A4E45;
+  border-color: #845736;
+  color: #845736;
 }
 
 .btn-primary {
   padding: 0.7rem 1.4rem;
   border-radius: 8px;
   border: none;
-  background-color: #5A4E45;
+  background-color: #845736;
   color: #ffffff;
   cursor: pointer;
   font-size: 0.9rem;
@@ -390,5 +351,81 @@
 }
 
 .btn-primary:hover {
-  background-color: #433932;
+  background-color: #694328;
+}
+
+.file-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.custom-file-upload {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.2rem;
+  border-radius: 8px;
+  border: 1px dashed #845736;
+  background-color: #f7f6f3;
+  color: #845736;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #eeece6;
+  border-color: #845736;
+}
+
+.file-upload-name {
+  font-size: 0.82rem;
+  color: #845736;
+}
+
+.file-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.custom-file-upload {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.65rem 1.2rem;
+  border-radius: 8px;
+  border: 1px dashed #845736;
+  background-color: #f7f6f3;
+  color: #845736;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #eeece6;
+  border-color: #845736;
+}
+
+.file-upload-name {
+  font-size: 0.82rem;
+  color: #845736;
+}
+
+.estudios-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
+  background-color: #e8e6e1;
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
 }
