@@ -32,12 +32,17 @@ const Navbar = () => {
         <nav className="navbar-container">
             <div className="navbar-left">
                 <Link to="/">
-                    <img src={logoCasaMaestra} alt="Logo Casa Maestra" className="navbar-logo" />
+                    <div
+                        className="navbar-logo"
+                        style={{ WebkitMaskImage: `url(${logoCasaMaestra})`, maskImage: `url(${logoCasaMaestra})` }}
+                        role="img"
+                        aria-label="Logo Casa Maestra"
+                    />
                 </Link>
                 <ul className="navbar-links">
                     <li><Link to="/residentes">Residentes</Link></li>
                     <li><Link to="/estudios">Estudios</Link></li>
-                    <li><Link to="/soporte">Soporte</Link></li>
+                    <li><a href="#soporte">Soporte</a></li>
                     {(user?.rol === "Admin" || user?.rol === "Fundador/a") && (
                         <li><Link to="/usuarios">Usuarios</Link></li>
                     )}
@@ -61,7 +66,7 @@ const Navbar = () => {
                                     {user.nombre_usuario || user.nombre}
                                 </div>
                                 <div className="account-dropdown-divider"></div>
-                                <Link to="/perfil?tab=datos-personales" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                <Link to="/perfil?tab=datos" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
                                     Datos Personales
                                 </Link>
                                 <Link to="/perfil?tab=seguridad" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>

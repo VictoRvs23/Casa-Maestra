@@ -1,19 +1,19 @@
 .login-content {
   text-align: center;
-  font-family: 'Roca Two', serif;
+  font-family: "League Spartan", sans-serif;
 }
 
 .login-title {
-  color: #5A4E45;
+  color: #845736;
   font-size: 2.8rem;
   margin-bottom: 0.5rem;
   font-weight: bold;
 }
 
 .login-subtitle {
-  color: #8c8c8c;
+  color: #845736;
   margin-bottom: 2rem;
-  font-family: 'Clear Sans', sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 0.95rem;
 }
 
@@ -22,13 +22,13 @@
   flex-direction: column;
   gap: 1.5rem;
   text-align: left;
-  font-family: 'Clear Sans', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #5A4E45;
+  color: #845736;
   font-size: 0.9rem;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .form-group input:focus {
-  border-color: #5A4E45;
+  border-color: #845736;
 }
 
 .login-options {
@@ -71,7 +71,7 @@
 }
 
 .login-btn {
-  background-color: #5A4E45;
+  background-color: #845736;
   color: white;
   padding: 1rem;
   border-radius: 8px;
@@ -83,7 +83,7 @@
 }
 
 .login-btn:hover {
-  background-color: #433932;
+  background-color: #694328;
 }
 
 .register-prompt {
@@ -95,7 +95,7 @@
 }
 
 .register-prompt a {
-  color: #5A4E45;
+  color: #845736;
   text-decoration: none;
   font-weight: bold;
 }

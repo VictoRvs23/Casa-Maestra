@@ -46,12 +46,12 @@ export const deleteEstudio = async (id_estudio) => {
   return data;
 };
 
-export const getDisponibilidad = async (id_estudio) => {
-  const { data } = await api.get(`/estudios/${id_estudio}/disponibilidad`);
+export const getAgenda = async (id_estudio) => {
+  const { data } = await api.get(`/estudios/${id_estudio}/agenda`);
   return data;
 };
 
-export const updateDisponibilidad = async (id_estudio, bloques) => {
-  const { data } = await api.put(`/estudios/${id_estudio}/disponibilidad`, { bloques });
+export const updateAgenda = async (id_estudio, bloques) => {
+  const { data } = await api.put(`/estudios/${id_estudio}/agenda`, { bloques });
   return data;
 };
