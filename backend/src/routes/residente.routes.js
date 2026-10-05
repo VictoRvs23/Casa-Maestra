@@ -16,13 +16,13 @@ import { CrearResidenteValidation, ActualizarResidenteValidation } from "../vali
 
 const router = Router();
 
-const soloFundador = authorizeRoles("Fundador/a");
+const GestionResidentes = authorizeRoles("Fundador/a", "Admin");
 
 router.get("/", getResidentes);
 router.get("/:id_residente", getResidente);
 
-router.post("/", verifyToken, soloFundador, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(CrearResidenteValidation), createResidente);
-router.put("/:id_residente", verifyToken, soloFundador, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(ActualizarResidenteValidation), updateResidente);
-router.delete("/:id_residente", verifyToken, soloFundador, deleteResidente);
+router.post("/", verifyToken, GestionResidentes, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(CrearResidenteValidation), createResidente);
+router.put("/:id_residente", verifyToken, GestionResidentes, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(ActualizarResidenteValidation), updateResidente);
+router.delete("/:id_residente", verifyToken, GestionResidentes, deleteResidente);
 
 export default router;
