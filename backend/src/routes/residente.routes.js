@@ -21,24 +21,8 @@ const soloFundador = authorizeRoles("Fundador/a");
 router.get("/", getResidentes);
 router.get("/:id_residente", getResidente);
 
-router.post(
-    "/",
-    verifyToken,
-    soloFundador,
-    uploadImagenResidente.single("imagen"),
-    handleMulterError,
-    validateBody(CrearResidenteValidation),
-    createResidente
-);
-router.put(
-    "/:id_residente",
-    verifyToken,
-    soloFundador,
-    uploadImagenResidente.single("imagen"),
-    handleMulterError,
-    validateBody(ActualizarResidenteValidation),
-    updateResidente
-);
+router.post("/", verifyToken, soloFundador, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(CrearResidenteValidation), createResidente);
+router.put("/:id_residente", verifyToken, soloFundador, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(ActualizarResidenteValidation), updateResidente);
 router.delete("/:id_residente", verifyToken, soloFundador, deleteResidente);
 
 export default router;
