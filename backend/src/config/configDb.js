@@ -4,6 +4,7 @@ import { DATABASE, DB_USERNAME, HOST, DB_PASSWORD, DB_PORT } from "./configEnv.j
 import UsuarioEntity from "../entities/usuario.entity.js"
 import EstudioEntity from "../entities/estudio.entity.js";
 import AgendaEntity from "../entities/agenda.entity.js";
+import ResidenteEntity from "../entities/residente.entity.js";
 import { createUsuarios } from "./InitDb.js";
 
 export const AppDataSource = new DataSource({
@@ -16,7 +17,8 @@ export const AppDataSource = new DataSource({
   entities: [
     UsuarioEntity,
     EstudioEntity,
-    AgendaEntity
+    AgendaEntity,
+    ResidenteEntity
   ],
   synchronize: true,
   logging: false,
