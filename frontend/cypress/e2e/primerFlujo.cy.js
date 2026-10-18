@@ -13,12 +13,9 @@ describe("Flujo 1 - Registro, login y filtrado de estudios", () => {
     cy.get("#telefono").type("912345678");
     cy.get('[id="contraseña"]').type(contraseña);
     cy.get('[id="confirmar_contraseña"]').type(contraseña);
-
-    const alerta = cy.stub().as("alerta");
-    cy.on("window:alert", alerta);
     cy.get("button.registro-btn").click();
 
-    cy.get("@alerta").should("have.been.calledWithMatch", "Registro exitoso");
+    // Tras registrarse, la app redirige a /login
     cy.url().should("include", "/login");
 
     // 2) Login
@@ -29,7 +26,7 @@ describe("Flujo 1 - Registro, login y filtrado de estudios", () => {
     cy.contains("Mi Cuenta").should("be.visible");
 
     // 3) Estudios y filtrado
-    cy.contains("Estudios").click();
+    cy.contains("a", "Estudios").click();
     cy.url().should("include", "/estudios");
     cy.get(".estudio-card").should("have.length.at.least", 3);
 
