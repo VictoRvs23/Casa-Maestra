@@ -1,6 +1,7 @@
 "use strict";
 import { AppDataSource } from "../config/configDb.js";
 import UsuarioEntity from "../entities/usuario.entity.js";
+import EstudioEntity from "../entities/estudio.entity.js";
 import bcrypt from "bcrypt";
 
 export async function createUsuarios() {
@@ -71,6 +72,60 @@ export async function createUsuarios() {
     
   } catch (error) {
     console.error("=> Error al inicializar los usuarios:", error);
+    throw error;
+  }
+}
+
+export async function createEstudios() {
+  try {
+    const estudioRepository = AppDataSource.getRepository(EstudioEntity);
+
+    const count = await estudioRepository.count();
+    if (count > 0) {
+      console.log("=> Estudios ya existentes en la base de datos.");
+      return;
+    }
+
+    const estudios = [
+      {
+        nombre: "Estudio 1",
+        descripcion: "Sala pequeña para trabajo individual.",
+        tipo_arriendo: "mensual",
+        capacidad: 2,
+        ancho_metros: 3,
+        largo_metros: 4,
+        precio: 150000
+      },
+      {
+        nombre: "Estudio 2",
+        descripcion: "Sala mediana para pequeños equipos.",
+        tipo_arriendo: "mensual",
+        capacidad: 6,
+        ancho_metros: 5,
+        largo_metros: 6,
+        precio: 250000
+      },
+      {
+        nombre: "Estudio 3",
+        descripcion: "Sala grande para talleres y grupos.",
+        tipo_arriendo: "mensual",
+        capacidad: 10,
+        ancho_metros: 8,
+        largo_metros: 10,
+        precio: 400000
+      }
+    ];
+
+    console.log("=> Creando estudios iniciales para la Casa Maestra...");
+
+    for (const e of estudios) {
+      const nuevoEstudio = estudioRepository.create(e);
+      await estudioRepository.save(nuevoEstudio);
+      console.log(`Estudio '${e.nombre}' creado con éxito.`);
+    }
+
+  } catch (error) {
+    console.error("=> Error al inicializar los estudios:", error);
     throw error;
   }
 }
