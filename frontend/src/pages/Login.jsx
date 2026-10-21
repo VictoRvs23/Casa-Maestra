@@ -2,25 +2,28 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
 import "../styles/Login.css";
-import { useAuth } from "../context/AuthContext"; 
+import { useAuth } from "../context/AuthContext";
+import { useAlerta } from "../context/AlertaContext.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); 
-  
+
   const { login } = useAuth();
+  const { alerta } = useAlerta();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
-    
+
     try {
       await login(email, password);
       navigate("/"); 
     } catch (err) {
-      setError(err);
+      alerta(typeof err === "string" ? err : "No se pudo iniciar sesión.", {
+        tipo: "error",
+        titulo: "No pudimos iniciar sesión",
+      });
     }
   };
 
@@ -31,7 +34,6 @@ const Login = () => {
         <p className="login-subtitle">
           Ingresa para agendar hora con tus artistas favoritos, revisar talleres y más
         </p>
-        {error && <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>}
 
         <form className="login-form" onSubmit={handleLogin}>
           

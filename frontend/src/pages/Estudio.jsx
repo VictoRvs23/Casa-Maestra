@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/AuthContext";
+import { useAlerta } from "../context/AlertaContext.jsx";
 import {
   getEstudios,
   createEstudio,
@@ -26,6 +27,7 @@ const ESTADO_INICIAL_FORM = {
 
 export default function Estudios() {
   const { user } = useAuth();
+  const { alerta, confirmar } = useAlerta();
   const puedeGestionar = user?.rol === "Fundador/a" || user?.rol === "Admin";
 
   const [estudios, setEstudios] = useState([]);
@@ -126,26 +128,36 @@ export default function Estudios() {
       }
       setModalAbierto(false);
       fetchEstudios();
+      alerta(
+        editandoId ? "El estudio se actualizó correctamente." : "El estudio se creó correctamente.",
+        { tipo: "exito" }
+      );
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "No se pudo guardar el estudio.");
+      alerta(err.response?.data?.message || "No se pudo guardar el estudio.", { tipo: "error" });
     }
   };
 
   const handleEliminar = async (estudio) => {
-    const ok = window.confirm(`¿Eliminar "${estudio.nombre}"? Esta acción no se puede deshacer.`);
+    const ok = await confirmar(`¿Eliminar "${estudio.nombre}"? Esta acción no se puede deshacer.`, {
+      textoConfirmar: "Eliminar",
+    });
     if (!ok) return;
     try {
       await deleteEstudio(estudio.id_estudio);
       fetchEstudios();
+      alerta("El estudio se eliminó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert("No se pudo eliminar el estudio.");
+      alerta("No se pudo eliminar el estudio.", { tipo: "error" });
     }
   };
 
   const handleReservar = (estudio) => {
-    alert(`Escríbenos por Soporte para arrendar "${estudio.nombre}". Pronto esto será automático.`);
+    alerta(`Escríbenos por Soporte para arrendar "${estudio.nombre}". Pronto esto será automático.`, {
+      tipo: "info",
+      titulo: "Reservar estudio",
+    });
   };
 
   return (

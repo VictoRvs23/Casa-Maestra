@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/AuthContext";
+import { useAlerta } from "../context/AlertaContext.jsx";
 import {
   getResidentes,
   createResidente,
@@ -15,6 +16,7 @@ const FORM_INICIAL = { nombre: "", descripcion: "" };
 
 export default function Residente() {
   const { user } = useAuth();
+  const { alerta, confirmar } = useAlerta();
   const puedeGestionar = user?.rol === "Fundador/a" || user?.rol === "Admin";
 
   const [residentes, setResidentes] = useState([]);
@@ -97,23 +99,30 @@ export default function Residente() {
       }
       cerrarModal();
       fetchResidentes();
+      alerta(
+        editandoId ? "El residente se actualizó correctamente." : "El residente se creó correctamente.",
+        { tipo: "exito" }
+      );
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "No se pudo guardar el residente.");
+      alerta(err.response?.data?.message || "No se pudo guardar el residente.", { tipo: "error" });
     } finally {
       setGuardando(false);
     }
   };
 
   const handleEliminar = async (residente) => {
-    const ok = window.confirm(`¿Eliminar a "${residente.nombre}"? Esta acción no se puede deshacer.`);
+    const ok = await confirmar(`¿Eliminar a "${residente.nombre}"? Esta acción no se puede deshacer.`, {
+      textoConfirmar: "Eliminar",
+    });
     if (!ok) return;
     try {
       await deleteResidente(residente.id_residente);
       fetchResidentes();
+      alerta("El residente se eliminó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "No se pudo eliminar el residente.");
+      alerta(err.response?.data?.message || "No se pudo eliminar el residente.", { tipo: "error" });
     }
   };
 

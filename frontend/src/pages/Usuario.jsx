@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar.jsx";
+import { useAlerta } from "../context/AlertaContext.jsx";
 import { getUsuarios, updateUsuario, deleteUsuario } from "../services/usuario.services.js";
 import { IoFilterSharp  } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
@@ -18,6 +19,7 @@ const ROL_DISPLAY = {
 };
 
 export default function Usuario() {
+  const { alerta, confirmar } = useAlerta();
   const [usuarios, setUsuarios] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -70,16 +72,18 @@ const usuariosOrdenados = Array.isArray(usuarios)
   };
 
   const handleDelete = async (usuario) => {
-    const ok = window.confirm(
-      `¿Eliminar a ${usuario.nombre} ${usuario.apellido}? Esta acción no se puede deshacer.`
+    const ok = await confirmar(
+      `¿Eliminar a ${usuario.nombre} ${usuario.apellido}? Esta acción no se puede deshacer.`,
+      { textoConfirmar: "Eliminar" }
     );
     if (!ok) return;
     try {
       await deleteUsuario(usuario.id_usuario);
       fetchUsuarios();
+      alerta("El usuario se eliminó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert("No se pudo eliminar el usuario.");
+      alerta("No se pudo eliminar el usuario.", { tipo: "error" });
     }
   };
 
@@ -94,9 +98,10 @@ const usuariosOrdenados = Array.isArray(usuarios)
       });
       setEditando(null);
       fetchUsuarios();
+      alerta("El usuario se actualizó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert("No se pudo guardar el cambio.");
+      alerta("No se pudo guardar el cambio.", { tipo: "error" });
     }
   };
 
