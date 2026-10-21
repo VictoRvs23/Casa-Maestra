@@ -3,14 +3,14 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import "./styles/index.css";
-import { AlertProvider } from "./context/AlertContext.jsx";
+import { AlertaProvider } from "./context/AlertaContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProvider>
-      <AlertProvider>
+      <AlertaProvider>
         <App />
-      </AlertProvider>
+      </AlertaProvider>
     </AuthProvider>
   </React.StrictMode>
 );
