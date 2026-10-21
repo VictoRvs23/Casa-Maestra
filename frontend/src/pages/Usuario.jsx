@@ -2,9 +2,8 @@ import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar.jsx";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getUsuarios, updateUsuario, deleteUsuario } from "../services/usuario.services.js";
-import { IoFilterSharp  } from "react-icons/io5";
-import { AiOutlineEdit } from "react-icons/ai";
-import { AiOutlineDelete } from "react-icons/ai";
+import { Funnel, Pencil, Trash2 } from "@sketchicon/lucide";
+import Icono from "../components/Icono.jsx";
 
 import "../styles/Usuario.css";
 
@@ -117,7 +116,7 @@ const usuariosOrdenados = Array.isArray(usuarios)
       <div className="usuarios-wrap">
         <div className="usuarios-toolbar">
           <button className="filter-btn" onClick={() => setShowFilter((v) => !v)} aria-label="Filtrar">
-            <IoFilterSharp size={18} />
+            <Icono icon={Funnel} size={18} />
           </button>
 
           {showFilter && (
@@ -178,14 +177,14 @@ const usuariosOrdenados = Array.isArray(usuarios)
                       <td>
                         <div className="acciones-cell">
                           <button className="icon-btn" onClick={() => setEditando(u)} aria-label="Editar">
-                            <AiOutlineEdit size={18} />
+                            <Icono icon={Pencil} size={18} />
                           </button>
                           <button
                             className="icon-btn danger"
                             onClick={() => handleDelete(u)}
                             aria-label="Eliminar"
                           >
-                            <AiOutlineDelete size={20} />
+                            <Icono icon={Trash2} size={20} />
                           </button>
                         </div>
                       </td>
