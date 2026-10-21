@@ -4,8 +4,8 @@ import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getUsuario, uploadAvatar, getAvatarUrl } from "../services/usuario.services.js";
-import { IoPersonOutline, IoLockClosedOutline, IoCalendarOutline, IoHeartOutline } from "react-icons/io5";
-import { AiOutlineEdit } from "react-icons/ai";
+import { User, Lock, Calendar, Heart, Pencil } from "@sketchicon/lucide";
+import Icono from "../components/Icono.jsx";
 import DatosPersonales from "../components/perfil/DatosPersonales.jsx";
 import Seguridad from "../components/perfil/Seguridad.jsx";
 import MisReservas from "../components/perfil/MisReservas.jsx";
@@ -113,7 +113,7 @@ export default function Perfil() {
               title="Cambiar foto"
               onClick={() => fileInputRef.current?.click()}
             >
-              <AiOutlineEdit size={14} />
+              <Icono icon={Pencil} size={14} />
             </button>
 
             <input
@@ -127,16 +127,16 @@ export default function Perfil() {
 
           <div className="perfil-tabs">
             <button className={tab === "datos-personales" ? "active" : ""} onClick={() => cambiarTab("datos-personales")}>
-              <IoPersonOutline size={17} /> Datos Personales
+              <Icono icon={User} size={17} /> Datos Personales
             </button>
             <button className={tab === "seguridad" ? "active" : ""} onClick={() => cambiarTab("seguridad")}>
-              <IoLockClosedOutline size={17} /> Seguridad
+              <Icono icon={Lock} size={17} /> Seguridad
             </button>
             <button className={tab === "reservas" ? "active" : ""} onClick={() => cambiarTab("reservas")}>
-              <IoCalendarOutline size={17} /> Mis reservas
+              <Icono icon={Calendar} size={17} /> Mis reservas
             </button>
             <button className={tab === "seguidos" ? "active" : ""} onClick={() => cambiarTab("seguidos")}>
-              <IoHeartOutline size={17} /> Seguidos
+              <Icono icon={Heart} size={17} /> Seguidos
             </button>
           </div>
         </div>

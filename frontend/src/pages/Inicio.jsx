@@ -1,7 +1,8 @@
 import React from "react";
 import Navbar from "../components/Navbar.jsx";
 import { FaInstagram } from "react-icons/fa";
-import { FaPhone } from "react-icons/fa6";
+import { Phone } from "@sketchicon/lucide";
+import Icono from "../components/Icono.jsx";
 import { SiGmail } from "react-icons/si";
 import "../styles/Inicio.css";
 import ceramicaImg from "../assets/categorias/ceramica.jpg";
@@ -64,7 +65,7 @@ const Inicio = () => {
       <footer className="inicio-footer">
         <div className="footer-content">
           <span className="footer-item"><FaInstagram size={20} /> casamaestra_cl</span>
-          <span className="footer-item"><FaPhone size={18} /> 9 11111111</span>
+          <span className="footer-item"><Icono icon={Phone} size={18} /> 9 11111111</span>
           <span className="footer-item"><SiGmail size={20} /> casamaestra@gmail.com</span>
         </div>
       </footer>
