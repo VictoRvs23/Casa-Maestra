@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { updateUsuario } from "../../services/usuario.services.js";
-import { useAlerta } from "../../context/AlertContext.jsx";
+import { useAlerta } from "../../context/AlertaContext.jsx";
 import { AiOutlineEdit } from "react-icons/ai";
 import "../../styles/perfil/DatosPersonales.css";
 
