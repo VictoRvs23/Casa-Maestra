@@ -5,7 +5,8 @@ import UsuarioEntity from "../entities/usuario.entity.js"
 import EstudioEntity from "../entities/estudio.entity.js";
 import AgendaEntity from "../entities/agenda.entity.js";
 import ResidenteEntity from "../entities/residente.entity.js";
-import { createUsuarios, createEstudios } from "./InitDb.js";
+import TallerEntity from "../entities/taller.entity.js";
+import { createUsuarios, createEstudios} from "./InitDb.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -18,7 +19,8 @@ export const AppDataSource = new DataSource({
     UsuarioEntity,
     EstudioEntity,
     AgendaEntity,
-    ResidenteEntity
+    ResidenteEntity,
+    TallerEntity
   ],
   synchronize: true,
   logging: false,
