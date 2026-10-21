@@ -40,7 +40,6 @@ Dependencias de producción:
 - react-dom (^18.2.0): Paquete encargado de renderizar los componentes de React en el DOM del navegador.
 - react-icons (^5.6.0): Colección masiva de íconos vectoriales personalizables para la interfaz.
 - react-router-dom (^7.11.0): Enrutador oficial para manejar la navegación entre las distintas páginas sin recargar el sitio (SPA).
-- sweetalert2 (^11.26.25): Librería para crear cuadros de diálogo, alertas y modales interactivos y estéticos.
 
 Dependencias de Desarrollo:
 - @types/react (^18.2.37) & @types/react-dom (^18.2.15): Paquetes que proveen las definiciones de tipos para mejorar el autocompletado y análisis de código.
