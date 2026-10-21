@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/AuthContext";
+import { useAlerta } from "../context/AlertaContext.jsx";
 import { getUsuario, uploadAvatar, getAvatarUrl } from "../services/usuario.services.js";
 import { IoPersonOutline, IoLockClosedOutline, IoCalendarOutline, IoHeartOutline } from "react-icons/io5";
 import { AiOutlineEdit } from "react-icons/ai";
@@ -16,6 +17,7 @@ const TABS_VALIDAS = ["datos-personales", "seguridad", "reservas", "seguidos"];
 
 export default function Perfil() {
   const { user } = useAuth();
+  const { alerta } = useAlerta();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const tabInicial = TABS_VALIDAS.includes(searchParams.get("tab")) ? searchParams.get("tab") : "datos-personales";
@@ -70,9 +72,10 @@ export default function Perfil() {
       const { usuario } = await uploadAvatar(perfil.id_usuario, archivoRecortado);
       setPerfil(usuario);
       cerrarRecortador();
+      alerta("Tu foto de perfil se actualizó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "No se pudo subir la foto de perfil.");
+      alerta(err.response?.data?.message || "No se pudo subir la foto de perfil.", { tipo: "error" });
     } finally {
       setSubiendoAvatar(false);
     }
