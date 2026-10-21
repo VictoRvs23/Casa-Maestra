@@ -9,7 +9,8 @@ import {
   deleteResidente,
   getImagenUrl,
 } from "../services/residente.services.js";
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { Pencil, Trash2 } from "@sketchicon/lucide";
+import Icono from "../components/Icono.jsx";
 import "../styles/Residente.css";
 
 const FORM_INICIAL = { nombre: "", descripcion: "" };
@@ -176,10 +177,10 @@ export default function Residente() {
                 {puedeGestionar && (
                   <div className="residente-admin-actions">
                     <button onClick={() => abrirEditar(residente)}>
-                      <AiOutlineEdit size={18} /> Editar
+                      <Icono icon={Pencil} size={18} /> Editar
                     </button>
                     <button className="danger" onClick={() => handleEliminar(residente)}>
-                      <AiOutlineDelete size={18} /> Eliminar
+                      <Icono icon={Trash2} size={18} /> Eliminar
                     </button>
                   </div>
                 )}
