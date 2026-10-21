@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { updateUsuario } from "../../services/usuario.services.js";
 import { useAlerta } from "../../context/AlertaContext.jsx";
-import { AiOutlineEdit } from "react-icons/ai";
+import { Pencil } from "@sketchicon/lucide";
+import Icono from "../Icono.jsx";
 import "../../styles/perfil/DatosPersonales.css";
 
 export default function DatosPersonales({ perfil, onGuardado }) {
@@ -58,7 +59,7 @@ export default function DatosPersonales({ perfil, onGuardado }) {
         </div>
         {!editando && (
           <button className="icon-edit-btn" onClick={() => setEditando(true)} aria-label="Editar">
-            <AiOutlineEdit size={18} />
+            <Icono icon={Pencil} size={18} />
           </button>
         )}
       </div>
