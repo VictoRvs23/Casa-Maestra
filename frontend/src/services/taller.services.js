@@ -1,115 +1,43 @@
-import { In } from "typeorm";
-import { AppDataSource } from "../config/configDb.js";
-import TallerEntity from "../entities/taller.entity.js";
-import UsuarioEntity from "../entities/usuario.entity.js";
-import fs from "fs";
-import path from "path";
+import api from "./api";
 
-const tallerRepository = AppDataSource.getRepository(TallerEntity);
-const usuarioRepository = AppDataSource.getRepository(UsuarioEntity);
+const SERVER_ORIGIN = (import.meta.env.VITE_API_URL || "http://localhost:3000/api").replace(/\/api\/?$/, "");
 
-const ROLES_ARTISTA = ["Residente"];
-
-const CAMPOS_ARTISTA = [
-    "artista.id_usuario",
-    "artista.nombre",
-    "artista.apellido",
-    "artista.nombre_usuario",
-    "artista.avatar",
-];
-
-const borrarImagenLocal = (rutaImagen) => {
-    if (!rutaImagen || !rutaImagen.startsWith("/uploads/talleres/")) return;
-
-    const rutaFisica = path.resolve("." + rutaImagen);
-    fs.unlink(rutaFisica, (err) => {
-        if (err && err.code !== "ENOENT") {
-            console.error("No se pudo borrar la imagen huérfana:", rutaFisica, err.message);
-        }
-    });
+export const getImagenUrl = (rutaImagen) => {
+  if (!rutaImagen) return null;
+  if (rutaImagen.startsWith("http")) return rutaImagen;
+  return `${SERVER_ORIGIN}${rutaImagen}`;
 };
 
-const resolverArtistas = async (ids) => {
-    if (!ids || ids.length === 0) return [];
-
-    const artistas = await usuarioRepository.find({
-        where: { id_usuario: In(ids), rol: In(ROLES_ARTISTA) },
-    });
-
-    if (artistas.length !== ids.length) {
-        throw {
-            status: 400,
-            message: "Alguno de los artistas seleccionados no existe o no tiene rol de Residente.",
-        };
-    }
-    return artistas;
+export const getTalleres = async () => {
+  const { data } = await api.get("/talleres");
+  return data;
 };
 
-export const getTalleresService = async () => {
-    return await tallerRepository.find({ order: { id_taller: "ASC" } });
+export const getTaller = async (id_taller) => {
+  const { data } = await api.get(`/talleres/${id_taller}`);
+  return data;
 };
 
-export const getTallerService = async (id_taller) => {
-    const taller = await tallerRepository
-        .createQueryBuilder("taller")
-        .leftJoin("taller.artistas", "artista")
-        .addSelect(CAMPOS_ARTISTA)
-        .where("taller.id_taller = :id", { id: parseInt(id_taller) })
-        .orderBy("artista.nombre", "ASC")
-        .getOne();
-
-    if (!taller) throw { status: 404, message: "Taller no encontrado" };
-    return taller;
+export const getArtistasDisponibles = async () => {
+  const { data } = await api.get("/talleres/artistas-disponibles");
+  return data;
 };
 
-export const getArtistasDisponiblesService = async () => {
-    return await usuarioRepository.find({
-        where: { rol: In(ROLES_ARTISTA) },
-        select: ["id_usuario", "nombre", "apellido", "nombre_usuario", "avatar"],
-        order: { nombre: "ASC" },
-    });
+export const createTaller = async (formData) => {
+  const { data } = await api.post("/talleres", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
 };
 
-export const createTallerService = async (data) => {
-    const { artistas: idsArtistas, ...resto } = data;
-
-    const nuevoTaller = tallerRepository.create(resto);
-    nuevoTaller.artistas = await resolverArtistas(idsArtistas);
-
-    const guardado = await tallerRepository.save(nuevoTaller);
-    return await getTallerService(guardado.id_taller);
+export const updateTaller = async (id_taller, formData) => {
+  const { data } = await api.put(`/talleres/${id_taller}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return data;
 };
 
-export const updateTallerService = async (id_taller, data) => {
-    const taller = await tallerRepository.findOne({
-        where: { id_taller: parseInt(id_taller) },
-        relations: { artistas: true },
-    });
-
-    if (!taller) throw { status: 404, message: "Taller no encontrado" };
-
-    const { artistas: idsArtistas, ...resto } = data;
-
-    if (resto.imagen !== undefined && resto.imagen !== taller.imagen) {
-        borrarImagenLocal(taller.imagen);
-    }
-
-    Object.assign(taller, resto);
-
-    if (idsArtistas !== undefined) {
-        taller.artistas = await resolverArtistas(idsArtistas);
-    }
-
-    await tallerRepository.save(taller);
-    return await getTallerService(id_taller);
-};
-
-export const deleteTallerService = async (id_taller) => {
-    const taller = await tallerRepository.findOneBy({ id_taller: parseInt(id_taller) });
-
-    if (!taller) throw { status: 404, message: "Taller no encontrado" };
-
-    borrarImagenLocal(taller.imagen);
-    await tallerRepository.delete(id_taller);
-    return true;
+export const deleteTaller = async (id_taller) => {
+  const { data } = await api.delete(`/talleres/${id_taller}`);
+  return data;
 };
