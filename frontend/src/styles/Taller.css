@@ -1,5 +1,5 @@
 .taller-page {
-  background-color: #e8e6e1;
+  background-color: #ffffff;
   min-height: 100vh;
   font-family: "Montserrat", sans-serif;
   color: #845736;
@@ -12,7 +12,7 @@
   position: absolute;
   inset: 0;
   background-image: url("../assets/hojaArrugada.jpg");
-  background-color: #e8e6e1;
+  background-color: #ffffff;
   background-size: cover;
   background-position: center;
   background-repeat: repeat;
@@ -22,9 +22,8 @@
 }
 
 .taller-wrap {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem 2rem 4rem;
+  border-top: 2px dashed #845736;
+  padding: 2rem max(2rem, calc((100% - 900px) / 2)) 4rem;
 }
 
 .taller-volver {
