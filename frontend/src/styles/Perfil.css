@@ -20,16 +20,15 @@
 }
 
 .perfil-wrap {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 2.5rem 2rem 4rem;
+  border-top: 2px dashed #845736;
+  padding: 2.5rem max(2rem, calc((100% - 1000px) / 2)) 4rem;
   display: grid;
   grid-template-columns: 260px 1fr;
   gap: 1.5rem;
 }
 
 .perfil-sidebar {
-  background-color: #f2f0eb;
+  background-color: #ffffff;
   border-radius: 15px;
   padding: 1.8rem 1.4rem;
   text-align: center;
