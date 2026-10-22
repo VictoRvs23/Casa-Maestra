@@ -38,7 +38,7 @@ const Inicio = () => {
   const [form, setForm] = useState(FORM_INICIAL);
   const [imagenArchivo, setImagenArchivo] = useState(null);
   const [artistasDisponibles, setArtistasDisponibles] = useState([]);
-  const [artistasElegidos, setArtistasElegidos] = useState([]); // ids
+  const [artistasElegidos, setArtistasElegidos] = useState([]);
   const [guardando, setGuardando] = useState(false);
 
   const fetchTalleres = useCallback(async () => {
@@ -298,7 +298,7 @@ const Inicio = () => {
               <div className="form-group">
                 <label>Artistas que trabajan aquí</label>
                 {artistasDisponibles.length === 0 ? (
-                  <p className="artistas-vacio">No hay artistas ni residentes registrados todavía.</p>
+                  <p className="artistas-vacio">No hay residentes registrados todavía.</p>
                 ) : (
                   <div className="artistas-checklist">
                     {artistasDisponibles.map((a) => (
