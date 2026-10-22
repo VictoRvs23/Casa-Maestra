@@ -4,6 +4,7 @@
   font-family: "Montserrat", sans-serif;
   overflow-x: hidden;
   position: relative;
+  z-index: 0;
 }
 
 .inicio-container::before {
@@ -141,4 +142,75 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.talleres-toolbar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.talleres-create-btn {
+  padding: 0.75rem 1.4rem;
+  border-radius: 21px;
+  border: none;
+  background-color: #845736;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.talleres-create-btn:hover {
+  background-color: #694328;
+}
+
+.category-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.category-link:focus-visible {
+  outline: 3px solid #845736;
+  outline-offset: 4px;
+  border-radius: 15px;
+}
+
+.category-card:hover .category-title {
+  text-decoration: underline;
+}
+
+.category-admin-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.6rem;
+}
+
+.category-admin-actions button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  color: #845736;
+  font-size: 0.82rem;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  padding: 0;
+}
+
+.category-admin-actions button:hover {
+  color: #694328;
+}
+
+.category-admin-actions button.danger:hover {
+  color: #a8452c;
+}
+
+.estado-error {
+  color: #a8452c;
 }
