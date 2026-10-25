@@ -1,0 +1,593 @@
+.soporte-page {
+  background-color: #ffffff;
+  min-height: 100vh;
+  font-family: "Montserrat", sans-serif;
+  color: #845736;
+  position: relative;
+  z-index: 0;
+}
+
+.soporte-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
+  background-color: #ffffff;
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.soporte-hero {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 2px dashed #845736;
+  border-bottom: 2px dashed #845736;
+}
+
+.soporte-hero h1 {
+  font-family: "League Spartan", sans-serif;
+  color: #845736;
+  font-size: 2.6rem;
+  margin: 0 0 0.5rem;
+  letter-spacing: 1px;
+}
+
+.soporte-hero p {
+  color: #845736;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.soporte-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+}
+
+.soporte-subtitulo {
+  font-family: "League Spartan", sans-serif;
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0 0 1.2rem;
+  color: #845736;
+}
+
+.soporte-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1.6rem;
+}
+
+.soporte-chip {
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  border: 2px solid #845736;
+  background: none;
+  color: #845736;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.soporte-chip:hover {
+  background-color: rgba(132, 87, 54, 0.12);
+}
+
+.soporte-chip.activo {
+  background-color: #845736;
+  color: #ffffff;
+}
+
+.soporte-toolbar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+}
+
+.soporte-create-btn {
+  padding: 0.75rem 1.4rem;
+  border-radius: 21px;
+  border: none;
+  background-color: #845736;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.soporte-create-btn:hover {
+  background-color: #694328;
+}
+
+.estado-msg {
+  text-align: center;
+  color: #845736;
+  padding: 2rem 0;
+}
+
+.estado-error {
+  color: #a8452c;
+}
+
+.soporte-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.soporte-item {
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.soporte-pregunta {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.4rem;
+  background: none;
+  border: none;
+  text-align: left;
+  color: #845736;
+  font-family: "League Spartan", sans-serif;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.soporte-pregunta:focus-visible {
+  outline: 3px solid #845736;
+  outline-offset: -3px;
+  border-radius: 15px;
+}
+
+.soporte-pregunta-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.soporte-categoria {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #9a8672;
+}
+
+.soporte-chevron {
+  display: flex;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.soporte-item.abierta .soporte-chevron {
+  transform: rotate(180deg);
+}
+
+.soporte-respuesta {
+  padding: 0 1.4rem 1.2rem;
+  border-top: 1px dashed #ccc;
+}
+
+.soporte-respuesta p {
+  margin: 1rem 0 0;
+  line-height: 1.7;
+  font-size: 0.95rem;
+  white-space: pre-line;
+}
+
+.soporte-admin-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+  border-top: 1px dashed #ccc;
+}
+
+.soporte-admin-actions button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: none;
+  color: #845736;
+  font-size: 0.82rem;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  padding: 0;
+}
+
+.soporte-admin-actions button:hover {
+  color: #694328;
+}
+
+.soporte-admin-actions button.danger:hover {
+  color: #a8452c;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(90, 78, 69, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  padding: 1.2rem;
+}
+
+.modal-box {
+  background-color: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem 2.2rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.modal-box h2 {
+  font-family: "League Spartan", sans-serif;
+  font-size: 1.6rem;
+  margin: 0 0 1.2rem;
+  color: #845736;
+}
+
+.form-group {
+  margin-bottom: 1.1rem;
+}
+
+.form-group > label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: #845736;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  outline: none;
+  font-size: 0.9rem;
+  font-family: "Montserrat", sans-serif;
+  background-color: #ffffff;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #845736;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.btn-ghost {
+  padding: 0.7rem 1.3rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: none;
+  color: #7a7a7a;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-ghost:hover {
+  border-color: #845736;
+  color: #845736;
+}
+
+.btn-primary {
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #845736;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #694328;
+}
+
+.btn-primary:disabled {
+  background-color: #cfccc4;
+  cursor: not-allowed;
+}
+
+.soporte-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.soporte-tab {
+  padding: 0.6rem 1.5rem;
+  border-radius: 999px;
+  border: 2px solid #845736;
+  background: none;
+  color: #845736;
+  font-family: "League Spartan", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.soporte-tab:hover {
+  background-color: rgba(132, 87, 54, 0.12);
+}
+
+.soporte-tab.activo {
+  background-color: #845736;
+  color: #ffffff;
+}
+
+.soporte-bloque {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.soporte-bloque-ancho {
+  max-width: none;
+}
+
+.soporte-intro {
+  text-align: center;
+  margin: 0 0 1.2rem;
+  font-size: 0.95rem;
+}
+
+.soporte-login-aviso {
+  text-align: center;
+  margin-top: 2.5rem;
+  font-size: 0.95rem;
+}
+
+.soporte-login-aviso a {
+  color: #845736;
+  font-weight: 700;
+}
+
+.estado-pill {
+  display: inline-block;
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.estado-abierto {
+  background-color: #f1e6c9;
+  color: #7a5c14;
+}
+
+.estado-revision {
+  background-color: #dbe6ec;
+  color: #3b5565;
+}
+
+.estado-resuelto {
+  background-color: #dcece3;
+  color: #2f6a53;
+}
+
+/*(vista de usuario)*/
+.ticket-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.ticket-card {
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 1.2rem 1.4rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.ticket-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.ticket-asunto {
+  font-family: "League Spartan", sans-serif;
+  font-size: 1.1rem;
+  margin: 0 0 0.2rem;
+  color: #845736;
+}
+
+.ticket-meta {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #9a8672;
+}
+
+.ticket-mensaje {
+  margin: 0.9rem 0 0;
+  line-height: 1.6;
+  font-size: 0.92rem;
+  white-space: pre-line;
+}
+
+.ticket-respuesta {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  background-color: #f7f6f3;
+  border-left: 4px solid #845736;
+}
+
+.ticket-respuesta p {
+  margin: 0.4rem 0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  white-space: pre-line;
+}
+
+.ticket-respuesta small {
+  color: #9a8672;
+  font-size: 0.74rem;
+}
+
+/*(vista de Admin/Fundador/a)*/
+.tickets-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-bottom: 1.4rem;
+}
+
+.tickets-filtros input,
+.tickets-filtros select {
+  padding: 0.65rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
+  font-size: 0.88rem;
+  font-family: "Montserrat", sans-serif;
+  color: #845736;
+  outline: none;
+}
+
+.tickets-filtros input {
+  flex: 1;
+  min-width: 220px;
+}
+
+.tickets-filtros input:focus,
+.tickets-filtros select:focus {
+  border-color: #845736;
+}
+
+.tickets-tabla-wrap {
+  background-color: #ffffff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.tickets-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.tickets-tabla th {
+  background-color: #845736;
+  color: #ffffff;
+  text-align: left;
+  padding: 0.9rem 1rem;
+  font-size: 0.82rem;
+}
+
+.tickets-tabla td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #ece9e3;
+  vertical-align: middle;
+}
+
+.tickets-tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.tickets-asunto {
+  max-width: 260px;
+}
+
+.ticket-ver-btn {
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  border: none;
+  background-color: #845736;
+  color: #ffffff;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ticket-ver-btn:hover {
+  background-color: #694328;
+}
+
+.tickets-paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+}
+
+.tickets-paginacion button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: #845736;
+  color: #ffffff;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.tickets-paginacion button:disabled {
+  background-color: #cfccc4;
+  cursor: not-allowed;
+}
+
+.modal-box-ancho {
+  max-width: 600px;
+}
+
+.ticket-detalle p {
+  margin: 0 0 0.5rem;
+  font-size: 0.88rem;
+}
+
+.ticket-mensaje-caja {
+  margin: 0.8rem 0 1.4rem;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  background-color: #f7f6f3;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  white-space: pre-line;
+}
