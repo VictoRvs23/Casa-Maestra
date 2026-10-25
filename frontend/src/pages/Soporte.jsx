@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/AuthContext";
-import PreguntasFrecuentes from "../components/soporte/PreguntasFrecuentes.jsx";
+import PreguntasFrecuentes from "../components/soporte/PreguntaFrecuente.jsx";
 import MisTickets from "../components/soporte/MisTickets.jsx";
 import RegistroTickets from "../components/soporte/RegistroTickets.jsx";
 import "../styles/Soporte.css";
