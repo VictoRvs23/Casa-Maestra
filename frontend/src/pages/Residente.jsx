@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar.jsx";
 import { useAuth } from "../context/AuthContext";
+import { useAlerta } from "../context/AlertaContext.jsx";
 import {
   getResidentes,
   createResidente,
@@ -8,13 +9,15 @@ import {
   deleteResidente,
   getImagenUrl,
 } from "../services/residente.services.js";
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
+import { Pencil, Trash2 } from "@sketchicon/lucide";
+import Icono from "../components/Icono.jsx";
 import "../styles/Residente.css";
 
 const FORM_INICIAL = { nombre: "", descripcion: "" };
 
 export default function Residente() {
   const { user } = useAuth();
+  const { alerta, confirmar } = useAlerta();
   const puedeGestionar = user?.rol === "Fundador/a" || user?.rol === "Admin";
 
   const [residentes, setResidentes] = useState([]);
@@ -97,23 +100,30 @@ export default function Residente() {
       }
       cerrarModal();
       fetchResidentes();
+      alerta(
+        editandoId ? "El residente se actualizó correctamente." : "El residente se creó correctamente.",
+        { tipo: "exito" }
+      );
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "No se pudo guardar el residente.");
+      alerta(err.response?.data?.message || "No se pudo guardar el residente.", { tipo: "error" });
     } finally {
       setGuardando(false);
     }
   };
 
   const handleEliminar = async (residente) => {
-    const ok = window.confirm(`¿Eliminar a "${residente.nombre}"? Esta acción no se puede deshacer.`);
+    const ok = await confirmar(`¿Eliminar a "${residente.nombre}"? Esta acción no se puede deshacer.`, {
+      textoConfirmar: "Eliminar",
+    });
     if (!ok) return;
     try {
       await deleteResidente(residente.id_residente);
       fetchResidentes();
+      alerta("El residente se eliminó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "No se pudo eliminar el residente.");
+      alerta(err.response?.data?.message || "No se pudo eliminar el residente.", { tipo: "error" });
     }
   };
 
@@ -167,10 +177,10 @@ export default function Residente() {
                 {puedeGestionar && (
                   <div className="residente-admin-actions">
                     <button onClick={() => abrirEditar(residente)}>
-                      <AiOutlineEdit size={18} /> Editar
+                      <Icono icon={Pencil} size={18} /> Editar
                     </button>
                     <button className="danger" onClick={() => handleEliminar(residente)}>
-                      <AiOutlineDelete size={18} /> Eliminar
+                      <Icono icon={Trash2} size={18} /> Eliminar
                     </button>
                   </div>
                 )}

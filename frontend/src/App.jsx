@@ -7,6 +7,8 @@ import Usuario from "./pages/Usuario.jsx";
 import Estudio from "./pages/Estudio.jsx";
 import Perfil from "./pages/Perfil.jsx";
 import Residente from "./pages/Residente.jsx";
+import Taller from "./pages/Taller.jsx";
+import Soporte from "./pages/Soporte.jsx";
 
 function App() {
   return (
@@ -14,6 +16,9 @@ function App() {
       <Routes>
         {/* Ruta de Inicio */}
         <Route path="/" element={<Inicio />} />
+
+        {/* Ruta de Taller */}
+        <Route path="/talleres/:id_taller" element={<Taller />} />
 
         {/* Ruta de Login */}
         <Route path="/login" element={<Login />} />
@@ -26,6 +31,9 @@ function App() {
 
         {/* Ruta de Estudios */}
         <Route path="/estudios" element={<Estudio />} />
+
+        {/* Ruta de Soporte */}
+        <Route path="/soporte" element={<Soporte />} />
 
         {/* Ruta de Usuarios */}
         <Route path="/usuarios" element={<Usuario />} />

@@ -5,7 +5,10 @@ import UsuarioEntity from "../entities/usuario.entity.js"
 import EstudioEntity from "../entities/estudio.entity.js";
 import AgendaEntity from "../entities/agenda.entity.js";
 import ResidenteEntity from "../entities/residente.entity.js";
-import { createUsuarios } from "./InitDb.js";
+import TallerEntity from "../entities/taller.entity.js";
+import PreguntaFrecuenteEntity from "../entities/preguntaFrecuente.entity.js";
+import TicketEntity from "../entities/ticket.entity.js";
+import { createUsuarios, createEstudios} from "./InitDb.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -18,7 +21,10 @@ export const AppDataSource = new DataSource({
     UsuarioEntity,
     EstudioEntity,
     AgendaEntity,
-    ResidenteEntity
+    ResidenteEntity,
+    TallerEntity,
+    PreguntaFrecuenteEntity,
+    TicketEntity
   ],
   synchronize: true,
   logging: false,
@@ -31,7 +37,8 @@ export async function connectDB() {
     console.log("=> Conexión a BD exitosa <=");
 
     await createUsuarios();
-
+    await createEstudios();
+    
   } catch (error) {
     console.error("=> Error al conectar a BD:", error);
     throw error;

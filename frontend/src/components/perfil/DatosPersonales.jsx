@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { updateUsuario } from "../../services/usuario.services.js";
-import { AiOutlineEdit } from "react-icons/ai";
+import { useAlerta } from "../../context/AlertaContext.jsx";
+import { Pencil } from "@sketchicon/lucide";
+import Icono from "../Icono.jsx";
 import "../../styles/perfil/DatosPersonales.css";
 
 export default function DatosPersonales({ perfil, onGuardado }) {
+  const { alerta } = useAlerta();
   const [editando, setEditando] = useState(false);
   const [guardando, setGuardando] = useState(false);
   const [form, setForm] = useState({
@@ -38,9 +41,10 @@ export default function DatosPersonales({ perfil, onGuardado }) {
       const { usuario } = await updateUsuario(perfil.id_usuario, form);
       onGuardado(usuario);
       setEditando(false);
+      alerta("Tus datos se actualizaron correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "No se pudieron guardar los cambios.");
+      alerta(err.response?.data?.message || "No se pudieron guardar los cambios.", { tipo: "error" });
     } finally {
       setGuardando(false);
     }
@@ -55,7 +59,7 @@ export default function DatosPersonales({ perfil, onGuardado }) {
         </div>
         {!editando && (
           <button className="icon-edit-btn" onClick={() => setEditando(true)} aria-label="Editar">
-            <AiOutlineEdit size={18} />
+            <Icono icon={Pencil} size={18} />
           </button>
         )}
       </div>

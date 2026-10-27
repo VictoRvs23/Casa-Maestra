@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoCasaMaestra from "../assets/logoCasaMaestra.png";
-import { IoIosNotifications } from "react-icons/io";
-import { IoPersonCircleOutline } from "react-icons/io5";
+import { Bell, CircleUser } from "@sketchicon/lucide";
+import Icono from "./Icono.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import "../styles/Navbar.css";
 
@@ -42,7 +42,7 @@ const Navbar = () => {
                 <ul className="navbar-links">
                     <li><Link to="/residentes">Residentes</Link></li>
                     <li><Link to="/estudios">Estudios</Link></li>
-                    <li><a href="#soporte">Soporte</a></li>
+                    <li><Link to="/soporte">Soporte</Link></li>
                     {(user?.rol === "Admin" || user?.rol === "Fundador/a") && (
                         <li><Link to="/usuarios">Usuarios</Link></li>
                     )}
@@ -51,13 +51,13 @@ const Navbar = () => {
 
             <div className="navbar-right">
                 <button className="campana-btn">
-                    <IoIosNotifications size={24} />
+                    <Icono icon={Bell} size={24} />
                 </button>
 
                 {user ? (
                     <div className="account-menu" ref={menuRef}>
                         <button className="nav-account-btn" onClick={() => setMenuOpen((v) => !v)}>
-                            <IoPersonCircleOutline size={22} /> Mi Cuenta
+                            <Icono icon={CircleUser} size={22} /> Mi Cuenta
                         </button>
 
                         {menuOpen && (
@@ -87,7 +87,7 @@ const Navbar = () => {
                     </div>
                 ) : (
                     <Link to="/login" className="nav-login-btn">
-                        <IoPersonCircleOutline size={22} /> Registrar/Iniciar Sesion
+                        <Icono icon={CircleUser} size={22} /> Registrar/Iniciar Sesion
                     </Link>
                 )}
             </div>

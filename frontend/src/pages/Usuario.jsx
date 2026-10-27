@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar.jsx";
+import { useAlerta } from "../context/AlertaContext.jsx";
 import { getUsuarios, updateUsuario, deleteUsuario } from "../services/usuario.services.js";
-import { IoFilterSharp  } from "react-icons/io5";
-import { AiOutlineEdit } from "react-icons/ai";
-import { AiOutlineDelete } from "react-icons/ai";
+import { Funnel, Pencil, Trash2 } from "@sketchicon/lucide";
+import Icono from "../components/Icono.jsx";
 
 import "../styles/Usuario.css";
 
@@ -18,6 +18,7 @@ const ROL_DISPLAY = {
 };
 
 export default function Usuario() {
+  const { alerta, confirmar } = useAlerta();
   const [usuarios, setUsuarios] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -70,16 +71,18 @@ const usuariosOrdenados = Array.isArray(usuarios)
   };
 
   const handleDelete = async (usuario) => {
-    const ok = window.confirm(
-      `¿Eliminar a ${usuario.nombre} ${usuario.apellido}? Esta acción no se puede deshacer.`
+    const ok = await confirmar(
+      `¿Eliminar a ${usuario.nombre} ${usuario.apellido}? Esta acción no se puede deshacer.`,
+      { textoConfirmar: "Eliminar" }
     );
     if (!ok) return;
     try {
       await deleteUsuario(usuario.id_usuario);
       fetchUsuarios();
+      alerta("El usuario se eliminó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert("No se pudo eliminar el usuario.");
+      alerta("No se pudo eliminar el usuario.", { tipo: "error" });
     }
   };
 
@@ -94,9 +97,10 @@ const usuariosOrdenados = Array.isArray(usuarios)
       });
       setEditando(null);
       fetchUsuarios();
+      alerta("El usuario se actualizó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert("No se pudo guardar el cambio.");
+      alerta("No se pudo guardar el cambio.", { tipo: "error" });
     }
   };
 
@@ -112,7 +116,7 @@ const usuariosOrdenados = Array.isArray(usuarios)
       <div className="usuarios-wrap">
         <div className="usuarios-toolbar">
           <button className="filter-btn" onClick={() => setShowFilter((v) => !v)} aria-label="Filtrar">
-            <IoFilterSharp size={18} />
+            <Icono icon={Funnel} size={18} />
           </button>
 
           {showFilter && (
@@ -173,14 +177,14 @@ const usuariosOrdenados = Array.isArray(usuarios)
                       <td>
                         <div className="acciones-cell">
                           <button className="icon-btn" onClick={() => setEditando(u)} aria-label="Editar">
-                            <AiOutlineEdit size={18} />
+                            <Icono icon={Pencil} size={18} />
                           </button>
                           <button
                             className="icon-btn danger"
                             onClick={() => handleDelete(u)}
                             aria-label="Eliminar"
                           >
-                            <AiOutlineDelete size={20} />
+                            <Icono icon={Trash2} size={20} />
                           </button>
                         </div>
                       </td>
