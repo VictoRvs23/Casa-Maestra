@@ -1,39 +1,61 @@
 .perfil-page {
-  background-color: #ffffff;
+  background-color: var(--papel);
   min-height: 100vh;
-  font-family: "Montserrat", sans-serif;
-  color: #845736;
+  font-family: var(--fuente-texto);
+  color: var(--cafe-oscuro);
   position: relative;
   z-index: 0;
 }
 
-.perfil-hero {
-  padding: 3rem 2rem 2.5rem;
-  text-align: center;
-  border-top: 2px dashed #845736; 
+.perfil-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
+  background-color: var(--papel);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
 }
 
-.estado-msg {
+.perfil-hero {
+  padding: 3rem 2rem 1.5rem;
   text-align: center;
-  color: #845736;
-  padding: 3rem 0;
 }
 
 .perfil-wrap {
-  border-top: 2px dashed #845736;
-  padding: 2.5rem max(2rem, calc((100% - 1000px) / 2)) 4rem;
+  padding: 1.5rem max(2rem, calc((100% - 1000px) / 2)) 4rem;
   display: grid;
   grid-template-columns: 260px 1fr;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .perfil-sidebar {
-  background-color: #ffffff;
-  border-radius: 15px;
-  padding: 1.8rem 1.4rem;
-  text-align: center;
   position: sticky;
   top: 20px;
+  align-self: start;
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: var(--radio-papel);
+  box-shadow: var(--sombra-dura);
+  padding: 2rem 1.4rem 1.6rem;
+  text-align: center;
+}
+
+.perfil-sidebar::before {
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 84px;
+  height: 26px;
+  margin-left: -42px;
+  background-color: var(--cinta);
+  transform: rotate(-3deg);
+  pointer-events: none;
 }
 
 .perfil-avatar-wrap {
@@ -47,15 +69,15 @@
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  background-color: #845736;
-  color: white;
-  font-family: "League Spartan", sans-serif;
-  font-size: 2.2rem;
+  background-color: var(--beige-claro);
+  color: var(--cafe);
+  font-family: var(--fuente-titulo);
+  font-size: 2.3rem;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 3px solid #ffffff;
-  box-shadow: 0 0 0 2px #845736;
+  border: 2.5px solid var(--cafe);
 }
 
 .perfil-avatar-img {
@@ -64,17 +86,17 @@
 
 .perfil-avatar-edit {
   position: absolute;
-  bottom: 4px;
-  right: 4px;
-  width: 28px;
-  height: 28px;
+  bottom: 2px;
+  right: 2px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background-color: #845736;
-  color: white;
+  background-color: var(--cafe);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #f2f0eb;
+  border: 2px solid var(--papel-claro);
   cursor: pointer;
 }
 
@@ -86,9 +108,9 @@
 .perfil-tabs {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.35rem;
   text-align: left;
-  border-top: 1px dashed #ccc;
+  border-top: 2px dashed var(--linea);
   padding-top: 1.2rem;
 }
 
@@ -97,42 +119,31 @@
   align-items: center;
   gap: 0.6rem;
   background: none;
-  border: none;
-  padding: 0.7rem 0.8rem;
-  border-radius: 8px;
+  border: 1.5px solid transparent;
+  padding: 0.7rem 0.9rem;
+  border-radius: 14px;
   font-size: 0.88rem;
-  color: #845736;
+  color: var(--cafe-oscuro);
   cursor: pointer;
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--fuente-texto);
   transition: background-color 0.2s ease;
 }
 
 .perfil-tabs button:hover {
-  background-color: #e6e2da;
+  background-color: var(--beige-claro);
 }
 
 .perfil-tabs button.active {
-  background-color: #ddd7cb;
-  font-weight: 600;
+  background-color: var(--beige);
+  border-color: var(--cafe);
+  color: var(--verde);
+  font-weight: 700;
 }
 
 .perfil-content {
-  background-color: #ffffff;
-  border-radius: 15px;
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: var(--radio-papel);
+  box-shadow: var(--sombra-dura);
   padding: 2rem 2.2rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
-}
-
-.perfil-page::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("../assets/hojaArrugada.jpg");
-  background-color: #e8e6e1;
-  background-size: cover;
-  background-position: center;
-  background-repeat: repeat;
-  opacity: 0.13;
-  z-index: -1;
-  pointer-events: none;
 }
