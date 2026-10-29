@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logoCasaMaestra from "../assets/logoCasaMaestra.png";
-import { Bell, CircleUser } from "@sketchicon/lucide";
-import Icono from "./Icono.jsx";
+import { IoIosNotifications } from "react-icons/io";
+import { IoPersonCircleOutline } from "react-icons/io5";
 import { useAuth } from "../context/AuthContext.jsx";
+import "../styles/tema.css";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
@@ -29,6 +30,7 @@ const Navbar = () => {
     };
 
     return (
+        <>
         <nav className="navbar-container">
             <div className="navbar-left">
                 <Link to="/">
@@ -40,24 +42,24 @@ const Navbar = () => {
                     />
                 </Link>
                 <ul className="navbar-links">
-                    <li><Link to="/residentes">Residentes</Link></li>
-                    <li><Link to="/estudios">Estudios</Link></li>
-                    <li><Link to="/soporte">Soporte</Link></li>
+                    <li><NavLink to="/residentes" className={({ isActive }) => (isActive ? "activo" : "")}>Residentes</NavLink></li>
+                    <li><NavLink to="/estudios" className={({ isActive }) => (isActive ? "activo" : "")}>Estudios</NavLink></li>
+                    <li><NavLink to="/soporte" className={({ isActive }) => (isActive ? "activo" : "")}>Soporte</NavLink></li>
                     {(user?.rol === "Admin" || user?.rol === "Fundador/a") && (
-                        <li><Link to="/usuarios">Usuarios</Link></li>
+                        <li><NavLink to="/usuarios" className={({ isActive }) => (isActive ? "activo" : "")}>Usuarios</NavLink></li>
                     )}
                 </ul>
             </div>
 
             <div className="navbar-right">
                 <button className="campana-btn">
-                    <Icono icon={Bell} size={24} />
+                    <IoIosNotifications size={24} />
                 </button>
 
                 {user ? (
                     <div className="account-menu" ref={menuRef}>
                         <button className="nav-account-btn" onClick={() => setMenuOpen((v) => !v)}>
-                            <Icono icon={CircleUser} size={22} /> Mi Cuenta
+                            <IoPersonCircleOutline size={22} /> Mi Cuenta
                         </button>
 
                         {menuOpen && (
@@ -87,11 +89,13 @@ const Navbar = () => {
                     </div>
                 ) : (
                     <Link to="/login" className="nav-login-btn">
-                        <Icono icon={CircleUser} size={22} /> Registrar/Iniciar Sesion
+                        <IoPersonCircleOutline size={22} /> Registrar/Iniciar Sesion
                     </Link>
                 )}
             </div>
         </nav>
+        <div className="divisor-hojas" role="presentation" aria-hidden="true" />
+        </>
     );
 };
 
