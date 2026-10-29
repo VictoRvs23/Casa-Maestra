@@ -1,0 +1,406 @@
+:root {
+  --cafe: #845736;
+  --cafe-oscuro: #5e3b22;    
+  --cafe-hover: #694328;
+  --beige: #e6d8c0;
+  --beige-claro: #ecdfc7;
+  --papel: #f6f1e8;
+  --papel-claro: #fffcf5;    
+  --verde: #1d3d2a;
+  --cinta: rgba(214, 194, 160, 0.85);
+  --linea: #c9b28d;           
+  --deshabilitado: #cfc6b3;
+
+  --exito-bg: #dcece3;  --exito-fg: #2f6a53;
+  --error-bg: #f5dddb;  --error-fg: #a33a32;
+  --aviso-bg: #f1e6c9;  --aviso-fg: #7a5c14;
+  --info-bg:  #dbe6ec;  --info-fg:  #3b5565;
+
+  --fuente-titulo: "League Spartan", sans-serif;
+  --fuente-texto: "Montserrat", sans-serif;
+
+  --sombra-dura: 5px 5px 0 var(--cafe);
+  --sombra-suave: 3px 3px 0 var(--cafe);
+  --radio-papel: 7px 10px 6px 9px;
+}
+
+body {
+  background-color: var(--papel);
+  color: var(--cafe-oscuro);
+}
+
+.divisor-hojas {
+  height: 44px;
+  background: url("../assets/enredadera.png") repeat-x center / auto 44px;
+  pointer-events: none;
+}
+
+.pie-pagina {
+  color: var(--cafe-oscuro);
+  font-family: var(--fuente-texto);
+  font-weight: 500;
+}
+
+.pie-pagina-contenido {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem 3.5rem;
+  padding: 1.2rem 2rem 2.8rem;
+}
+
+.pie-pagina-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.btn-primary,
+.hero-btn,
+.reservar-btn,
+.create-btn,
+.talleres-create-btn,
+.residentes-create-btn,
+.soporte-create-btn,
+.residente-ver-btn,
+.ticket-ver-btn,
+.filter-apply-btn,
+.login-btn,
+.registro-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.6rem;
+  border: 2px solid var(--cafe);
+  border-radius: 22px 18px 24px 20px / 20px 24px 18px 22px;
+  background-color: var(--cafe);
+  color: #ffffff;
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--verde);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.2s ease;
+}
+
+.btn-primary:hover,
+.hero-btn:hover,
+.reservar-btn:hover,
+.create-btn:hover,
+.talleres-create-btn:hover,
+.residentes-create-btn:hover,
+.soporte-create-btn:hover,
+.residente-ver-btn:hover,
+.ticket-ver-btn:hover,
+.filter-apply-btn:hover,
+.login-btn:hover,
+.registro-btn:hover {
+  background-color: var(--cafe-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--verde);
+}
+
+.btn-primary:active,
+.hero-btn:active,
+.reservar-btn:active,
+.create-btn:active,
+.talleres-create-btn:active,
+.residentes-create-btn:active,
+.soporte-create-btn:active,
+.residente-ver-btn:active,
+.ticket-ver-btn:active,
+.filter-apply-btn:active,
+.login-btn:active,
+.registro-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--verde);
+}
+
+.btn-primary:disabled,
+.login-btn:disabled,
+.registro-btn:disabled {
+  background-color: var(--deshabilitado);
+  border-color: var(--deshabilitado);
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  padding: 0.7rem 1.4rem;
+  border: 2px solid var(--cafe);
+  border-radius: 20px 24px 18px 22px / 24px 18px 22px 20px;
+  background: transparent;
+  color: var(--cafe-oscuro);
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-ghost:hover {
+  background-color: var(--beige-claro);
+  color: var(--cafe-oscuro);
+}
+
+.admin-actions button,
+.category-admin-actions button,
+.residente-admin-actions button,
+.soporte-admin-actions button,
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.9rem;
+  border: 1.5px solid var(--cafe);
+  border-radius: 16px;
+  background: transparent;
+  color: var(--cafe-oscuro);
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admin-actions button:hover,
+.category-admin-actions button:hover,
+.residente-admin-actions button:hover,
+.soporte-admin-actions button:hover,
+.icon-btn:hover {
+  background-color: var(--beige-claro);
+  color: var(--cafe-oscuro);
+}
+
+.admin-actions button.danger,
+.category-admin-actions button.danger,
+.residente-admin-actions button.danger,
+.soporte-admin-actions button.danger,
+.icon-btn.danger {
+  border-color: var(--error-fg);
+  background-color: var(--error-bg);
+  color: var(--error-fg);
+}
+
+.admin-actions button.danger:hover,
+.category-admin-actions button.danger:hover,
+.residente-admin-actions button.danger:hover,
+.soporte-admin-actions button.danger:hover,
+.icon-btn.danger:hover {
+  background-color: #efc9c5;
+  color: var(--error-fg);
+}
+
+.category-card,
+.estudio-card,
+.residente-card,
+.artista-card,
+.ticket-card {
+  position: relative;
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: var(--radio-papel);
+  box-shadow: var(--sombra-dura);
+  transform: rotate(var(--giro, 0deg));
+}
+
+.category-card::before,
+.estudio-card::before,
+.residente-card::before,
+.artista-card::before,
+.ticket-card::before {
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 84px;
+  height: 26px;
+  margin-left: -42px;
+  background-color: var(--cinta);
+  transform: rotate(-3deg);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.category-card:nth-child(4n + 1),
+.estudio-card:nth-child(4n + 1),
+.residente-card:nth-child(4n + 1),
+.artista-card:nth-child(4n + 1) { --giro: -1.3deg; }
+.category-card:nth-child(4n + 2),
+.estudio-card:nth-child(4n + 2),
+.residente-card:nth-child(4n + 2),
+.artista-card:nth-child(4n + 2) { --giro: 1deg; }
+.category-card:nth-child(4n + 3),
+.estudio-card:nth-child(4n + 3),
+.residente-card:nth-child(4n + 3),
+.artista-card:nth-child(4n + 3) { --giro: -0.7deg; }
+.category-card:nth-child(4n + 4),
+.estudio-card:nth-child(4n + 4),
+.residente-card:nth-child(4n + 4),
+.artista-card:nth-child(4n + 4) { --giro: 1.4deg; }
+
+.estado-pill {
+  display: inline-block;
+  padding: 0.25rem 0.85rem;
+  border: 1.5px solid currentColor;
+  border-radius: 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.estado-msg {
+  text-align: center;
+  color: var(--cafe-oscuro);
+  padding: 2rem 0;
+}
+
+.estado-error {
+  color: var(--error-fg);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(60, 44, 30, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+  padding: 1.2rem;
+}
+
+.modal-box {
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: 8px 10px 7px 9px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem 2.2rem;
+  box-shadow: 6px 6px 0 var(--cafe);
+  color: var(--cafe-oscuro);
+}
+
+.modal-box h2 {
+  font-family: var(--fuente-titulo);
+  font-size: 1.7rem;
+  margin: 0 0 1.2rem;
+  color: var(--cafe);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+}
+
+.form-group {
+  margin-bottom: 1.1rem;
+}
+
+.form-group label,
+.modal-field label {
+  display: block;
+  margin-bottom: 0.4rem;
+  color: var(--cafe-oscuro);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.form-group input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+.form-group textarea,
+.form-group select,
+.modal-field input,
+.modal-field select,
+.filter-field input,
+.filter-field select,
+.filter-popover input,
+.filter-popover select,
+.tickets-filtros input,
+.tickets-filtros select {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 2px solid var(--cafe);
+  border-radius: 14px 12px 15px 13px / 13px 15px 12px 14px;
+  background-color: var(--papel-claro);
+  color: var(--cafe-oscuro);
+  box-sizing: border-box;
+  outline: none;
+  font-size: 0.92rem;
+  font-family: var(--fuente-texto);
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus,
+.modal-field input:focus,
+.modal-field select:focus,
+.filter-field input:focus,
+.filter-field select:focus,
+.filter-popover input:focus,
+.filter-popover select:focus,
+.tickets-filtros input:focus,
+.tickets-filtros select:focus {
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgba(29, 61, 42, 0.15);
+}
+
+.file-upload-container {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.custom-file-upload {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  border-radius: 14px;
+  border: 2px dashed var(--cafe);
+  background-color: var(--beige-claro);
+  color: var(--cafe-oscuro);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: var(--beige);
+}
+
+.file-upload-name {
+  font-size: 0.82rem;
+  color: var(--cafe-oscuro);
+}
+
+.pagination button,
+.tickets-paginacion button {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid var(--cafe);
+  background-color: var(--cafe);
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination button:disabled,
+.tickets-paginacion button:disabled {
+  background-color: var(--deshabilitado);
+  border-color: var(--deshabilitado);
+  cursor: not-allowed;
+}
