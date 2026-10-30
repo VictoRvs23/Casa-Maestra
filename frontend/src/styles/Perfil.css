@@ -147,3 +147,37 @@
   box-shadow: var(--sombra-dura);
   padding: 2rem 2.2rem;
 }
+
+.perfil-content {
+  font-family: var(--fuente-texto);
+  color: var(--cafe-oscuro);
+}
+
+.perfil-content h1,
+.perfil-content h2,
+.perfil-content h3,
+.perfil-content h4 {
+  font-family: var(--fuente-titulo);
+  color: var(--cafe);
+  letter-spacing: 0.5px;
+}
+
+.perfil-content h2 {
+  font-size: 1.7rem;
+}
+
+.perfil-content p,
+.perfil-content label,
+.perfil-content span,
+.perfil-content small,
+.perfil-content th,
+.perfil-content td {
+  font-family: var(--fuente-texto);
+}
+
+.perfil-content button,
+.perfil-content input,
+.perfil-content select,
+.perfil-content textarea {
+  font-family: inherit;
+}
