@@ -68,7 +68,7 @@ const Navbar = () => {
                                     {user.nombre_usuario || user.nombre}
                                 </div>
                                 <div className="account-dropdown-divider"></div>
-                                <Link to="/perfil?tab=datos" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                <Link to="/perfil?tab=datos-personales" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
                                     Datos Personales
                                 </Link>
                                 <Link to="/perfil?tab=seguridad" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
