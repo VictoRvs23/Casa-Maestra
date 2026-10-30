@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import {
@@ -253,6 +254,8 @@ export default function Estudios() {
           ))}
         </div>
       </div>
+
+      <Footer />
 
       {modalAbierto && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setModalAbierto(false)}>
