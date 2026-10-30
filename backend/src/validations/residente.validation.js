@@ -19,6 +19,15 @@ export const CrearResidenteValidation = Joi.object({
         .messages({
             "string.max": "La descripción debe tener máximo 150 caracteres.",
         }),
+    id_usuario: Joi.number()
+        .integer()
+        .positive()
+        .allow("", null)
+        .messages({
+            "number.base": "La cuenta seleccionada no es válida.",
+            "number.integer": "La cuenta seleccionada no es válida.",
+            "number.positive": "La cuenta seleccionada no es válida.",
+        }),
 }).unknown(false);
 
 export const ActualizarResidenteValidation = CrearResidenteValidation.fork(
