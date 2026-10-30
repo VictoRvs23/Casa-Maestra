@@ -218,7 +218,7 @@ table.usuarios-table tbody tr:hover {
   color: var(--cafe-oscuro);
 }
 
-.modal-box {
+.usuarios-page .modal-box {
   max-width: 460px;
 }
 
@@ -232,6 +232,6 @@ table.usuarios-table tbody tr:hover {
   font-size: 0.78rem;
 }
 
-.modal-actions {
+.usuarios-page .modal-actions {
   margin-top: 1.3rem;
 }
