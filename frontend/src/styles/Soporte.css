@@ -175,7 +175,7 @@
   border-top: 2px dashed var(--linea);
 }
 
-.modal-box-ancho {
+.modal-box.modal-box-ancho {
   max-width: 600px;
 }
 
