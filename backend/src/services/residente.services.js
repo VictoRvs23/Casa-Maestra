@@ -1,7 +1,7 @@
 import { AppDataSource } from "../config/configDb.js";
 import ResidenteEntity from "../entities/residente.entity.js";
 import UsuarioEntity from "../entities/usuario.entity.js";
-import { slugify } from "../src/helpers/slug.helper.js";
+import { slugify } from "../helpers/slug.helper.js";
 import { limpiarImagenesDeResidenteService } from "./pagina.services.js";
 import fs from "fs";
 import path from "path";
