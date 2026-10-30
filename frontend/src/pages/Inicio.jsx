@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import {
@@ -12,9 +13,7 @@ import {
   getArtistasDisponibles,
   getImagenUrl,
 } from "../services/taller.services.js";
-import { FaInstagram } from "react-icons/fa";
-import { SiGmail } from "react-icons/si";
-import { Phone, Pencil, Trash2 } from "@sketchicon/lucide";
+import { Pencil, Trash2 } from "@sketchicon/lucide";
 import Icono from "../components/Icono.jsx";
 import "../styles/Inicio.css";
 import "../styles/Taller.css";
@@ -236,13 +235,7 @@ const Inicio = () => {
         )}
       </section>
 
-      <footer className="inicio-footer">
-        <div className="footer-content">
-          <span className="footer-item"><FaInstagram size={20} /> casamaestra_cl</span>
-          <span className="footer-item"><Icono icon={Phone} size={18} /> 9 11111111</span>
-          <span className="footer-item"><SiGmail size={20} /> casamaestra@gmail.com</span>
-        </div>
-      </footer>
+      <Footer />
 
       {modalAbierto && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && cerrarModal()}>
