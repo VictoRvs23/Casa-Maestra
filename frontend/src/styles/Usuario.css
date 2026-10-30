@@ -1,365 +1,11 @@
 .usuarios-page {
-  background-color: #ffffff;
+  background-color: var(--papel);
   min-height: 100vh;
-  font-family: "Montserrat", sans-serif;
-  color: #845736;
+  font-family: var(--fuente-texto);
+  color: var(--cafe-oscuro);
   position: relative;
-  z-index: 0;
-}
-
-.usuarios-hero {
-  padding: 3rem 2rem 2.5rem;
-  text-align: center;
-  border-top: 2px dashed #845736; 
-  border-bottom: 2px dashed #845736;
-}
-
-.usuarios-hero h1 {
-  font-family: "League Spartan", sans-serif;
-  font-size: 2.4rem;
-  margin: 0 0 0.5rem;
-  color: #845736;
-  letter-spacing: 1px;
-}
-
-.usuarios-hero p {
-  margin: 0;
-  color: #845736;
-  font-size: 0.95rem;
-}
-
-.usuarios-wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2.5rem 2rem 4rem;
-}
-
-.usuarios-toolbar {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
-  position: relative;
-}
-
-.filter-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: none;
-  background-color: #845736;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.filter-btn:hover {
-  background-color: #694328;
-}
-
-.filter-popover {
-  position: absolute;
-  top: 52px;
-  right: 0;
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  padding: 1.2rem;
-  width: 270px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-  z-index: 10;
-}
-
-.filter-popover label {
-  display: block;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: #845736;
-  margin-bottom: 0.4rem;
-}
-
-.filter-popover select,
-.filter-popover input {
-  width: 100%;
-  padding: 0.7rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #ffffff;
-  box-sizing: border-box;
-  outline: none;
-  font-size: 0.95rem;
-  color: #845736;
-  font-family: "Montserrat", sans-serif;
-  margin-bottom: 1rem;
-}
-
-.filter-popover select:focus,
-.filter-popover input:focus {
-  border-color: #845736;
-}
-
-.filter-apply-btn {
-  width: 100%;
-  padding: 0.75rem;
-  border-radius: 8px;
-  border: none;
-  background-color: #845736;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-.filter-apply-btn:hover {
-  background-color: #694328;
-}
-
-.usuarios-table-wrap {
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-table.usuarios-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-  font-family: "Montserrat", sans-serif;
-}
-
-table.usuarios-table thead th {
-  text-align: left;
-  background-color: #845736;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
-  padding: 0.9rem 1.1rem;
-}
-
-table.usuarios-table tbody td {
-  padding: 0.9rem 1.1rem;
-  border-bottom: 1px solid #e8e6e1;
-  color: #845736;
-}
-
-table.usuarios-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-table.usuarios-table tbody tr:hover {
-  background-color: #f7f6f3;
-}
-
-.rol-pill {
-  display: inline-block;
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  font-family: "Montserrat", sans-serif;
-}
-
-.rol-pill.rol-admin {
-  background-color: #f3ddd6;
-  color: #a8452c;
-}
-
-.rol-pill.rol-fundador {
-  background-color: #e6def0;
-  color: #7a5fa8;
-}
-
-.rol-pill.rol-residente {
-  background-color: #f1e6c9;
-  color: #a8843a;
-}
-
-.rol-pill.rol-artista {
-  background-color: #dcece3;
-  color: #4a8a72;
-}
-
-.rol-pill.rol-cliente {
-  background-color: #dbe6ec;
-  color: #5a7686;
-}
-
-.acciones-cell {
-  display: flex;
-  gap: 0.8rem;
-}
-
-.icon-btn {
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 1rem;
-  color: #845736;
-  padding: 2px;
-  transition: color 0.3s ease;
-}
-
-.icon-btn:hover {
-  color: #845736;
-}
-
-.icon-btn.danger:hover {
-  color: #a8452c;
-}
-
-.table-empty,
-.table-loading,
-.table-error {
-  text-align: center;
-  padding: 3rem 1.2rem;
-  color: #845736;
-  font-size: 0.9rem;
-}
-
-.table-error {
-  color: #a8452c;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.pagination span {
-  font-size: 0.9rem;
-  color: #845736;
-}
-
-.pagination button {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background-color: #845736;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s ease;
-}
-
-.pagination button:hover:not(:disabled) {
-  background-color: #694328;
-}
-
-.pagination button:disabled {
-  background-color: #cfccc4;
-  cursor: not-allowed;
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(90, 78, 69, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 30;
-  padding: 1.2rem;
-}
-
-.modal-box {
-  background-color: #ffffff;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 460px;
-  padding: 2rem 2.2rem;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-}
-
-.modal-box h2 {
-  font-family: "League Spartan", sans-serif;
-  font-size: 1.6rem;
-  margin: 0 0 1.2rem;
-  color: #845736;
-}
-
-.modal-field {
-  margin-bottom: 1.1rem;
-}
-
-.modal-field label {
-  display: block;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: #845736;
-  margin-bottom: 0.4rem;
-}
-
-.modal-field input,
-.modal-field select {
-  width: 100%;
-  padding: 0.7rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #ffffff;
-  box-sizing: border-box;
-  outline: none;
-  font-size: 0.95rem;
-  color: #845736;
-  font-family: "Montserrat", sans-serif;
-}
-
-.modal-field input:focus,
-.modal-field select:focus {
-  border-color: #845736;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.7rem;
-  margin-top: 1.3rem;
-}
-
-.btn-ghost {
-  padding: 0.7rem 1.3rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: none;
-  color: #7a7a7a;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-family: "Montserrat", sans-serif;
-  transition: border-color 0.3s ease, color 0.3s ease;
-}
-
-.btn-ghost:hover {
-  border-color: #845736;
-  color: #845736;
-}
-
-.btn-primary {
-  padding: 0.7rem 1.4rem;
-  border-radius: 8px;
-  border: none;
-  background-color: #845736;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  font-family: "Montserrat", sans-serif;
-  transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-  background-color: #694328;
+  z-index: 0;
 }
 
 .usuarios-page::before {
@@ -367,11 +13,225 @@ table.usuarios-table tbody tr:hover {
   position: absolute;
   inset: 0;
   background-image: url("../assets/hojaArrugada.jpg");
-  background-color: #e8e6e1;
+  background-color: var(--papel);
   background-size: cover;
   background-position: center;
   background-repeat: repeat;
   opacity: 0.13;
   z-index: -1;
   pointer-events: none;
+}
+
+.usuarios-hero {
+  padding: 3rem 2rem 1.5rem;
+  text-align: center;
+}
+
+.usuarios-hero h1 {
+  font-family: var(--fuente-titulo);
+  color: var(--cafe);
+  font-size: 3rem;
+  margin: 0 0 0.6rem;
+  letter-spacing: 3px;
+}
+
+.usuarios-hero p {
+  color: var(--cafe-oscuro);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.usuarios-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 4rem;
+}
+
+.usuarios-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.6rem;
+  position: relative;
+}
+
+.filter-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--cafe);
+  background-color: var(--cafe);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 3px 3px 0 var(--verde);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.filter-btn:hover {
+  background-color: var(--cafe-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--verde);
+}
+
+.filter-popover {
+  position: absolute;
+  top: 54px;
+  right: 0;
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: 8px 10px 7px 9px;
+  padding: 1.2rem;
+  width: 280px;
+  box-shadow: 5px 5px 0 var(--cafe);
+  z-index: 10;
+}
+
+.filter-popover label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  color: var(--cafe-oscuro);
+  margin-bottom: 0.4rem;
+}
+
+.filter-popover select,
+.filter-popover input {
+  margin-bottom: 1rem;
+}
+
+.filter-apply-btn {
+  width: 100%;
+}
+
+.usuarios-table-wrap {
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: 8px 10px 7px 9px;
+  overflow: hidden;
+  box-shadow: 6px 6px 0 var(--cafe);
+}
+
+table.usuarios-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  font-family: var(--fuente-texto);
+}
+
+table.usuarios-table thead th {
+  text-align: left;
+  background-color: var(--beige-claro);
+  color: var(--cafe-oscuro);
+  border-bottom: 2px solid var(--cafe);
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  padding: 0.95rem 1.2rem;
+}
+
+table.usuarios-table tbody td {
+  padding: 0.95rem 1.2rem;
+  border-bottom: 1.5px solid #d9c6a3;
+  color: var(--cafe-oscuro);
+}
+
+table.usuarios-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+table.usuarios-table tbody tr:hover {
+  background-color: #f8f1e1;
+}
+
+.rol-pill {
+  display: inline-block;
+  padding: 0.3rem 0.9rem;
+  border: 1.5px solid currentColor;
+  border-radius: 14px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  font-family: var(--fuente-texto);
+  white-space: nowrap;
+}
+
+.rol-pill.rol-admin {
+  background-color: var(--info-bg);
+  color: var(--info-fg);
+}
+
+.rol-pill.rol-fundador {
+  background-color: var(--exito-bg);
+  color: var(--exito-fg);
+}
+
+.rol-pill.rol-residente {
+  background-color: var(--aviso-bg);
+  color: var(--aviso-fg);
+}
+
+.rol-pill.rol-artista {
+  background-color: var(--beige-claro);
+  color: var(--cafe-oscuro);
+}
+
+.rol-pill.rol-cliente {
+  background-color: var(--papel-claro);
+  color: var(--cafe-oscuro);
+}
+
+.acciones-cell {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.icon-btn {
+  padding: 0.35rem 0.6rem;
+}
+
+.table-empty,
+.table-loading,
+.table-error {
+  text-align: center;
+  padding: 3rem 1.2rem;
+  color: var(--cafe-oscuro);
+  font-size: 0.9rem;
+}
+
+.table-error {
+  color: var(--error-fg);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.8rem;
+}
+
+.pagination span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cafe-oscuro);
+}
+
+.usuarios-page .modal-box {
+  max-width: 460px;
+}
+
+.modal-field {
+  margin-bottom: 1.1rem;
+}
+
+.modal-field label {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+}
+
+.usuarios-page .modal-actions {
+  margin-top: 1.3rem;
 }

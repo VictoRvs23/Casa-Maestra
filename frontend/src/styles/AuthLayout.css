@@ -3,7 +3,7 @@
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background-color: #cfccc4;
+  background-color: var(--beige);
   padding: 2rem;
 }
 
@@ -12,9 +12,10 @@
   width: 100%;
   max-width: 1500px;
   min-height: 550px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: 10px 12px 9px 11px;
+  box-shadow: 8px 8px 0 var(--cafe);
   position: relative;
   overflow: hidden;
 }
@@ -23,7 +24,7 @@
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  color: #845736;
+  color: var(--cafe);
   background: none;
   border: none;
   cursor: pointer;
@@ -32,11 +33,12 @@
 }
 
 .close-modal-btn:hover {
-  color: #845736;
+  color: var(--verde);
 }
+
 .auth-layout-left {
   flex: 1;
-  background-color: #845736;
+  background-color: var(--cafe);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,7 +56,7 @@
   align-items: center;
   justify-content: center;
   padding: 3rem;
-  background-color: #ffffff;
+  background-color: var(--papel-claro);
   position: relative;
   overflow: hidden;
 }
@@ -64,7 +66,7 @@
   position: absolute;
   inset: 0;
   background-image: url("../assets/hojaArrugada.jpg");
-  background-color: #ffffff;
+  background-color: var(--papel-claro);
   background-size: cover;
   background-position: center;
   background-repeat: repeat;

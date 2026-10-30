@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 import { useAuth } from "../context/AuthContext";
 import PreguntasFrecuentes from "../components/soporte/PreguntaFrecuente.jsx";
 import MisTickets from "../components/soporte/MisTickets.jsx";
@@ -57,6 +58,8 @@ export default function Soporte() {
           </p>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 }

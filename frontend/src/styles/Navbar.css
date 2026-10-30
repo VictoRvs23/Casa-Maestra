@@ -3,24 +3,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 4rem;
-  background-color: #ffffff;
-  font-family: "Montserrat", sans-serif;
+  background-color: transparent;
+  font-family: var(--fuente-texto);
   position: relative;
-  z-index: 0;
-}
-
-.navbar-container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("../assets/hojaArrugada.jpg");
-  background-color: #e8e6e1;
-  background-size: cover;
-  background-position: center;
-  background-repeat: repeat;
-  opacity: 0.13;
-  z-index: -1;
-  pointer-events: none;
+  z-index: 20;
 }
 
 .navbar-left {
@@ -39,28 +25,37 @@
   mask-repeat: no-repeat;
   -webkit-mask-position: center;
   mask-position: center;
-  background-color: #845736;
+  background-color: var(--cafe);
   cursor: pointer;
 }
 
 .navbar-links {
   display: flex;
+  align-items: center;
   list-style: none;
-  gap: 2rem;
+  gap: 1.2rem;
   margin: 0;
   padding: 0;
 }
 
 .navbar-links a {
+  display: block;
+  padding: 0.45rem 0.9rem;
+  border-radius: 18px;
   text-decoration: none;
-  color: #845736;
+  color: var(--cafe-oscuro);
   font-weight: 600;
   font-size: 0.95rem;
-  transition: color 0.3s;
+  transition: color 0.3s, background-color 0.3s;
 }
 
 .navbar-links a:hover {
-  color: #845736;
+  color: var(--verde);
+}
+
+.navbar-links a.activo {
+  background-color: var(--beige);
+  color: var(--verde);
 }
 
 .navbar-right {
@@ -70,7 +65,7 @@
 }
 
 .campana-btn {
-  background-color: #845736;
+  background-color: var(--cafe);
   color: white;
   border: none;
   border-radius: 50%;
@@ -85,11 +80,11 @@
 }
 
 .campana-btn:hover {
-  background-color: #694328;
+  background-color: var(--cafe-hover);
 }
 
 .nav-login-btn {
-  background-color: #845736;
+  background-color: var(--cafe);
   color: white;
   text-decoration: none;
   height: 42px;
@@ -104,7 +99,7 @@
 }
 
 .nav-login-btn:hover {
-  background-color: #694328;
+  background-color: var(--cafe-hover);
 }
 
 .account-menu {
@@ -112,14 +107,14 @@
 }
 
 .nav-account-btn {
-  background-color: #845736;
+  background-color: var(--cafe);
   color: white;
   border: none;
   height: 42px;
   padding: 0 1.5rem;
   border-radius: 21px;
   font-weight: 600;
-  font-family: "Montserrat", sans-serif;
+  font-family: var(--fuente-texto);
   font-size: 0.95rem;
   display: flex;
   align-items: center;
@@ -130,32 +125,33 @@
 }
 
 .nav-account-btn:hover {
-  background-color: #694328;
+  background-color: var(--cafe-hover);
 }
 
 .account-dropdown {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 12px);
   right: 0;
-  background-color: #e8e6e1;
-  border: 1px solid #845736;
-  border-radius: 10px;
-  min-width: 200px;
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: 8px 10px 7px 9px;
+  min-width: 210px;
   padding: 0.9rem 0;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 5px 5px 0 var(--cafe);
   z-index: 50;
 }
 
 .account-dropdown-username {
   text-align: center;
+  font-family: var(--fuente-titulo);
   font-weight: 700;
-  color: #845736;
-  font-size: 0.95rem;
+  color: var(--cafe);
+  font-size: 1.05rem;
   padding: 0 1.2rem 0.7rem;
 }
 
 .account-dropdown-divider {
-  border-top: 1px dashed #845736;
+  border-top: 2px dashed var(--linea);
   margin: 0.3rem 1rem;
 }
 
@@ -166,8 +162,8 @@
   padding: 0.65rem 1.2rem;
   background: none;
   border: none;
-  color: #845736;
-  font-family: "Montserrat", sans-serif;
+  color: var(--cafe-oscuro);
+  font-family: var(--fuente-texto);
   font-size: 0.9rem;
   text-decoration: none;
   cursor: pointer;
@@ -175,14 +171,14 @@
 }
 
 .account-dropdown-item:hover {
-  background-color: #ddd9d0;
+  background-color: var(--beige-claro);
 }
 
 .account-dropdown-logout {
-  color: #a8452c;
+  color: var(--error-fg);
   font-weight: 600;
 }
 
 .account-dropdown-logout:hover {
-  background-color: #f3ddd6;
+  background-color: var(--error-bg);
 }

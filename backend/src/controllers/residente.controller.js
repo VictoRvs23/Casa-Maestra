@@ -1,5 +1,10 @@
 "use strict";
+import fs from "fs";
 import * as residenteService from "../services/residente.services.js";
+
+const descartarArchivoSubido = (req) => {
+    if (req.file) fs.unlink(req.file.path, () => {});
+};
 
 export const getResidentes = async (req, res) => {
     try {
@@ -22,6 +27,16 @@ export const getResidente = async (req, res) => {
     }
 };
 
+export const getCuentasDisponibles = async (req, res) => {
+    try {
+        const cuentas = await residenteService.getCuentasDisponiblesService(req.query.id_residente);
+        res.status(200).json({ cuentas });
+    } catch (error) {
+        console.error("Error en getCuentasDisponibles:", error);
+        res.status(500).json({ message: "Error interno al obtener las cuentas disponibles" });
+    }
+};
+
 export const createResidente = async (req, res) => {
     try {
         const data = { ...req.body };
@@ -38,6 +53,8 @@ export const createResidente = async (req, res) => {
 
         res.status(201).json({ message: "Residente creado", residente });
     } catch (error) {
+        descartarArchivoSubido(req);
+        if (error.status) return res.status(error.status).json({ message: error.message });
         console.error("Error en createResidente:", error);
         res.status(500).json({ message: "Error interno al crear el residente" });
     }
@@ -59,6 +76,7 @@ export const updateResidente = async (req, res) => {
 
         res.status(200).json({ message: "Residente actualizado", residente });
     } catch (error) {
+        descartarArchivoSubido(req);
         if (error.status) return res.status(error.status).json({ message: error.message });
         console.error("Error en updateResidente:", error);
         res.status(500).json({ message: "Error interno al actualizar el residente" });

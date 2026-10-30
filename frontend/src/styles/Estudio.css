@@ -1,46 +1,59 @@
 .estudios-page {
-  background-color: #ffffff;
+  background-color: var(--papel);
   min-height: 100vh;
-  font-family: "Montserrat", sans-serif;
-  color: #845736;
+  font-family: var(--fuente-texto);
+  color: var(--cafe-oscuro);
   position: relative;
   overflow: hidden;
   z-index: 0;
 }
 
+.estudios-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
+  background-color: var(--papel);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
+}
+
 .estudios-hero {
   text-align: center;
-  padding: 3rem 2rem;
-  border-top: 2px dashed #845736;
-  border-bottom: 2px dashed #845736;
+  padding: 3rem 2rem 1.5rem;
 }
 
 .estudios-hero h1 {
-  font-family: "League Spartan", sans-serif;
-  color: #845736;
-  font-size: 2.6rem;
-  margin: 0 0 0.5rem;
-  letter-spacing: 1px;
+  font-family: var(--fuente-titulo);
+  color: var(--cafe);
+  font-size: 3rem;
+  margin: 0 0 0.6rem;
+  letter-spacing: 3px;
 }
 
 .estudios-hero p {
-  color: #845736;
+  color: var(--cafe-oscuro);
   font-size: 1rem;
   margin: 0;
 }
 
 .estudios-wrap {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2.5rem 2rem 4rem;
+  padding: 1.5rem 2rem 4rem;
 }
 
 .estudios-filters {
   display: flex;
   align-items: flex-end;
+  justify-content: center;
   gap: 1.2rem;
   flex-wrap: wrap;
-  margin-bottom: 2rem;
+  margin-bottom: 3.2rem;
 }
 
 .filter-field {
@@ -52,85 +65,49 @@
 
 .filter-field label {
   font-size: 0.8rem;
-  color: #845736;
+  color: var(--cafe-oscuro);
   font-weight: 600;
 }
 
-.filter-field select,
-.filter-field input {
-  padding: 0.7rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 0.9rem;
-  font-family: "Montserrat", sans-serif;
-  outline: none;
-}
-
-.filter-field select:focus,
-.filter-field input:focus {
-  border-color: #845736;
-}
-
 .search-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  border: none;
-  background-color: #845736;
-  color: white;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--cafe);
+  background-color: var(--cafe);
+  color: #ffffff;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s ease;
+  box-shadow: 3px 3px 0 var(--verde);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .search-btn:hover {
-  background-color: #694328;
+  background-color: var(--cafe-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--verde);
 }
 
 .create-btn {
   margin-left: auto;
-  padding: 0.75rem 1.4rem;
-  border-radius: 21px;
-  border: none;
-  background-color: #845736;
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.create-btn:hover {
-  background-color: #6f6759;
-}
-
-.estado-msg {
-  text-align: center;
-  color: #845736;
-  padding: 2rem 0;
-}
-
-.estado-error {
-  color: #a8452c;
 }
 
 .estudios-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.8rem;
+  gap: 3.8rem 3rem;
+  padding-top: 0.6rem;
 }
 
 .estudio-card {
-  background-color: #ffffff;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  padding: 0.9rem 0.9rem 1.2rem;
 }
 
 .estudio-img {
   position: relative;
-  height: 180px;
-  background-color: #ccc;
+  height: 190px;
+  border-radius: 3px;
+  background-color: var(--beige-claro);
   background-size: cover;
   background-position: center;
   display: flex;
@@ -140,36 +117,37 @@
 }
 
 .estudio-badge {
-  background-color: rgba(90, 78, 69, 0.75);
-  color: white;
-  font-family: "League Spartan", sans-serif;
+  background-color: rgba(60, 44, 30, 0.78);
+  color: #ffffff;
+  font-family: var(--fuente-titulo);
   font-size: 0.85rem;
   padding: 0.3rem 0.8rem;
   border-radius: 6px;
 }
 
 .estado-icono {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #ffffff;
   font-size: 0.8rem;
   font-weight: bold;
+  border: 2px solid var(--papel-claro);
 }
 
 .estado-icono.libre {
-  background-color: #4a8a72;
+  background-color: var(--exito-fg);
 }
 
 .estado-icono.ocupado {
-  background-color: #a8452c;
+  background-color: var(--error-fg);
 }
 
 .estudio-info {
-  padding: 1rem 1.2rem 1.2rem;
+  padding: 1rem 0.4rem 0;
 }
 
 .estudio-info p {
@@ -178,7 +156,7 @@
   gap: 0.5rem;
   margin: 0.3rem 0;
   font-size: 0.88rem;
-  color: #845736;
+  color: var(--cafe-oscuro);
 }
 
 .estudio-info .ico {
@@ -189,88 +167,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px dashed #ccc;
-  margin-top: 0.8rem;
-  padding-top: 0.8rem;
+  border-top: 2px dashed var(--linea);
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
 }
 
 .estudio-precio {
+  font-family: var(--fuente-titulo);
   font-weight: 700;
-  color: #845736;
-}
-
-.reservar-btn {
-  background-color: #845736;
-  color: white;
-  border: none;
-  padding: 0.55rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.reservar-btn:hover {
-  background-color: #694328;
+  font-size: 1.25rem;
+  color: var(--verde);
 }
 
 .admin-actions {
   display: flex;
-  gap: 0.8rem;
-  margin-top: 0.8rem;
-  padding-top: 0.8rem;
-  border-top: 1px dashed #ccc;
-}
-
-.admin-actions button {
-  background: none;
-  border: none;
-  color: #845736;
-  font-size: 0.82rem;
-  cursor: pointer;
-  padding: 0;
-}
-
-.admin-actions button:hover {
-  color: #845736;
-}
-
-.admin-actions button.danger:hover {
-  color: #a8452c;
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(90, 78, 69, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 30;
-  padding: 1.2rem;
-}
-
-.modal-box {
-  background-color: #ffffff;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 480px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 2rem 2.2rem;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-}
-
-.modal-box h2 {
-  font-family: "League Spartan", sans-serif;
-  font-size: 1.6rem;
-  margin: 0 0 1.2rem;
-  color: #845736;
-}
-
-.form-group {
-  margin-bottom: 1.1rem;
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 2px dashed var(--linea);
 }
 
 .form-row {
@@ -282,150 +196,15 @@
   flex: 1;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 0.4rem;
-  color: #845736;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 0.7rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  outline: none;
-  font-size: 0.9rem;
-  font-family: "Montserrat", sans-serif;
-  resize: vertical;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  border-color: #845736;
-}
-
 .checkbox-row {
   display: flex;
   align-items: center;
   gap: 0.6rem;
   font-size: 0.9rem;
-  color: #845736;
+  color: var(--cafe-oscuro);
   margin-bottom: 1.2rem;
 }
 
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.8rem;
-}
-
-.btn-ghost {
-  padding: 0.7rem 1.3rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: none;
-  color: #7a7a7a;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.btn-ghost:hover {
-  border-color: #845736;
-  color: #845736;
-}
-
-.btn-primary {
-  padding: 0.7rem 1.4rem;
-  border-radius: 8px;
-  border: none;
-  background-color: #845736;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-  background-color: #694328;
-}
-
-.file-upload-container {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-}
-
-.custom-file-upload {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.65rem 1.2rem;
-  border-radius: 8px;
-  border: 1px dashed #845736;
-  background-color: #f7f6f3;
-  color: #845736;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.custom-file-upload:hover {
-  background-color: #eeece6;
-  border-color: #845736;
-}
-
-.file-upload-name {
-  font-size: 0.82rem;
-  color: #845736;
-}
-
-.file-upload-container {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-}
-
-.custom-file-upload {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.65rem 1.2rem;
-  border-radius: 8px;
-  border: 1px dashed #845736;
-  background-color: #f7f6f3;
-  color: #845736;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.custom-file-upload:hover {
-  background-color: #eeece6;
-  border-color: #845736;
-}
-
-.file-upload-name {
-  font-size: 0.82rem;
-  color: #845736;
-}
-
-.estudios-page::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("../assets/hojaArrugada.jpg");
-  background-color: #e8e6e1;
-  background-size: cover;
-  background-position: center;
-  background-repeat: repeat;
-  opacity: 0.13;
-  z-index: -1;
-  pointer-events: none;
+.checkbox-row input {
+  accent-color: var(--cafe);
 }

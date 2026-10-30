@@ -1,9 +1,10 @@
 .inicio-container {
-  
+  background-color: var(--papel);
   min-height: 100vh;
-  font-family: "Montserrat", sans-serif;
-  overflow-x: hidden;
+  font-family: var(--fuente-texto);
+  color: var(--cafe-oscuro);
   position: relative;
+  overflow-x: hidden;
   z-index: 0;
 }
 
@@ -12,7 +13,7 @@
   position: absolute;
   inset: 0;
   background-image: url("../assets/hojaArrugada.jpg");
-  background-color: #e8e6e1;
+  background-color: var(--papel);
   background-size: cover;
   background-position: center;
   background-repeat: repeat;
@@ -23,51 +24,37 @@
 
 .hero-section {
   text-align: center;
-  padding: 4rem 2rem;
-  background-size: cover;
-  background-position: center;
-  border-top: 2px dashed #845736; 
-  border-bottom: 2px dashed #845736;
+  padding: 4rem 2rem 3.5rem;
 }
 
 .hero-title {
-  font-family: "League Spartan", sans-serif;
-  color: #845736;
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-  letter-spacing: 2px;
+  font-family: var(--fuente-titulo);
+  color: var(--cafe);
+  font-size: 4.5rem;
+  margin: 0 0 0.6rem;
+  letter-spacing: 5px;
+  line-height: 1;
 }
 
 .hero-subtitle {
-  color: #845736;
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
+  color: var(--cafe-oscuro);
+  font-size: 1.15rem;
+  margin: 0 0 2.2rem;
 }
 
 .hero-buttons {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  flex-wrap: wrap;
+  gap: 1.6rem;
 }
 
 .hero-btn {
-  background-color: #845736;
-  color: white;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 25px;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.hero-btn:hover {
-  background-color: #694328;
+  padding: 0.9rem 2rem;
 }
 
 .categories-section {
-  padding: 4rem 10%;
+  padding: 2rem 10% 5rem;
   position: relative;
 }
 
@@ -75,31 +62,31 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 3rem;
+  gap: 3.8rem 2.6rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .category-card {
-  width: 300px;
+  width: 260px;
+  padding: 0.8rem 0.8rem 1.1rem;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .category-card:hover {
-  transform: translateY(-5px);
+  transform: rotate(0deg) translateY(-6px);
+  box-shadow: 7px 9px 0 var(--cafe);
 }
 
 .category-img-wrapper {
   width: 100%;
-  height: 120px;
-  border-radius: 15px;
+  height: 150px;
+  border-radius: 3px;
   overflow: hidden;
-  border: 3px solid #845736; 
-  background-color: #ccc; 
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background-color: var(--beige-claro);
+  margin-bottom: 0.9rem;
 }
 
 .category-img {
@@ -109,62 +96,24 @@
 }
 
 .category-title {
-  font-family: "League Spartan", sans-serif;
-  color: #845736;
-  font-size: 1.2rem;
+  font-family: var(--fuente-titulo);
+  color: var(--cafe);
+  font-size: 1.3rem;
   margin: 0;
 }
 
 .empty-categories {
   text-align: center;
-  color: #845736;
+  color: var(--cafe-oscuro);
   font-size: 1.2rem;
   font-style: italic;
   padding: 2rem 0;
 }
 
-.inicio-footer {
-  text-align: center;
-  padding: 2rem;
-  border-top: 2px dashed #845736; 
-  color: #845736;
-  font-weight: 500;
-}
-
-.footer-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 3rem;
-}
-
-.footer-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .talleres-toolbar {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.talleres-create-btn {
-  padding: 0.75rem 1.4rem;
-  border-radius: 21px;
-  border: none;
-  background-color: #845736;
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-  font-family: "Montserrat", sans-serif;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.talleres-create-btn:hover {
-  background-color: #694328;
+  margin-bottom: 3rem;
 }
 
 .category-link {
@@ -174,43 +123,14 @@
 }
 
 .category-link:focus-visible {
-  outline: 3px solid #845736;
+  outline: 3px solid var(--verde);
   outline-offset: 4px;
-  border-radius: 15px;
-}
-
-.category-card:hover .category-title {
-  text-decoration: underline;
+  border-radius: 10px;
 }
 
 .category-admin-actions {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 0.6rem;
-}
-
-.category-admin-actions button {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  background: none;
-  border: none;
-  color: #845736;
-  font-size: 0.82rem;
-  font-family: "Montserrat", sans-serif;
-  cursor: pointer;
-  padding: 0;
-}
-
-.category-admin-actions button:hover {
-  color: #694328;
-}
-
-.category-admin-actions button.danger:hover {
-  color: #a8452c;
-}
-
-.estado-error {
-  color: #a8452c;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
 }

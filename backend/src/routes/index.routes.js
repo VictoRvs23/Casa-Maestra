@@ -7,6 +7,8 @@ import authRoutes from "./auth.routes.js"
 import tallerRoutes from "./taller.routes.js";
 import preguntaFrecuenteRoutes from "./preguntaFrecuente.routes.js";
 import ticketRoutes from "./ticket.routes.js";
+import miPaginaRoutes from "./miPagina.routes.js";
+import paginaRoutes from "./pagina.routes.js";
 
 const router = Router();
 
@@ -17,5 +19,7 @@ router.use("/residentes", residenteRoutes);
 router.use("/talleres", tallerRoutes);
 router.use("/preguntas-frecuentes", preguntaFrecuenteRoutes);
 router.use("/tickets", ticketRoutes);
+router.use("/mi-pagina", miPaginaRoutes);
+router.use("/paginas", paginaRoutes);
 
 export default router;

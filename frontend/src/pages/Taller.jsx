@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 import { getTaller, getImagenUrl } from "../services/taller.services.js";
 import { getAvatarUrl } from "../services/usuario.services.js";
 import { ArrowLeft } from "@sketchicon/lucide";
@@ -98,6 +99,8 @@ export default function Taller() {
           </>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 }
