@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getUsuario, uploadAvatar, getAvatarUrl } from "../services/usuario.services.js";
@@ -148,6 +149,8 @@ export default function Perfil() {
           {tab === "seguidos" && <Seguidos />}
         </div>
       </div>
+
+      <Footer />
 
       {imagenParaRecortar && (
         <AvatarCropper
