@@ -30,8 +30,11 @@ body {
 }
 
 .divisor-hojas {
-  height: 44px;
-  background: url("../assets/enredadera.png") repeat-x center / auto 44px;
+  height: 35px;
+  background-image: url("../assets/enredadera.png");
+  background-repeat: round no-repeat;
+  background-position: auto center;
+  background-size: auto 30.5px;
   pointer-events: none;
 }
 
