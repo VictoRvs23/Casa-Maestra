@@ -2,7 +2,7 @@ import React from "react";
 import { FaInstagram } from "react-icons/fa";
 import { FaPhone } from "react-icons/fa6";
 import { SiGmail } from "react-icons/si";
-import "../styles/tema.css";
+import "../styles/Tema.css";
 
 const Footer = () => (
   <footer className="pie-pagina">

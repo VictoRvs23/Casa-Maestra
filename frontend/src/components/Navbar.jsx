@@ -4,7 +4,7 @@ import logoCasaMaestra from "../assets/logoCasaMaestra.png";
 import { IoIosNotifications } from "react-icons/io";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { useAuth } from "../context/AuthContext.jsx";
-import "../styles/tema.css";
+import "../styles/Tema.css";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
