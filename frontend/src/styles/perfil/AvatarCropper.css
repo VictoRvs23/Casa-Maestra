@@ -1,7 +1,7 @@
 .cropper-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(90, 78, 69, 0.55);
+  background-color: rgba(60, 44, 30, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,24 +10,40 @@
 }
 
 .cropper-box {
-  background-color: #ffffff;
-  border-radius: 20px;
-  padding: 2rem;
+  position: relative;
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
+  padding: 2rem;
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: 8px 10px 7px 9px;
+  box-shadow: 6px 6px 0 var(--cafe);
   text-align: center;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  color: var(--cafe-oscuro);
+}
+
+.cropper-box::before {
+  content: "";
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 84px;
+  height: 26px;
+  margin-left: -42px;
+  background-color: var(--cinta);
+  transform: rotate(-3deg);
+  pointer-events: none;
 }
 
 .cropper-box h2 {
-  font-family: 'Roca Two', serif;
-  font-size: 1.4rem;
+  font-family: var(--fuente-titulo);
+  font-size: 1.7rem;
   margin: 0 0 0.3rem;
-  color: #5A4E45;
+  color: var(--cafe);
 }
 
 .cropper-sub {
-  color: #8c8c8c;
+  color: var(--cafe);
   font-size: 0.85rem;
   margin: 0 0 1.2rem;
 }
@@ -37,9 +53,10 @@
   width: 260px;
   height: 260px;
   margin: 0 auto 1.2rem;
-  border-radius: 12px;
+  border: 2px solid var(--cafe);
+  border-radius: 6px;
   overflow: hidden;
-  background-color: #eee;
+  background-color: var(--beige-claro);
   cursor: grab;
   touch-action: none;
 }
@@ -52,54 +69,18 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  box-shadow: 0 0 0 999px rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 0 999px rgba(255, 252, 245, 0.78);
   pointer-events: none;
 }
 
 .cropper-zoom {
   width: 100%;
   margin-bottom: 1.4rem;
-  accent-color: #5A4E45;
+  accent-color: var(--cafe);
 }
 
 .cropper-actions {
   display: flex;
   justify-content: center;
   gap: 0.8rem;
-}
-
-.btn-ghost {
-  padding: 0.7rem 1.3rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: none;
-  color: #7a7a7a;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.btn-ghost:hover {
-  border-color: #5A4E45;
-  color: #5A4E45;
-}
-
-.btn-primary {
-  padding: 0.7rem 1.4rem;
-  border-radius: 8px;
-  border: none;
-  background-color: #5A4E45;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-  background-color: #433932;
-}
-
-.btn-primary:disabled {
-  background-color: #cfccc4;
-  cursor: not-allowed;
 }
