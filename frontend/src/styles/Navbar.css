@@ -3,24 +3,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 4rem;
-  background-color: var(--papel);
+  background-color: transparent;
   font-family: var(--fuente-texto);
   position: relative;
   z-index: 20;
-}
-
-.navbar-container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("../assets/hojaArrugada.jpg");
-  background-color: var(--papel);
-  background-size: cover;
-  background-position: center;
-  background-repeat: repeat;
-  opacity: 0.13;
-  z-index: -1;
-  pointer-events: none;
 }
 
 .navbar-left {
