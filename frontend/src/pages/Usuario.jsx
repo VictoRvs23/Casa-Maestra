@@ -28,6 +28,7 @@ export default function Usuario() {
 
   const [showFilter, setShowFilter] = useState(false);
   const [rolFiltro, setRolFiltro] = useState("");
+  const [rolInput, setRolInput] = useState("");
   const [busquedaInput, setBusquedaInput] = useState("");
   const [busquedaAplicada, setBusquedaAplicada] = useState("");
 
@@ -66,6 +67,7 @@ const usuariosOrdenados = Array.isArray(usuarios)
     : [];
 
   const applyFilters = () => {
+    setRolFiltro(rolInput);
     setBusquedaAplicada(busquedaInput);
     setPage(1);
     setShowFilter(false);
@@ -123,7 +125,7 @@ const usuariosOrdenados = Array.isArray(usuarios)
           {showFilter && (
             <div className="filter-popover">
               <label>Rol</label>
-              <select value={rolFiltro} onChange={(e) => setRolFiltro(e.target.value)}>
+              <select value={rolInput} onChange={(e) => setRolInput(e.target.value)}>
                 <option value="">Todos</option>
                 {ROLES.map((r) => (
                   <option key={r} value={r}>
