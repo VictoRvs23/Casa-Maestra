@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getUsuarios, updateUsuario, deleteUsuario } from "../services/usuario.services.js";
 import { Funnel, Pencil, Trash2 } from "@sketchicon/lucide";
@@ -211,6 +212,8 @@ const usuariosOrdenados = Array.isArray(usuarios)
           </button>
         </div>
       </div>
+
+      <Footer />
 
       {editando && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setEditando(null)}>
