@@ -21,11 +21,15 @@ export default function Perfil() {
   const { alerta } = useAlerta();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const tabInicial = TABS_VALIDAS.includes(searchParams.get("tab")) ? searchParams.get("tab") : "datos-personales";
+  const tabDesdeUrl = (valor) => (valor === "datos" ? "datos-personales" : valor);
+
+  const tabInicial = TABS_VALIDAS.includes(tabDesdeUrl(searchParams.get("tab")))
+    ? tabDesdeUrl(searchParams.get("tab"))
+    : "datos-personales";
   const [tab, setTab] = useState(tabInicial);
 
   useEffect(() => {
-    const tabDeUrl = searchParams.get("tab");
+    const tabDeUrl = tabDesdeUrl(searchParams.get("tab"));
     if (TABS_VALIDAS.includes(tabDeUrl) && tabDeUrl !== tab) {
       setTab(tabDeUrl);
     }
