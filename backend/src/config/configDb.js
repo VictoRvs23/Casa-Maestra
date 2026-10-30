@@ -8,6 +8,7 @@ import ResidenteEntity from "../entities/residente.entity.js";
 import TallerEntity from "../entities/taller.entity.js";
 import PreguntaFrecuenteEntity from "../entities/preguntaFrecuente.entity.js";
 import TicketEntity from "../entities/ticket.entity.js";
+import paginaResidenteEntity from "../entities/paginaResidente.entity.js";
 import { createUsuarios, createEstudios} from "./InitDb.js";
 
 export const AppDataSource = new DataSource({
@@ -24,7 +25,8 @@ export const AppDataSource = new DataSource({
     ResidenteEntity,
     TallerEntity,
     PreguntaFrecuenteEntity,
-    TicketEntity
+    TicketEntity,
+    paginaResidenteEntity
   ],
   synchronize: true,
   logging: false,
