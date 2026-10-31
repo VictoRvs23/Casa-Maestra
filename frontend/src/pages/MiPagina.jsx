@@ -15,7 +15,7 @@ import {
   IconoCerrar,
   IconoMas,
   IconoSubir,
-} from "../components/pagina/iconos.js";
+} from "../components/pagina/Iconos.js";
 import { Pencil } from "@sketchicon/lucide";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getMiPagina, updateMiPagina, subirImagenPagina } from "../services/pagina.services.js";
@@ -82,15 +82,15 @@ export default function MiPagina() {
 
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const [info, setInfo] = useState(null); 
-  const [form, setForm] = useState(null); 
+  const [info, setInfo] = useState(null);
+  const [form, setForm] = useState(null);
   const [guardado, setGuardado] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [subiendoClave, setSubiendoClave] = useState(null);
 
   const [pestana, setPestana] = useState("bloques");
   const [panelAbierto, setPanelAbierto] = useState(false);
-  const [nuevoId, setNuevoId] = useState(null); 
+  const [nuevoId, setNuevoId] = useState(null);
   const [arrastrandoId, setArrastrandoId] = useState(null);
   const [sobreId, setSobreId] = useState(null);
 
@@ -118,7 +118,7 @@ export default function MiPagina() {
   }, []);
 
   const hayCambios = form && JSON.stringify(form) !== JSON.stringify(guardado);
-  
+
   useEffect(() => {
     if (!hayCambios) return;
     const avisar = (e) => {
@@ -288,6 +288,7 @@ export default function MiPagina() {
     <div className="mipagina-page">
       <Navbar />
 
+      {/* Estado y Acciones Principales ---- */}
       <div className="mipagina-barra">
         <div className="mipagina-barra-titulo">
           <h1>Mi página</h1>
@@ -324,6 +325,7 @@ export default function MiPagina() {
       </div>
 
       <div className="mipagina-editor">
+        {/* SideBar Tools */}
         <aside className={`mipagina-lateral ${panelAbierto ? "abierto" : ""}`} aria-label="Herramientas de la página">
           <button
             type="button"
@@ -470,6 +472,7 @@ export default function MiPagina() {
           </div>
         </aside>
 
+        {/* Vista Usuarios */}
         <main className="mipagina-lienzo-wrap">
           <PaginaLienzo
             editor
@@ -530,7 +533,7 @@ export default function MiPagina() {
                 onArrastrar={() => setArrastrandoId(bloque.id)}
                 onArrastrarSobre={(e) => {
                   if (!arrastrandoId || arrastrandoId === bloque.id) return;
-                  e.preventDefault(); 
+                  e.preventDefault();
                   e.dataTransfer.dropEffect = "move";
                   setSobreId(bloque.id);
                 }}
