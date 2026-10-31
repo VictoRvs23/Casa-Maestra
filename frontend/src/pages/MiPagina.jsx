@@ -5,7 +5,17 @@ import Footer from "../components/Footer.jsx";
 import Icono from "../components/Icono.jsx";
 import PaginaLienzo from "../components/pagina/PaginaLienzo.jsx";
 import BloqueEditor from "../components/pagina/BloqueEditor.jsx";
-import { IconoTexto, IconoImagen, IconoGaleria, IconoSeparador, IconoWeb, IconoCamara, IconoCerrar } from "../components/pagina/iconos.js";
+import {
+  IconoTexto,
+  IconoImagen,
+  IconoGaleria,
+  IconoSeparador,
+  IconoWeb,
+  IconoCamara,
+  IconoCerrar,
+  IconoMas,
+  IconoSubir,
+} from "../components/pagina/iconos.js";
 import { Pencil } from "@sketchicon/lucide";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getMiPagina, updateMiPagina, subirImagenPagina } from "../services/pagina.services.js";
@@ -18,6 +28,8 @@ import {
   TIPOS_BLOQUE,
   ESTADISTICAS_EJEMPLO,
   crearBloque,
+  normalizarBloque,
+  CLAVES_REDES,
 } from "../constants/paginaEstilos.js";
 import "../styles/pagina/MiPagina.css";
 
@@ -29,6 +41,20 @@ const ICONOS_BLOQUE = {
   redes: IconoWeb,
 };
 
+const AYUDA_BLOQUE = {
+  texto: "Un párrafo para presentarte",
+  imagen: "Una foto grande",
+  galeria: "Hasta 6 fotos pequeñas",
+  separador: "Una línea con una hoja",
+  redes: "Instagram, TikTok, WhatsApp y más",
+};
+
+const PESTANAS = [
+  { id: "bloques", label: "Bloques" },
+  { id: "estilo", label: "Estilo" },
+  { id: "resumen", label: "Resumen" },
+];
+
 const TIPOS_IMAGEN = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -38,7 +64,7 @@ const aFormulario = (pagina) => ({
   color_fondo: pagina.color_fondo,
   fuente: pagina.fuente,
   portada: pagina.portada,
-  bloques: pagina.bloques,
+  bloques: pagina.bloques.map(normalizarBloque),
 });
 
 const bloqueTieneContenido = (b) => {
@@ -46,7 +72,7 @@ const bloqueTieneContenido = (b) => {
     case "texto": return b.contenido.trim() !== "";
     case "imagen": return Boolean(b.url);
     case "galeria": return b.imagenes.some(Boolean);
-    case "redes": return Boolean(b.instagram || b.email || b.web);
+    case "redes": return CLAVES_REDES.some((c) => b[c]);
     default: return false;
   }
 };
@@ -56,11 +82,17 @@ export default function MiPagina() {
 
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const [info, setInfo] = useState(null); // { residente, usuario }
-  const [form, setForm] = useState(null); // lo que se está editando
-  const [guardado, setGuardado] = useState(null); // lo último que está en el servidor
+  const [info, setInfo] = useState(null); 
+  const [form, setForm] = useState(null); 
+  const [guardado, setGuardado] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [subiendoClave, setSubiendoClave] = useState(null);
+
+  const [pestana, setPestana] = useState("bloques");
+  const [panelAbierto, setPanelAbierto] = useState(false);
+  const [nuevoId, setNuevoId] = useState(null); 
+  const [arrastrandoId, setArrastrandoId] = useState(null);
+  const [sobreId, setSobreId] = useState(null);
 
   useEffect(() => {
     let cancelado = false;
@@ -86,7 +118,7 @@ export default function MiPagina() {
   }, []);
 
   const hayCambios = form && JSON.stringify(form) !== JSON.stringify(guardado);
-
+  
   useEffect(() => {
     if (!hayCambios) return;
     const avisar = (e) => {
@@ -96,6 +128,16 @@ export default function MiPagina() {
     window.addEventListener("beforeunload", avisar);
     return () => window.removeEventListener("beforeunload", avisar);
   }, [hayCambios]);
+
+  useEffect(() => {
+    if (!nuevoId) return;
+    const el = document.getElementById(`bloque-${nuevoId}`);
+    if (el) {
+      const reducir = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reducir ? "auto" : "smooth", block: "center" });
+    }
+    setNuevoId(null);
+  }, [nuevoId]);
 
   const cambiar = (campos) => setForm((f) => ({ ...f, ...campos }));
 
@@ -112,7 +154,10 @@ export default function MiPagina() {
       alerta(`Puedes agregar hasta ${MAX_BLOQUES} bloques.`, { tipo: "advertencia" });
       return;
     }
-    setForm((f) => ({ ...f, bloques: [...f.bloques, crearBloque(tipo)] }));
+    const bloque = crearBloque(tipo);
+    setForm((f) => ({ ...f, bloques: [...f.bloques, bloque] }));
+    setNuevoId(bloque.id);
+    setPanelAbierto(false);
   };
 
   const moverBloque = (id, direccion) =>
@@ -124,6 +169,22 @@ export default function MiPagina() {
       [bloques[i], bloques[j]] = [bloques[j], bloques[i]];
       return { ...f, bloques };
     });
+
+  const reordenarBloque = (desdeId, haciaId) =>
+    setForm((f) => {
+      const bloques = [...f.bloques];
+      const i = bloques.findIndex((b) => b.id === desdeId);
+      const j = bloques.findIndex((b) => b.id === haciaId);
+      if (i < 0 || j < 0 || i === j) return f;
+      const [movido] = bloques.splice(i, 1);
+      bloques.splice(j, 0, movido);
+      return { ...f, bloques };
+    });
+
+  const terminarArrastre = () => {
+    setArrastrandoId(null);
+    setSobreId(null);
+  };
 
   const eliminarBloque = async (bloque) => {
     if (bloqueTieneContenido(bloque)) {
@@ -185,6 +246,16 @@ export default function MiPagina() {
     }
   };
 
+  const teclaPestanas = (e) => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    e.preventDefault();
+    const i = PESTANAS.findIndex((p) => p.id === pestana);
+    const paso = e.key === "ArrowRight" ? 1 : -1;
+    const siguiente = PESTANAS[(i + paso + PESTANAS.length) % PESTANAS.length];
+    setPestana(siguiente.id);
+    document.getElementById(`mp-tab-${siguiente.id}`)?.focus();
+  };
+
   if (cargando) {
     return (
       <div className="mipagina-page">
@@ -217,144 +288,189 @@ export default function MiPagina() {
     <div className="mipagina-page">
       <Navbar />
 
-      <div className="mipagina-hero">
-        <h1>Mi página</h1>
-        <p>Diseña tu página a tu gusto</p>
+      <div className="mipagina-barra">
+        <div className="mipagina-barra-titulo">
+          <h1>Mi página</h1>
+          <span className={`mipagina-estado ${hayCambios ? "pendiente" : ""}`} role="status">
+            {hayCambios ? "Cambios sin guardar" : "Todo guardado"}
+          </span>
+        </div>
+
+        <div className="mipagina-prev-acciones">
+          {guardado.publicada && (
+            <Link to={`/residentes/${residente.slug}`} className="mipagina-ver-link">
+              Ver mi página
+            </Link>
+          )}
+
+          <div className="mipagina-publicar">
+            <span>{form.publicada ? "Publicada" : "Borrador"}</span>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={form.publicada}
+              aria-label="Publicar mi página"
+              className={`mipagina-switch ${form.publicada ? "activo" : ""}`}
+              onClick={() => cambiar({ publicada: !form.publicada })}
+            >
+              <span />
+            </button>
+          </div>
+
+          <button type="button" className="btn-primary" disabled={!hayCambios || guardando} onClick={handleGuardar}>
+            {guardando ? "Guardando..." : "Guardar cambios"}
+          </button>
+        </div>
       </div>
 
-      <div className="mipagina-wrap">
-        <section className="mipagina-card" aria-labelledby="mp-bloques">
-          <h2 id="mp-bloques">Agregar bloque</h2>
-          <div className="mipagina-bloques-botones">
-            {TIPOS_BLOQUE.map(({ tipo, label }) => (
-              <button type="button" key={tipo} className="mipagina-bloque-btn" onClick={() => agregarBloque(tipo)}>
-                <Icono icon={ICONOS_BLOQUE[tipo]} size={20} /> {label}
-              </button>
-            ))}
-          </div>
-        </section>
+      <div className="mipagina-editor">
+        <aside className={`mipagina-lateral ${panelAbierto ? "abierto" : ""}`} aria-label="Herramientas de la página">
+          <button
+            type="button"
+            className="mipagina-lateral-toggle"
+            aria-expanded={panelAbierto}
+            aria-controls="mp-lateral-contenido"
+            onClick={() => setPanelAbierto((v) => !v)}
+          >
+            Herramientas
+            <Icono icon={IconoSubir} size={18} />
+          </button>
 
-        <section className="mipagina-card" aria-labelledby="mp-estilo">
-          <h2 id="mp-estilo">Personaliza tu página</h2>
-
-          <div className="mipagina-colores">
-            <div>
-              <h3>Color de detalles</h3>
-              <div className="mipagina-swatches">
-                {COLORES_ACENTO.map((c) => (
-                  <button
-                    type="button"
-                    key={c.hex}
-                    className={`swatch ${form.color_acento === c.hex ? "activo" : ""}`}
-                    style={{ backgroundColor: c.hex }}
-                    aria-label={c.nombre}
-                    aria-pressed={form.color_acento === c.hex}
-                    onClick={() => cambiar({ color_acento: c.hex })}
-                  />
-                ))}
-                <label className="swatch-otro">
-                  <Icono icon={Pencil} size={14} /> Otro
-                  <input
-                    type="color"
-                    aria-label="Elegir otro color de detalles"
-                    value={form.color_acento}
-                    onChange={(e) => cambiar({ color_acento: e.target.value })}
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <h3>Fondo de página</h3>
-              <div className="mipagina-swatches">
-                {COLORES_FONDO.map((c) => (
-                  <button
-                    type="button"
-                    key={c.hex}
-                    className={`swatch ${form.color_fondo === c.hex ? "activo" : ""}`}
-                    style={{ backgroundColor: c.hex }}
-                    aria-label={c.nombre}
-                    aria-pressed={form.color_fondo === c.hex}
-                    onClick={() => cambiar({ color_fondo: c.hex })}
-                  />
-                ))}
-                <label className="swatch-otro">
-                  <Icono icon={Pencil} size={14} /> Otro
-                  <input
-                    type="color"
-                    aria-label="Elegir otro color de fondo"
-                    value={form.color_fondo}
-                    onChange={(e) => cambiar({ color_fondo: e.target.value })}
-                  />
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <h3>Fuente</h3>
-            <div className="mipagina-fuentes">
-              {Object.entries(FUENTES).map(([clave, f]) => (
+          <div className="mipagina-lateral-contenido" id="mp-lateral-contenido">
+            <div className="lateral-tabs" role="tablist" aria-label="Secciones de herramientas" onKeyDown={teclaPestanas}>
+              {PESTANAS.map((p) => (
                 <button
                   type="button"
-                  key={clave}
-                  className={`fuente-chip ${form.fuente === clave ? "activo" : ""}`}
-                  style={{ fontFamily: f.family }}
-                  aria-pressed={form.fuente === clave}
-                  onClick={() => cambiar({ fuente: clave })}
+                  key={p.id}
+                  role="tab"
+                  id={`mp-tab-${p.id}`}
+                  aria-selected={pestana === p.id}
+                  aria-controls={`mp-panel-${p.id}`}
+                  tabIndex={pestana === p.id ? 0 : -1}
+                  className="lateral-tab"
+                  onClick={() => setPestana(p.id)}
                 >
-                  <span>{f.label}</span>
-                  <span className="fuente-muestra">Aa</span>
+                  {p.label}
                 </button>
               ))}
             </div>
-          </div>
-        </section>
 
-        <section className="mipagina-stats" aria-labelledby="mp-stats">
-          <h2 id="mp-stats">Estadísticas</h2>
-          <div className="mipagina-stats-grid">
-            {ESTADISTICAS_EJEMPLO.map((e, i) => (
-              <article className="estadistica-card" key={e.etiqueta} style={{ "--giro": ["-1deg", "0.8deg", "-0.6deg"][i] }}>
-                <p className="estadistica-etiqueta">{e.etiqueta}</p>
-                <p className="estadistica-valor">{e.valor}</p>
-              </article>
-            ))}
-          </div>
-          <p className="mipagina-nota">Valores de ejemplo: se conectarán a datos reales más adelante.</p>
-        </section>
-
-        <section aria-labelledby="mp-prev">
-          <div className="mipagina-prev-cabecera">
-            <h2 id="mp-prev">Vista previa</h2>
-
-            <div className="mipagina-prev-acciones">
-              {guardado.publicada && (
-                <Link to={`/residentes/${residente.slug}`} className="mipagina-ver-link">
-                  Ver mi página
-                </Link>
-              )}
-
-              <div className="mipagina-publicar">
-                <span>{form.publicada ? "Publicado" : "Borrador"}</span>
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={form.publicada}
-                  aria-label="Publicar mi página"
-                  className={`mipagina-switch ${form.publicada ? "activo" : ""}`}
-                  onClick={() => cambiar({ publicada: !form.publicada })}
-                >
-                  <span />
-                </button>
+            {/* Bloques */}
+            {pestana === "bloques" && (
+              <div role="tabpanel" id="mp-panel-bloques" aria-labelledby="mp-tab-bloques">
+                <p className="lateral-ayuda">
+                  Toca un bloque para agregarlo al final de tu página. Luego puedes arrastrarlo para cambiarlo de lugar.
+                </p>
+                <div className="lateral-bloques">
+                  {TIPOS_BLOQUE.map(({ tipo, label }) => (
+                    <button type="button" key={tipo} className="lateral-bloque-btn" onClick={() => agregarBloque(tipo)}>
+                      <Icono icon={ICONOS_BLOQUE[tipo]} size={22} />
+                      <span className="lateral-bloque-texto">
+                        <strong>{label}</strong>
+                        <small>{AYUDA_BLOQUE[tipo]}</small>
+                      </span>
+                      <Icono icon={IconoMas} size={18} />
+                    </button>
+                  ))}
+                </div>
+                <p className="lateral-contador">
+                  {form.bloques.length} de {MAX_BLOQUES} bloques
+                </p>
               </div>
+            )}
 
-              <button type="button" className="btn-primary" disabled={!hayCambios || guardando} onClick={handleGuardar}>
-                {guardando ? "Guardando..." : "Guardar cambios"}
-              </button>
-            </div>
+            {/* Estilo */}
+            {pestana === "estilo" && (
+              <div role="tabpanel" id="mp-panel-estilo" aria-labelledby="mp-tab-estilo">
+                <h2 className="lateral-subtitulo">Color de detalles</h2>
+                <div className="mipagina-swatches">
+                  {COLORES_ACENTO.map((c) => (
+                    <button
+                      type="button"
+                      key={c.hex}
+                      className={`swatch ${form.color_acento === c.hex ? "activo" : ""}`}
+                      style={{ backgroundColor: c.hex }}
+                      aria-label={c.nombre}
+                      aria-pressed={form.color_acento === c.hex}
+                      onClick={() => cambiar({ color_acento: c.hex })}
+                    />
+                  ))}
+                  <label className="swatch-otro">
+                    <Icono icon={Pencil} size={14} /> Otro
+                    <input
+                      type="color"
+                      aria-label="Elegir otro color de detalles"
+                      value={form.color_acento}
+                      onChange={(e) => cambiar({ color_acento: e.target.value })}
+                    />
+                  </label>
+                </div>
+
+                <h2 className="lateral-subtitulo">Fondo de página</h2>
+                <div className="mipagina-swatches">
+                  {COLORES_FONDO.map((c) => (
+                    <button
+                      type="button"
+                      key={c.hex}
+                      className={`swatch ${form.color_fondo === c.hex ? "activo" : ""}`}
+                      style={{ backgroundColor: c.hex }}
+                      aria-label={c.nombre}
+                      aria-pressed={form.color_fondo === c.hex}
+                      onClick={() => cambiar({ color_fondo: c.hex })}
+                    />
+                  ))}
+                  <label className="swatch-otro">
+                    <Icono icon={Pencil} size={14} /> Otro
+                    <input
+                      type="color"
+                      aria-label="Elegir otro color de fondo"
+                      value={form.color_fondo}
+                      onChange={(e) => cambiar({ color_fondo: e.target.value })}
+                    />
+                  </label>
+                </div>
+
+                <h2 className="lateral-subtitulo">Fuente</h2>
+                <div className="mipagina-fuentes">
+                  {Object.entries(FUENTES).map(([clave, f]) => (
+                    <button
+                      type="button"
+                      key={clave}
+                      className={`fuente-chip ${form.fuente === clave ? "activo" : ""}`}
+                      style={{ fontFamily: f.family }}
+                      aria-pressed={form.fuente === clave}
+                      onClick={() => cambiar({ fuente: clave })}
+                    >
+                      <span>{f.label}</span>
+                      <span className="fuente-muestra">Aa</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Resumen */}
+            {pestana === "resumen" && (
+              <div role="tabpanel" id="mp-panel-resumen" aria-labelledby="mp-tab-resumen">
+                <div className="mipagina-stats-grid">
+                  {ESTADISTICAS_EJEMPLO.map((e, i) => (
+                    <article
+                      className="estadistica-card"
+                      key={e.etiqueta}
+                      style={{ "--giro": ["-1deg", "0.8deg", "-0.6deg"][i] }}
+                    >
+                      <p className="estadistica-etiqueta">{e.etiqueta}</p>
+                      <p className="estadistica-valor">{e.valor}</p>
+                    </article>
+                  ))}
+                </div>
+                <p className="mipagina-nota">Valores de ejemplo: se conectarán a datos reales más adelante.</p>
+              </div>
+            )}
           </div>
+        </aside>
 
+        <main className="mipagina-lienzo-wrap">
           <PaginaLienzo
             editor
             estilo={form}
@@ -393,7 +509,9 @@ export default function MiPagina() {
             }
           >
             {form.bloques.length === 0 && (
-              <p className="estado-msg">Todavía no hay bloques. Agrega uno con los botones de arriba.</p>
+              <p className="mipagina-vacio">
+                Todavía no hay bloques. Agrega el primero desde el panel de herramientas.
+              </p>
             )}
 
             {form.bloques.map((bloque, i) => (
@@ -403,14 +521,29 @@ export default function MiPagina() {
                 esPrimero={i === 0}
                 esUltimo={i === form.bloques.length - 1}
                 subiendoClave={subiendoClave}
+                arrastrando={arrastrandoId === bloque.id}
+                sobre={sobreId === bloque.id}
                 onCambiar={(cambios) => cambiarBloque(bloque.id, cambios)}
                 onSubirImagen={subirImagen}
                 onMover={(direccion) => moverBloque(bloque.id, direccion)}
                 onEliminar={() => eliminarBloque(bloque)}
+                onArrastrar={() => setArrastrandoId(bloque.id)}
+                onArrastrarSobre={(e) => {
+                  if (!arrastrandoId || arrastrandoId === bloque.id) return;
+                  e.preventDefault(); 
+                  e.dataTransfer.dropEffect = "move";
+                  setSobreId(bloque.id);
+                }}
+                onSoltar={(e) => {
+                  e.preventDefault();
+                  if (arrastrandoId) reordenarBloque(arrastrandoId, bloque.id);
+                  terminarArrastre();
+                }}
+                onTerminarArrastre={terminarArrastre}
               />
             ))}
           </PaginaLienzo>
-        </section>
+        </main>
       </div>
 
       <Footer />
