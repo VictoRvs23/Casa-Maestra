@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
+import CampoContrasena from "../components/CampoContrasena.jsx";
 import "../styles/Registro.css";
 import { registroService } from "../services/auth.services";
 import { useAlerta } from "../context/AlertaContext.jsx";
@@ -131,31 +132,28 @@ const Registro = () => {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="contraseña">Contraseña</label>
-              <div className="password-input-wrapper">
-                <input
-                  id="contraseña"
-                  name="contraseña"
-                  type="password"
-                  placeholder="Mínimo 8 Caracteres"
-                  value={formData.contraseña}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <CampoContrasena
+                id="contraseña"
+                name="contraseña"
+                placeholder="Mínimo 8 Caracteres"
+                autoComplete="new-password"
+                value={formData.contraseña}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="confirmar_contraseña">Confirmar contraseña</label>
-              <div className="password-input-wrapper">
-                <input
-                  id="confirmar_contraseña"
-                  name="confirmar_contraseña"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.confirmar_contraseña}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <CampoContrasena
+                conOjo={false}
+                id="confirmar_contraseña"
+                name="confirmar_contraseña"
+                placeholder="••••••••"
+                autoComplete="new-password"
+                value={formData.confirmar_contraseña}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
 
