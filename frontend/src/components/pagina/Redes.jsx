@@ -1,7 +1,7 @@
 import React from "react";
 import { FaInstagram, FaTiktok, FaFacebookF, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import Icono from "../Icono.jsx";
-import { IconoCorreo } from "./iconos.js";
+import { IconoCorreo } from "./Iconos.js";
 
 const sinArroba = (v) => v.trim().replace(/^@/, "");
 
