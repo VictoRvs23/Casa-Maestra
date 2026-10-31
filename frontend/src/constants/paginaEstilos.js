@@ -27,6 +27,14 @@ export const COLORES_FONDO = [
 ];
 
 export const MAX_BLOQUES = 30;
+
+export const CLAVES_REDES = ["instagram", "tiktok", "facebook", "youtube", "whatsapp", "email"];
+const REDES_VACIAS = Object.fromEntries(CLAVES_REDES.map((c) => [c, ""]));
+
+export const normalizarBloque = (bloque) =>
+  bloque.tipo === "redes"
+    ? { id: bloque.id, tipo: "redes", ...REDES_VACIAS, ...Object.fromEntries(CLAVES_REDES.map((c) => [c, bloque[c] || ""])) }
+    : bloque;
 export const MAX_FOTOS_GALERIA = 6;
 
 export const TIPOS_BLOQUE = [
@@ -79,7 +87,7 @@ export const crearBloque = (tipo) => {
     case "separador":
       return { id, tipo };
     case "redes":
-      return { id, tipo, instagram: "", email: "", web: "" };
+      return { id, tipo, ...REDES_VACIAS };
     default:
       return null;
   }
