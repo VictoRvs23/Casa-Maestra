@@ -1,0 +1,15 @@
+export {
+  Type as IconoTexto,
+  Image as IconoImagen,
+  LayoutGrid as IconoGaleria,
+  Minus as IconoSeparador,
+  Globe as IconoWeb,
+  Mail as IconoCorreo,
+  ArrowUp as IconoSubir,
+  ArrowDown as IconoBajar,
+  Camera as IconoCamara,
+  Leaf as IconoHoja,
+  Plus as IconoMas,
+  Trash2 as IconoBorrar,
+  X as IconoCerrar,
+} from "@sketchicon/lucide";
