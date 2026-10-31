@@ -2,6 +2,7 @@
 import { Router } from "express";
 import { getUsuario,
     getUsuarios,
+    createUsuario,
     updateUsuario,
     cambiarContrasena,
     subirAvatar,
@@ -11,6 +12,8 @@ import { verifyToken} from "../middleware/auth.middleware.js";
 import { authorizeRoles } from "../middleware/authorization.middleware.js";
 import { uploadAvatar } from "../upload/usuario.upload.js";
 import { handleMulterError } from "../middleware/multerError.middleware.js";
+import { validateBody } from "../middleware/validateBody.js";
+import { CrearUsuarioValidation } from "../validations/usuario.validation.js";
 
 const router = Router();
 
@@ -28,6 +31,7 @@ const canEditarPerfil = (req, res, next) => {
 };
 
 router.get("/", verifyToken, accesosPermitidos, getUsuarios);
+router.post("/", verifyToken, accesosPermitidos, validateBody(CrearUsuarioValidation), createUsuario);
 router.get("/:id_usuario", verifyToken, canEditarPerfil, getUsuario);
 
 router.put("/:id_usuario", verifyToken, canEditarPerfil, updateUsuario);
@@ -36,4 +40,4 @@ router.put("/:id_usuario/avatar", verifyToken, canEditarPerfil, uploadAvatar.sin
 
 router.delete("/:id_usuario", verifyToken, canEditarPerfil, deleteUsuario);
 
-export default router;accesosPermitidos
+export default router;
