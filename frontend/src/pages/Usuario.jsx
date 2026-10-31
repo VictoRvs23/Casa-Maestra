@@ -15,7 +15,7 @@ const ROL_DISPLAY = {
   "Fundador/a": { label: "Fundador/a", cls: "rol-fundador" },
   Residente: { label: "Residente", cls: "rol-residente" },
   Artista: { label: "Artista", cls: "rol-artista" },
-  Cliente: { label: "Usuario", cls: "rol-cliente" },
+  Cliente: { label: "Cliente", cls: "rol-cliente" },
 };
 
 export default function Usuario() {
