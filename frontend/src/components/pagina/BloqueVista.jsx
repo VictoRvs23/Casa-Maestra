@@ -1,7 +1,7 @@
 import React from "react";
 import Icono from "../Icono.jsx";
-import { IconoHoja } from "./iconos.js";
-import { REDES } from "./redes.jsx";
+import { IconoHoja } from "./Iconos.js";
+import { REDES } from "./Redes.jsx";
 import { getImagenUrl } from "../../services/pagina.services.js";
 
 const GIROS = ["-1.2deg", "0.9deg", "-0.6deg", "1.1deg", "-0.8deg", "0.7deg"];
