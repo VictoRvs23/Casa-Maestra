@@ -9,6 +9,7 @@ import { ArrowLeft } from "@sketchicon/lucide";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getPaginaPublica } from "../services/pagina.services.js";
 import { getAvatarUrl } from "../services/usuario.services.js";
+import { textoSobre, detalleLegible } from "../constants/paginaEstilos.js";
 import "../styles/pagina/PaginaResidente.css";
 
 export default function PaginaResidente() {
@@ -55,36 +56,74 @@ export default function PaginaResidente() {
         .toUpperCase()
     : "";
 
+  const acento = datos?.pagina.color_acento;
+  const conFoto = Boolean(datos?.pagina.portada);
+  const acentoOscuro = datos ? textoSobre(acento) === "#ffffff" : false;
+
+  const tinta = conFoto || acentoOscuro ? "#ffffff" : "#2b1f15";
+  const textoBoton = tinta === "#ffffff" ? detalleLegible(acento, "#ffffff") : "#ffffff";
+
+  const colores = datos
+    ? {
+        backgroundColor: datos.pagina.color_fondo,
+        "--acento": acento,
+        "--texto-acento": textoSobre(acento),
+        "--tinta": tinta,
+        "--texto-boton": textoBoton,
+      }
+    : undefined;
+
+  const clases = [
+    "pagina-publica-page",
+    datos && "con-pagina",
+    conFoto && "con-foto", 
+    datos && tinta === "#ffffff" && "cabecera-clara",
+    datos && acentoOscuro && "pie-claro",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className="pagina-publica-page">
-      <Navbar />
-
-      <div className="pagina-publica-wrap">
-        <Link to="/residentes" className="pagina-volver">
-          <Icono icon={ArrowLeft} size={18} /> Volver a residentes
-        </Link>
-
-        {loading && <p className="estado-msg">Cargando página...</p>}
-        {!loading && error && <p className="estado-msg estado-error">{error}</p>}
-
-        {!loading && datos && (
-          <PaginaLienzo
-            estilo={datos.pagina}
-            nombre={datos.residente.nombre}
-            descripcion={datos.residente.descripcion}
-            avatarUrl={datos.avatar ? getAvatarUrl(datos.avatar) : null}
-            iniciales={iniciales}
-            onAgendar={proximamente("Agendar")}
-            onSeguir={proximamente("Seguir")}
-          >
-            {datos.pagina.bloques.map((bloque) => (
-              <BloqueVista key={bloque.id} bloque={bloque} />
-            ))}
-          </PaginaLienzo>
-        )}
+    <div className={clases} style={colores}>
+      <div className="pagina-publica-cabecera">
+        <Navbar />
       </div>
 
-      <Footer />
+      {loading && <p className="estado-msg pagina-publica-estado">Cargando página...</p>}
+
+      {!loading && error && (
+        <div className="pagina-publica-estado">
+          <p className="estado-msg estado-error">{error}</p>
+          <Link to="/residentes" className="pagina-volver-simple">
+            <Icono icon={ArrowLeft} size={18} /> Volver a residentes
+          </Link>
+        </div>
+      )}
+
+      {!loading && datos && (
+        <PaginaLienzo
+          estilo={datos.pagina}
+          nombre={datos.residente.nombre}
+          descripcion={datos.residente.descripcion}
+          avatarUrl={datos.avatar ? getAvatarUrl(datos.avatar) : null}
+          iniciales={iniciales}
+          accionPortada={
+            <Link to="/residentes" className="pagina-volver">
+              <Icono icon={ArrowLeft} size={16} /> Residentes
+            </Link>
+          }
+          onAgendar={proximamente("Agendar")}
+          onSeguir={proximamente("Seguir")}
+        >
+          {datos.pagina.bloques.map((bloque) => (
+            <BloqueVista key={bloque.id} bloque={bloque} />
+          ))}
+        </PaginaLienzo>
+      )}
+
+      <div className="pagina-publica-pie">
+        <Footer />
+      </div>
     </div>
   );
 }
