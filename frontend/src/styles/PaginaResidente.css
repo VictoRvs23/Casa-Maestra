@@ -1,0 +1,50 @@
+.pagina-publica-page {
+  background-color: var(--papel);
+  min-height: 100vh;
+  font-family: var(--fuente-texto);
+  color: var(--cafe-oscuro);
+  position: relative;
+  overflow-x: hidden;
+  z-index: 0;
+}
+
+.pagina-publica-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
+  background-color: var(--papel);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.pagina-publica-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 4rem;
+}
+
+.pagina-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1.6rem;
+  color: var(--cafe-oscuro);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.pagina-volver:hover {
+  color: var(--verde);
+}
+
+@media (max-width: 720px) {
+  .pagina-publica-wrap {
+    padding: 1rem 1rem 3rem;
+  }
+}
