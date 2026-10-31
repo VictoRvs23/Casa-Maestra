@@ -76,7 +76,7 @@ export default function PaginaResidente() {
   const clases = [
     "pagina-publica-page",
     datos && "con-pagina",
-    conFoto && "con-foto", 
+    conFoto && "con-foto",
     datos && tinta === "#ffffff" && "cabecera-clara",
     datos && acentoOscuro && "pie-claro",
   ]
