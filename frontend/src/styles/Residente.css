@@ -98,6 +98,7 @@
 
 .residente-ver-btn {
   flex-shrink: 0;
+  text-decoration: none;
   padding: 0.45rem 1.3rem;
   font-size: 0.82rem;
 }
@@ -108,4 +109,11 @@
   margin-top: 0.9rem;
   padding-top: 0.9rem;
   border-top: 2px dashed var(--linea);
+}
+
+.form-ayuda {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--cafe);
 }
