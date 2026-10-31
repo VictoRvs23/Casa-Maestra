@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { cambiarContrasena, deleteUsuario } from "../../services/usuario.services.js";
 import { useAlerta } from "../../context/AlertaContext.jsx";
+import CampoContrasena from "../CampoContrasena.jsx";
 import "../../styles/perfil/Seguridad.css";
 
 export default function Seguridad({ userId }) {
@@ -68,8 +69,8 @@ export default function Seguridad({ userId }) {
       <form onSubmit={handleActualizarContrasena}>
         <div className="form-group">
           <label>Contraseña Actual</label>
-          <input
-            type="password"
+          <CampoContrasena
+            autoComplete="current-password"
             value={passActual}
             onChange={(e) => setPassActual(e.target.value)}
             required
@@ -79,9 +80,9 @@ export default function Seguridad({ userId }) {
         <div className="form-row">
           <div className="form-group">
             <label>Nueva contraseña</label>
-            <input
-              type="password"
+            <CampoContrasena
               placeholder="Mínimo 8 Caracteres"
+              autoComplete="new-password"
               value={passNueva}
               onChange={(e) => setPassNueva(e.target.value)}
               required
@@ -89,8 +90,9 @@ export default function Seguridad({ userId }) {
           </div>
           <div className="form-group">
             <label>Confirmar nueva contraseña</label>
-            <input
-              type="password"
+            <CampoContrasena
+              conOjo={false}
+              autoComplete="new-password"
               value={passConfirmar}
               onChange={(e) => setPassConfirmar(e.target.value)}
               required
