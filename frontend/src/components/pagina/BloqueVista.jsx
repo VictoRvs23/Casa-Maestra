@@ -1,7 +1,7 @@
 import React from "react";
-import { FaInstagram } from "react-icons/fa";
 import Icono from "../Icono.jsx";
-import { IconoCorreo, IconoWeb, IconoHoja } from "./iconos.js";
+import { IconoHoja } from "./iconos.js";
+import { REDES } from "./redes.jsx";
 import { getImagenUrl } from "../../services/pagina.services.js";
 
 const GIROS = ["-1.2deg", "0.9deg", "-0.6deg", "1.1deg", "-0.8deg", "0.7deg"];
@@ -46,25 +46,22 @@ export default function BloqueVista({ bloque }) {
       );
 
     case "redes": {
-      const { instagram, email, web } = bloque;
-      if (!instagram && !email && !web) return null;
+      const activas = REDES.filter((r) => bloque[r.clave]?.trim());
+      if (activas.length === 0) return null;
       return (
         <div className="bloque-redes">
-          {instagram && (
-            <a href={`https://instagram.com/${instagram.replace(/^@/, "")}`} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-              <FaInstagram size={20} />
+          {activas.map((r) => (
+            <a
+              key={r.clave}
+              href={r.enlace(bloque[r.clave])}
+              target={r.clave === "email" ? undefined : "_blank"}
+              rel="noopener noreferrer"
+              aria-label={r.label}
+              title={r.label}
+            >
+              {r.icono(20)}
             </a>
-          )}
-          {email && (
-            <a href={`mailto:${email}`} aria-label="Correo">
-              <Icono icon={IconoCorreo} size={20} />
-            </a>
-          )}
-          {web && (
-            <a href={web} target="_blank" rel="noopener noreferrer" aria-label="Sitio web">
-              <Icono icon={IconoWeb} size={20} />
-            </a>
-          )}
+          ))}
         </div>
       );
     }
