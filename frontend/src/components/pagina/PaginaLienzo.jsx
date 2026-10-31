@@ -1,7 +1,7 @@
 import React from "react";
 import { FUENTES, FUENTE_POR_DEFECTO, textoSobre } from "../../constants/paginaEstilos.js";
 import { getImagenUrl } from "../../services/pagina.services.js";
-import "../../styles/PaginaLienzo.css";
+import "../../styles/pagina/PaginaLienzo.css";
 
 export default function PaginaLienzo({
   estilo,
