@@ -1,0 +1,247 @@
+.pagina-marco {
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: var(--radio-papel);
+  box-shadow: 6px 6px 0 var(--cafe);
+  padding: 14px;
+}
+
+.pagina-lienzo {
+  background-color: var(--fondo-pagina, var(--papel));
+  color: #2b1f15;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pagina-portada {
+  position: relative;
+  height: 220px;
+  background-color: var(--acento);
+  background-size: cover;
+  background-position: center;
+}
+
+.pagina-cuerpo {
+  padding: 0 3rem 3rem;
+}
+
+.pagina-cabecera {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 1.4rem;
+  margin-top: -56px;
+}
+
+.pagina-avatar-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.pagina-avatar {
+  width: 120px;
+  height: 120px;
+  box-sizing: border-box;
+  border: 4px solid var(--fondo-pagina);
+  border-radius: 50%;
+  background-color: #2b1f15;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.pagina-avatar-img {
+  object-fit: cover;
+}
+
+.pagina-identidad {
+  flex: 1 1 260px;
+  min-width: 0;
+  padding-bottom: 0.4rem;
+}
+
+.pagina-nombre {
+  margin: 0;
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: #2b1f15;
+  overflow-wrap: anywhere;
+}
+
+.pagina-categoria {
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--acento);
+}
+
+.pagina-acciones {
+  display: flex;
+  gap: 0.8rem;
+  padding-bottom: 0.5rem;
+}
+
+.pagina-btn {
+  padding: 0.65rem 1.7rem;
+  border: 2px solid var(--acento);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pagina-btn-lleno {
+  border-radius: 22px 18px 24px 20px / 20px 24px 18px 22px;
+  background-color: var(--acento);
+  color: var(--texto-acento);
+  box-shadow: 3px 3px 0 rgba(43, 31, 21, 0.35);
+}
+
+.pagina-btn-borde {
+  border-radius: 20px 24px 18px 22px / 24px 18px 22px 20px;
+  background-color: transparent;
+  color: var(--acento);
+}
+
+.pagina-btn:not(:disabled):hover {
+  transform: translate(-1px, -1px);
+}
+
+.pagina-btn:disabled {
+  cursor: default;
+}
+
+.pagina-bloques {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2.4rem;
+}
+
+.bloque-texto {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.bloque-imagen,
+.bloque-foto {
+  position: relative;
+  margin: 0;
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: var(--radio-papel);
+  box-shadow: 5px 5px 0 var(--cafe);
+}
+
+.bloque-imagen::before,
+.bloque-foto::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 78px;
+  height: 24px;
+  margin-left: -39px;
+  background-color: var(--cinta);
+  transform: rotate(-3deg);
+  pointer-events: none;
+}
+
+.bloque-imagen {
+  padding: 12px 12px 30px;
+}
+
+.bloque-imagen img {
+  display: block;
+  width: 100%;
+  max-height: 460px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.bloque-galeria {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.bloque-foto {
+  padding: 10px 10px 28px;
+  transform: rotate(var(--giro, 0deg));
+}
+
+.bloque-foto img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.bloque-separador {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: var(--acento);
+}
+
+.bloque-separador span {
+  flex: 1;
+  height: 2px;
+  background-color: var(--acento);
+  opacity: 0.55;
+}
+
+.bloque-redes {
+  display: flex;
+  justify-content: center;
+  gap: 0.9rem;
+}
+
+.bloque-redes a {
+  width: 46px;
+  height: 46px;
+  border: 2px solid var(--acento);
+  border-radius: 50%;
+  color: var(--acento);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.bloque-redes a:hover {
+  background-color: var(--acento);
+  color: var(--texto-acento);
+}
+
+@media (max-width: 720px) {
+  .pagina-portada {
+    height: 150px;
+  }
+
+  .pagina-cuerpo {
+    padding: 0 1.3rem 2rem;
+  }
+
+  .pagina-cabecera {
+    margin-top: -48px;
+  }
+
+  .pagina-nombre {
+    font-size: 1.7rem;
+  }
+}
