@@ -24,6 +24,11 @@ export const getUsuario = async (id_usuario) => {
   return data;
 };
 
+export const createUsuario = async (payload) => {
+  const { data } = await api.post("/usuarios", payload);
+  return data;
+};
+
 export const updateUsuario = async (id_usuario, payload) => {
   const { data } = await api.put(`/usuarios/${id_usuario}`, payload);
   return data;
