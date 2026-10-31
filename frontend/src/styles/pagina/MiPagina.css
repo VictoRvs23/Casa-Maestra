@@ -1,0 +1,662 @@
+.mipagina-page {
+  background-color: var(--papel);
+  min-height: 100vh;
+  font-family: var(--fuente-texto);
+  color: var(--cafe-oscuro);
+  position: relative;
+  overflow-x: hidden;
+  z-index: 0;
+}
+
+.mipagina-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
+  background-color: var(--papel);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.mipagina-hero {
+  text-align: center;
+  padding: 3rem 2rem 1.5rem;
+}
+
+.mipagina-hero h1 {
+  font-family: var(--fuente-titulo);
+  color: var(--cafe);
+  font-size: 3rem;
+  margin: 0 0 0.6rem;
+  letter-spacing: 3px;
+}
+
+.mipagina-hero p {
+  color: var(--cafe-oscuro);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.mipagina-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.6rem;
+}
+
+.mipagina-card {
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: var(--radio-papel);
+  box-shadow: var(--sombra-dura);
+  padding: 1.4rem 2rem 1.8rem;
+}
+
+.mipagina-card h2,
+.mipagina-stats h2,
+.mipagina-prev-cabecera h2 {
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  color: var(--cafe);
+  margin: 0 0 1.1rem;
+}
+
+.mipagina-card h2 {
+  font-size: 1.4rem;
+}
+
+.mipagina-card h3 {
+  margin: 0 0 0.9rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.mipagina-bloques-botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.mipagina-bloque-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  height: 46px;
+  padding: 0 1.4rem;
+  border: 2px solid var(--cafe);
+  border-radius: 22px 18px 24px 20px / 20px 24px 18px 22px;
+  background: transparent;
+  color: var(--cafe-oscuro);
+  font-family: var(--fuente-texto);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mipagina-bloque-btn:hover {
+  background-color: var(--beige-claro);
+}
+
+.mipagina-colores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.6rem 3.5rem;
+  margin-bottom: 1.8rem;
+}
+
+.mipagina-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.swatch {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid var(--cafe-oscuro);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.swatch.activo {
+  box-shadow: 0 0 0 3px var(--papel-claro), 0 0 0 5px var(--cafe-oscuro);
+}
+
+.swatch:focus-visible,
+.fuente-chip:focus-visible {
+  outline: 3px solid var(--verde);
+  outline-offset: 3px;
+}
+
+.swatch-otro {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 32px;
+  padding: 0 0.8rem;
+  border: 1.5px solid var(--cafe);
+  border-radius: 16px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.swatch-otro input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.swatch-otro:focus-within {
+  outline: 3px solid var(--verde);
+  outline-offset: 3px;
+}
+
+.mipagina-fuentes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+}
+
+.fuente-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.4rem;
+  min-width: 150px;
+  height: 46px;
+  padding: 0 1.1rem;
+  border: 2px solid var(--cafe);
+  border-radius: 18px 22px 20px 24px / 22px 18px 24px 20px;
+  background-color: var(--papel-claro);
+  color: #3e2f22;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.fuente-chip.activo {
+  background-color: var(--beige);
+}
+
+.fuente-muestra {
+  color: var(--cafe);
+  font-size: 1.05rem;
+}
+
+.mipagina-stats h2 {
+  text-align: center;
+  font-size: 1.7rem;
+  letter-spacing: 1px;
+  margin-bottom: 1.8rem;
+}
+
+.mipagina-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2.2rem;
+}
+
+.estadistica-card {
+  position: relative;
+  padding: 1.8rem 1.2rem 1.4rem;
+  text-align: center;
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: var(--radio-papel);
+  box-shadow: var(--sombra-dura);
+  transform: rotate(var(--giro, 0deg));
+}
+
+.estadistica-card::before {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  width: 78px;
+  height: 24px;
+  margin-left: -39px;
+  background-color: var(--cinta);
+  transform: rotate(-3deg);
+  pointer-events: none;
+}
+
+.estadistica-etiqueta {
+  margin: 0 0 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.estadistica-valor {
+  margin: 0;
+  font-family: var(--fuente-titulo);
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--cafe);
+}
+
+.mipagina-nota {
+  margin: 1.4rem 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--cafe);
+}
+
+.mipagina-prev-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.mipagina-prev-cabecera h2 {
+  font-size: 1.9rem;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.mipagina-prev-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.mipagina-ver-link {
+  color: var(--verde);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.mipagina-publicar {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.mipagina-switch {
+  display: flex;
+  align-items: center;
+  width: 54px;
+  height: 30px;
+  padding: 0;
+  border: 2px solid var(--cafe);
+  border-radius: 15px;
+  background-color: var(--beige);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.mipagina-switch span {
+  display: block;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  margin-left: 2px;
+  border: 2px solid var(--cafe);
+  border-radius: 50%;
+  background-color: var(--papel-claro);
+  transition: margin-left 0.2s ease;
+}
+
+.mipagina-switch.activo {
+  background-color: var(--exito-fg);
+}
+
+.mipagina-switch.activo span {
+  margin-left: 24px;
+}
+
+.mipagina-switch:focus-visible {
+  outline: 3px solid var(--verde);
+  outline-offset: 3px;
+}
+
+.pagina-portada-acciones {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.pagina-portada-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  border: 2px solid var(--papel-claro);
+  border-radius: 16px;
+  background-color: rgba(43, 31, 21, 0.5);
+  color: #ffffff;
+  font-family: var(--fuente-texto);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pagina-portada-btn input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pagina-portada-btn:focus-within {
+  outline: 3px solid var(--papel-claro);
+  outline-offset: 2px;
+}
+
+.pagina-avatar-edit {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--fondo-pagina);
+  border-radius: 50%;
+  background-color: var(--acento);
+  color: var(--texto-acento);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bloque-editor {
+  position: relative;
+  padding: 1.6rem 1.2rem 1.2rem;
+  border: 2px dashed transparent;
+  border-radius: 6px;
+  transition: border-color 0.2s ease;
+}
+
+.bloque-editor:hover,
+.bloque-editor:focus-within {
+  border-color: var(--acento);
+}
+
+.bloque-etiqueta {
+  position: absolute;
+  top: -0.7rem;
+  left: 1rem;
+  padding: 0 0.6rem;
+  background-color: var(--fondo-pagina);
+  color: var(--acento);
+  font-family: var(--fuente-texto);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.bloque-herramientas {
+  position: absolute;
+  top: -18px;
+  right: 14px;
+  z-index: 3;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background-color: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  border-radius: 16px;
+  box-shadow: 2px 2px 0 var(--cafe);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.bloque-editor:hover .bloque-etiqueta,
+.bloque-editor:focus-within .bloque-etiqueta,
+.bloque-editor:hover .bloque-herramientas,
+.bloque-editor:focus-within .bloque-herramientas {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .bloque-etiqueta,
+  .bloque-herramientas {
+    opacity: 1;
+  }
+}
+
+.bloque-herramientas button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cafe-oscuro);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.bloque-herramientas button:hover:not(:disabled) {
+  background-color: var(--beige-claro);
+}
+
+.bloque-herramientas button:disabled {
+  color: var(--deshabilitado);
+  cursor: not-allowed;
+}
+
+.bloque-herramientas button.danger {
+  color: var(--error-fg);
+}
+
+.bloque-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.9rem 1rem;
+  border: 2px dashed var(--acento);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  text-align: center;
+  resize: vertical;
+  outline: none;
+}
+
+.bloque-textarea:focus {
+  border-style: solid;
+}
+
+.bloque-textarea::placeholder {
+  color: var(--acento);
+  opacity: 0.7;
+}
+
+.slot-foto {
+  position: relative;
+  display: flex;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 2px dashed var(--acento);
+  border-radius: 4px;
+  color: var(--acento);
+}
+
+.slot-foto.slot-grande {
+  aspect-ratio: auto;
+  height: 280px;
+}
+
+.slot-foto-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slot-foto-label {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--fuente-texto);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.slot-foto-label input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.slot-foto-label:focus-within {
+  outline: 3px solid var(--acento);
+  outline-offset: -5px;
+}
+
+.slot-foto.con-imagen .slot-foto-label {
+  background-color: rgba(43, 31, 21, 0.55);
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.slot-foto.con-imagen:hover .slot-foto-label,
+.slot-foto.con-imagen .slot-foto-label:focus-within {
+  opacity: 1;
+}
+
+.slot-foto-quitar {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 2px solid var(--papel-claro);
+  border-radius: 50%;
+  background-color: var(--cafe-oscuro);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.bloque-galeria-editor {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.2rem;
+}
+
+.bloque-agregar-foto {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 1rem auto 0;
+  padding: 0.45rem 1rem;
+  border: 2px dashed var(--acento);
+  border-radius: 16px;
+  background: transparent;
+  color: var(--acento);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bloque-alt {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.8rem;
+  padding: 0.55rem 0.8rem;
+  border: 1.5px solid var(--acento);
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.55);
+  color: #2b1f15;
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.bloque-redes-editor {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.bloque-redes-editor label {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--acento);
+}
+
+.bloque-redes-editor input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.6rem 0.9rem;
+  border: 2px solid var(--acento);
+  border-radius: 14px;
+  background-color: rgba(255, 255, 255, 0.6);
+  color: #2b1f15;
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .mipagina-wrap {
+    padding: 1rem 1rem 3rem;
+  }
+
+  .mipagina-card {
+    padding: 1.2rem 1.2rem 1.5rem;
+  }
+
+  .bloque-editor {
+    padding: 1.6rem 0.4rem 1rem;
+  }
+}

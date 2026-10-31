@@ -45,6 +45,9 @@ const Navbar = () => {
                     <li><NavLink to="/residentes" className={({ isActive }) => (isActive ? "activo" : "")}>Residentes</NavLink></li>
                     <li><NavLink to="/estudios" className={({ isActive }) => (isActive ? "activo" : "")}>Estudios</NavLink></li>
                     <li><NavLink to="/soporte" className={({ isActive }) => (isActive ? "activo" : "")}>Soporte</NavLink></li>
+                    {user?.rol === "Residente" && (
+                        <li><NavLink to="/mi-pagina" className={({ isActive }) => (isActive ? "activo" : "")}>Mi página</NavLink></li>
+                    )}
                     {(user?.rol === "Admin" || user?.rol === "Fundador/a") && (
                         <li><NavLink to="/usuarios" className={({ isActive }) => (isActive ? "activo" : "")}>Usuarios</NavLink></li>
                     )}

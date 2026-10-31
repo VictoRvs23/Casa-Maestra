@@ -9,6 +9,8 @@ import Perfil from "./pages/Perfil.jsx";
 import Residente from "./pages/Residente.jsx";
 import Taller from "./pages/Taller.jsx";
 import Soporte from "./pages/Soporte.jsx";
+import MiPagina from "./pages/MiPagina.jsx";
+import PaginaResidente from "./pages/PaginaResidente.jsx";
 
 function App() {
   return (
@@ -28,6 +30,12 @@ function App() {
 
         {/* Ruta de Residentes */}
         <Route path="/residentes" element={<Residente />} />
+
+        {/* Ruta de Página de Residente */}
+        <Route path="/residentes/:slug" element={<PaginaResidente />} />
+
+        {/* Ruta de Mi Página */}
+        <Route path="/mi-pagina" element={<MiPagina />} />
 
         {/* Ruta de Estudios */}
         <Route path="/estudios" element={<Estudio />} />

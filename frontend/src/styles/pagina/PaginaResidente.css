@@ -1,0 +1,161 @@
+.pagina-publica-page {
+  background-color: var(--papel);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--fuente-texto);
+  color: var(--cafe-oscuro);
+  position: relative;
+  overflow-x: hidden;
+  z-index: 0;
+}
+
+.pagina-publica-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../../assets/hojaArrugada.jpg");
+  background-color: var(--papel);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.pagina-publica-page > .pagina-lienzo,
+.pagina-publica-page > .pagina-publica-estado {
+  flex: 1;
+}
+
+.pagina-publica-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 1rem;
+}
+
+.pagina-volver {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border: 2px solid var(--papel-claro);
+  border-radius: 16px;
+  background-color: rgba(43, 31, 21, 0.5);
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.pagina-volver:hover {
+  background-color: var(--cafe-oscuro);
+}
+
+.pagina-volver:focus-visible {
+  outline: 3px solid var(--papel-claro);
+  outline-offset: 2px;
+}
+
+.pagina-volver-simple {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--cafe-oscuro);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.pagina-volver-simple:hover {
+  color: var(--verde);
+}
+
+.pagina-publica-page {
+  --cabecera-alto: 142px;
+}
+
+.pagina-publica-page.con-pagina::before {
+  display: none;
+}
+
+.pagina-publica-page.con-pagina .pagina-publica-cabecera {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+}
+
+.pagina-publica-page.con-pagina .pagina-portada {
+  height: calc(var(--cabecera-alto) + 260px);
+}
+
+.pagina-publica-page.con-foto .pagina-portada::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(43, 31, 21, 0.6), rgba(43, 31, 21, 0) 60%);
+  pointer-events: none;
+}
+
+.pagina-publica-page.con-pagina .pagina-volver {
+  top: calc(var(--cabecera-alto) + 16px);
+}
+
+.con-pagina .navbar-logo {
+  background-color: var(--tinta);
+}
+
+.con-pagina .navbar-links a {
+  color: var(--tinta);
+}
+
+.con-pagina .navbar-links a:hover {
+  color: var(--tinta);
+  background-color: color-mix(in srgb, var(--tinta) 12%, transparent);
+}
+
+.con-pagina .navbar-links a.activo {
+  background-color: color-mix(in srgb, var(--tinta) 22%, transparent);
+  color: var(--tinta);
+}
+
+.con-pagina .campana-btn,
+.con-pagina .nav-account-btn,
+.con-pagina .nav-login-btn {
+  background-color: var(--tinta);
+  color: var(--texto-boton);
+}
+
+.con-pagina .campana-btn:hover,
+.con-pagina .nav-account-btn:hover,
+.con-pagina .nav-login-btn:hover {
+  background-color: var(--tinta);
+  opacity: 0.88;
+}
+
+.cabecera-clara .pagina-publica-cabecera .divisor-hojas {
+  filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(43, 31, 21, 0.35));
+}
+
+.pie-claro .pagina-publica-pie .divisor-hojas {
+  filter: brightness(0) invert(1);
+}
+
+.pagina-publica-pie {
+  background-color: var(--acento, transparent);
+  color: var(--texto-acento, inherit);
+}
+
+.pagina-publica-pie .pie-pagina {
+  color: inherit;
+  padding-top: 0.6rem;
+}

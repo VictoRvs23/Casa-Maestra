@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import { useAuth } from "../context/AuthContext";
@@ -8,13 +9,14 @@ import {
   createResidente,
   updateResidente,
   deleteResidente,
+  getCuentasDisponibles,
   getImagenUrl,
 } from "../services/residente.services.js";
 import { Pencil, Trash2 } from "@sketchicon/lucide";
 import Icono from "../components/Icono.jsx";
 import "../styles/Residente.css";
 
-const FORM_INICIAL = { nombre: "", descripcion: "" };
+const FORM_INICIAL = { nombre: "", descripcion: "", id_usuario: "" };
 
 export default function Residente() {
   const { user } = useAuth();
@@ -30,6 +32,7 @@ export default function Residente() {
   const [form, setForm] = useState(FORM_INICIAL);
   const [imagenArchivo, setImagenArchivo] = useState(null);
   const [guardando, setGuardando] = useState(false);
+  const [cuentas, setCuentas] = useState([]);
 
   const fetchResidentes = useCallback(async () => {
     setLoading(true);
@@ -49,11 +52,22 @@ export default function Residente() {
     fetchResidentes();
   }, [fetchResidentes]);
 
+  const cargarCuentas = async (id_residente) => {
+    try {
+      const data = await getCuentasDisponibles(id_residente);
+      setCuentas(data.cuentas || []);
+    } catch (err) {
+      console.error(err);
+      setCuentas([]);
+    }
+  };
+
   const abrirCrear = () => {
     setEditandoId(null);
     setForm(FORM_INICIAL);
     setImagenArchivo(null);
     setModalAbierto(true);
+    cargarCuentas();
   };
 
   const abrirEditar = (residente) => {
@@ -61,9 +75,11 @@ export default function Residente() {
     setForm({
       nombre: residente.nombre,
       descripcion: residente.descripcion || "",
+      id_usuario: residente.id_usuario ? String(residente.id_usuario) : "",
     });
     setImagenArchivo(null);
     setModalAbierto(true);
+    cargarCuentas(residente.id_residente);
   };
 
   const cerrarModal = () => {
@@ -89,6 +105,7 @@ export default function Residente() {
     const formData = new FormData();
     formData.append("nombre", form.nombre);
     formData.append("descripcion", form.descripcion);
+    formData.append("id_usuario", form.id_usuario);
     if (imagenArchivo) {
       formData.append("imagen", imagenArchivo);
     }
@@ -172,7 +189,9 @@ export default function Residente() {
                       <p className="residente-descripcion">{residente.descripcion}</p>
                     )}
                   </div>
-                  <button className="residente-ver-btn">Ver</button>
+                  <Link to={`/residentes/${residente.slug}`} className="residente-ver-btn">
+                    Ver
+                  </Link>
                 </div>
 
                 {puedeGestionar && (
@@ -218,6 +237,21 @@ export default function Residente() {
                   maxLength={150}
                   placeholder="Ej: Piercings y Tatuajes"
                 />
+              </div>
+
+              <div className="form-group">
+                <label>Cuenta asociada (opcional)</label>
+                <select name="id_usuario" value={form.id_usuario} onChange={handleFormChange}>
+                  <option value="">Sin cuenta asociada</option>
+                  {cuentas.map((c) => (
+                    <option key={c.id_usuario} value={c.id_usuario}>
+                      {c.nombre} {c.apellido} (@{c.nombre_usuario})
+                    </option>
+                  ))}
+                </select>
+                <small className="form-ayuda">
+                  La persona con esta cuenta podrá diseñar su página desde "Mi página".
+                </small>
               </div>
 
               <div className="form-group">
