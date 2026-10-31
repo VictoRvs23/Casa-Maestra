@@ -43,16 +43,24 @@ export const ESTADISTICAS_EJEMPLO = [
   { etiqueta: "Seguidores", valor: 86 },
 ];
 
-export const textoSobre = (hex) => {
+const luminancia = (hex) => {
   const limpio = (hex || "").replace("#", "");
-  if (limpio.length !== 6) return "#ffffff";
+  if (limpio.length !== 6) return 0;
 
   const [r, g, b] = [0, 2, 4].map((i) => parseInt(limpio.slice(i, i + 2), 16) / 255);
   const lineal = (c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
-  const luminancia = 0.2126 * lineal(r) + 0.7152 * lineal(g) + 0.0722 * lineal(b);
-
-  return luminancia > 0.4 ? "#2b1f15" : "#ffffff";
+  return 0.2126 * lineal(r) + 0.7152 * lineal(g) + 0.0722 * lineal(b);
 };
+
+export const textoSobre = (hex) => (luminancia(hex) > 0.4 ? "#2b1f15" : "#ffffff");
+
+export const contraste = (a, b) => {
+  const [claro, oscuro] = [luminancia(a), luminancia(b)].sort((x, y) => y - x);
+  return (claro + 0.05) / (oscuro + 0.05);
+};
+
+export const detalleLegible = (acento, fondo) =>
+  contraste(acento, fondo) >= 3 ? acento : textoSobre(fondo);
 
 const nuevoId = () =>
   typeof crypto !== "undefined" && crypto.randomUUID
