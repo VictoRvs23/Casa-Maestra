@@ -9,7 +9,7 @@ import { ArrowLeft } from "@sketchicon/lucide";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getPaginaPublica } from "../services/pagina.services.js";
 import { getAvatarUrl } from "../services/usuario.services.js";
-import "../styles/PaginaResidente.css";
+import "../styles/pagina/PaginaResidente.css";
 
 export default function PaginaResidente() {
   const { slug } = useParams();
