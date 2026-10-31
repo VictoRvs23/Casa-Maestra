@@ -9,10 +9,10 @@ import {
   IconoBorrar,
   IconoCerrar,
   IconoMas,
-} from "./iconos.js";
+} from "./Iconos.js";
 import { MAX_FOTOS_GALERIA, TIPOS_BLOQUE } from "../../constants/paginaEstilos.js";
 import { getImagenUrl } from "../../services/pagina.services.js";
-import { REDES } from "./redes.jsx";
+import { REDES } from "./Redes.jsx";
 
 function SlotFoto({ url, clave, subiendoClave, onArchivo, onQuitar, className = "" }) {
   const imagen = getImagenUrl(url);
@@ -184,6 +184,7 @@ export default function BloqueEditor({
       <span className="bloque-etiqueta">{etiqueta}</span>
 
       <div className="bloque-herramientas" role="group" aria-label={`Acciones del bloque ${etiqueta}`}>
+
         <span
           className="bloque-asa"
           title="Arrastra para cambiar de lugar"
@@ -194,7 +195,7 @@ export default function BloqueEditor({
             e.dataTransfer.setData("text/plain", bloque.id);
             const tarjeta = e.currentTarget.closest(".bloque-editor");
             if (tarjeta) e.dataTransfer.setDragImage(tarjeta, 24, 24);
-            setTimeout(() => onArrastrar?.(), 0); 
+            setTimeout(() => onArrastrar?.(), 0);
           }}
           onDragEnd={() => onTerminarArrastre?.()}
         >

@@ -23,7 +23,6 @@ export const subirImagenPagina = async (archivo) => {
   return data;
 };
 
-
 export const getPaginaPublica = async (slug) => {
   const { data } = await api.get(`/paginas/${encodeURIComponent(slug)}`);
   return data;
