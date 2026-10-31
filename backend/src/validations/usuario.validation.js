@@ -60,6 +60,26 @@ export const RegistroValidation = Joi.object({
     .optional()
 }).unknown(false);
 
+export const CrearUsuarioValidation = RegistroValidation.keys({
+    contraseña: Joi.string()
+    .min(8)
+    .max(72)
+    .required()
+    .messages({
+        "string.empty": "La contraseña es obligatoria.",
+        "string.min": "La contraseña debe tener al menos 8 caracteres.",
+        "string.max": "La contraseña debe tener maximo 72 caracteres.",
+        "any.required": "La contraseña es obligatoria."
+    }),
+    rol: Joi.string()
+    .valid("Fundador/a", "Cliente", "Admin", "Residente", "Artista")
+    .required()
+    .messages({
+        "any.only": "El rol elegido no es válido.",
+        "any.required": "El rol es obligatorio."
+    }),
+});
+
 export const LoginValidation = Joi.object({
     email: Joi.string()
     .email()
