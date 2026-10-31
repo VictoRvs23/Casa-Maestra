@@ -19,7 +19,7 @@ import {
   ESTADISTICAS_EJEMPLO,
   crearBloque,
 } from "../constants/paginaEstilos.js";
-import "../styles/MiPagina.css";
+import "../styles/pagina/MiPagina.css";
 
 const ICONOS_BLOQUE = {
   texto: IconoTexto,
@@ -56,9 +56,9 @@ export default function MiPagina() {
 
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const [info, setInfo] = useState(null);
-  const [form, setForm] = useState(null);
-  const [guardado, setGuardado] = useState(null);
+  const [info, setInfo] = useState(null); // { residente, usuario }
+  const [form, setForm] = useState(null); // lo que se está editando
+  const [guardado, setGuardado] = useState(null); // lo último que está en el servidor
   const [guardando, setGuardando] = useState(false);
   const [subiendoClave, setSubiendoClave] = useState(null);
 
