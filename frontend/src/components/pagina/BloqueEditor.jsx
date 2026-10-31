@@ -1,10 +1,8 @@
 import React from "react";
-import { FaInstagram } from "react-icons/fa";
+import { FaGripVertical } from "react-icons/fa";
 import Icono from "../Icono.jsx";
 import {
   IconoImagen,
-  IconoCorreo,
-  IconoWeb,
   IconoHoja,
   IconoSubir,
   IconoBajar,
@@ -14,6 +12,7 @@ import {
 } from "./iconos.js";
 import { MAX_FOTOS_GALERIA, TIPOS_BLOQUE } from "../../constants/paginaEstilos.js";
 import { getImagenUrl } from "../../services/pagina.services.js";
+import { REDES } from "./redes.jsx";
 
 function SlotFoto({ url, clave, subiendoClave, onArchivo, onQuitar, className = "" }) {
   const imagen = getImagenUrl(url);
@@ -56,6 +55,12 @@ export default function BloqueEditor({
   onSubirImagen,
   onMover,
   onEliminar,
+  arrastrando = false,
+  sobre = false,
+  onArrastrar,
+  onArrastrarSobre,
+  onSoltar,
+  onTerminarArrastre,
 }) {
   const etiqueta = TIPOS_BLOQUE.find((t) => t.tipo === bloque.tipo)?.label;
 
@@ -148,39 +153,19 @@ export default function BloqueEditor({
       case "redes":
         return (
           <div className="bloque-redes-editor">
-            <label>
-              <FaInstagram size={18} aria-hidden="true" />
-              <span className="solo-lectores">Instagram</span>
-              <input
-                type="text"
-                placeholder="@tu_usuario"
-                maxLength={30}
-                value={bloque.instagram}
-                onChange={(e) => onCambiar({ instagram: e.target.value })}
-              />
-            </label>
-            <label>
-              <Icono icon={IconoCorreo} size={18} />
-              <span className="solo-lectores">Correo</span>
-              <input
-                type="email"
-                placeholder="correo@ejemplo.com"
-                maxLength={200}
-                value={bloque.email}
-                onChange={(e) => onCambiar({ email: e.target.value })}
-              />
-            </label>
-            <label>
-              <Icono icon={IconoWeb} size={18} />
-              <span className="solo-lectores">Sitio web</span>
-              <input
-                type="url"
-                placeholder="https://tusitio.cl"
-                maxLength={255}
-                value={bloque.web}
-                onChange={(e) => onCambiar({ web: e.target.value })}
-              />
-            </label>
+            {REDES.map((r) => (
+              <label key={r.clave}>
+                {r.icono(18)}
+                <span className="solo-lectores">{r.label}</span>
+                <input
+                  type={r.tipo}
+                  placeholder={r.placeholder}
+                  maxLength={r.max}
+                  value={bloque[r.clave] || ""}
+                  onChange={(e) => onCambiar({ [r.clave]: e.target.value })}
+                />
+              </label>
+            ))}
           </div>
         );
 
@@ -190,10 +175,31 @@ export default function BloqueEditor({
   };
 
   return (
-    <div className="bloque-editor">
+    <div
+      id={`bloque-${bloque.id}`}
+      className={`bloque-editor ${arrastrando ? "arrastrando" : ""} ${sobre ? "sobre" : ""}`}
+      onDragOver={onArrastrarSobre}
+      onDrop={onSoltar}
+    >
       <span className="bloque-etiqueta">{etiqueta}</span>
 
       <div className="bloque-herramientas" role="group" aria-label={`Acciones del bloque ${etiqueta}`}>
+        <span
+          className="bloque-asa"
+          title="Arrastra para cambiar de lugar"
+          aria-hidden="true"
+          draggable
+          onDragStart={(e) => {
+            e.dataTransfer.effectAllowed = "move";
+            e.dataTransfer.setData("text/plain", bloque.id);
+            const tarjeta = e.currentTarget.closest(".bloque-editor");
+            if (tarjeta) e.dataTransfer.setDragImage(tarjeta, 24, 24);
+            setTimeout(() => onArrastrar?.(), 0); 
+          }}
+          onDragEnd={() => onTerminarArrastre?.()}
+        >
+          <FaGripVertical size={14} />
+        </span>
         <button type="button" aria-label="Subir bloque" disabled={esPrimero} onClick={() => onMover(-1)}>
           <Icono icon={IconoSubir} size={16} />
         </button>
