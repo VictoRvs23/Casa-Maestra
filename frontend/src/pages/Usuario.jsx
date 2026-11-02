@@ -2,13 +2,24 @@ import React, { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import { useAlerta } from "../context/AlertaContext.jsx";
-import { getUsuarios, updateUsuario, deleteUsuario } from "../services/usuario.services.js";
+import { getUsuarios, updateUsuario, deleteUsuario, createUsuario } from "../services/usuario.services.js";
 import { Funnel, Pencil, Trash2 } from "@sketchicon/lucide";
 import Icono from "../components/Icono.jsx";
+import CampoContrasena from "../components/CampoContrasena.jsx";
 
 import "../styles/Usuario.css";
 
 const ROLES = ["Admin", "Fundador/a", "Residente", "Artista", "Cliente"];
+
+const FORM_NUEVO = {
+  nombre_usuario: "",
+  nombre: "",
+  apellido: "",
+  email: "",
+  telefono: "",
+  contraseña: "",
+  rol: "Cliente",
+};
 
 const ROL_DISPLAY = {
   Admin: { label: "Admin", cls: "rol-admin" },
@@ -33,6 +44,8 @@ export default function Usuario() {
   const [busquedaAplicada, setBusquedaAplicada] = useState("");
 
   const [editando, setEditando] = useState(null);
+  const [nuevo, setNuevo] = useState(null);
+  const [creando, setCreando] = useState(false);
 
   const fetchUsuarios = useCallback(async () => {
     setLoading(true);
@@ -107,6 +120,26 @@ const usuariosOrdenados = Array.isArray(usuarios)
     }
   };
 
+  const handleCrear = async (e) => {
+    e.preventDefault();
+    setCreando(true);
+    try {
+      await createUsuario(nuevo);
+      setNuevo(null);
+      setPage(1);
+      fetchUsuarios();
+      alerta(
+        "La cuenta se creó correctamente. Entrégale la contraseña temporal a la persona y pídele que la cambie desde Seguridad.",
+        { tipo: "exito", titulo: "Cuenta creada" }
+      );
+    } catch (err) {
+      console.error(err);
+      alerta(err.response?.data?.message || "No se pudo crear la cuenta.", { tipo: "error" });
+    } finally {
+      setCreando(false);
+    }
+  };
+
   return (
     <div className="usuarios-page">
       <Navbar />
@@ -118,6 +151,10 @@ const usuariosOrdenados = Array.isArray(usuarios)
 
       <div className="usuarios-wrap">
         <div className="usuarios-toolbar">
+          <button type="button" className="btn-primary" onClick={() => setNuevo({ ...FORM_NUEVO })}>
+            + Crear usuario
+          </button>
+
           <button className="filter-btn" onClick={() => setShowFilter((v) => !v)} aria-label="Filtrar">
             <Icono icon={Funnel} size={18} />
           </button>
@@ -262,6 +299,125 @@ const usuariosOrdenados = Array.isArray(usuarios)
                 </button>
                 <button type="submit" className="btn-primary">
                   Guardar cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {nuevo && (
+        <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setNuevo(null)}>
+          <div className="modal-box modal-box-ancho">
+            <h2>Crear usuario</h2>
+            <p className="modal-ayuda">
+              Úsalo cuando una persona no pueda registrarse por su cuenta. La contraseña es temporal:
+              pídele que la cambie desde Seguridad.
+            </p>
+
+            <form onSubmit={handleCrear}>
+              <div className="modal-field">
+                <label htmlFor="nuevo-nombre_usuario">Nombre de usuario</label>
+                <input
+                  id="nuevo-nombre_usuario"
+                  value={nuevo.nombre_usuario}
+                  onChange={(e) => setNuevo({ ...nuevo, nombre_usuario: e.target.value })}
+                  minLength={3}
+                  maxLength={50}
+                  required
+                />
+              </div>
+
+              <div className="modal-row">
+                <div className="modal-field">
+                  <label htmlFor="nuevo-nombre">Nombre</label>
+                  <input
+                    id="nuevo-nombre"
+                    value={nuevo.nombre}
+                    onChange={(e) => setNuevo({ ...nuevo, nombre: e.target.value })}
+                    minLength={3}
+                    maxLength={50}
+                    required
+                  />
+                </div>
+                <div className="modal-field">
+                  <label htmlFor="nuevo-apellido">Apellido</label>
+                  <input
+                    id="nuevo-apellido"
+                    value={nuevo.apellido}
+                    onChange={(e) => setNuevo({ ...nuevo, apellido: e.target.value })}
+                    minLength={3}
+                    maxLength={50}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="modal-row">
+                <div className="modal-field">
+                  <label htmlFor="nuevo-email">Correo electrónico</label>
+                  <input
+                    id="nuevo-email"
+                    type="email"
+                    value={nuevo.email}
+                    onChange={(e) => setNuevo({ ...nuevo, email: e.target.value })}
+                    maxLength={200}
+                    required
+                  />
+                </div>
+                <div className="modal-field">
+                  <label htmlFor="nuevo-telefono">Teléfono</label>
+                  <input
+                    id="nuevo-telefono"
+                    type="tel"
+                    inputMode="numeric"
+                    placeholder="912345678"
+                    value={nuevo.telefono}
+                    onChange={(e) => setNuevo({ ...nuevo, telefono: e.target.value.replace(/\D/g, "") })}
+                    pattern="9[0-9]{8}"
+                    title="Debe tener 9 dígitos y comenzar con 9"
+                    maxLength={9}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="modal-row">
+                <div className="modal-field">
+                  <label htmlFor="nuevo-contraseña">Contraseña temporal</label>
+                  <CampoContrasena
+                    id="nuevo-contraseña"
+                    placeholder="Mínimo 8 caracteres"
+                    autoComplete="new-password"
+                    value={nuevo.contraseña}
+                    onChange={(e) => setNuevo({ ...nuevo, contraseña: e.target.value })}
+                    minLength={8}
+                    maxLength={72}
+                    required
+                  />
+                </div>
+                <div className="modal-field">
+                  <label htmlFor="nuevo-rol">Rol</label>
+                  <select
+                    id="nuevo-rol"
+                    value={nuevo.rol}
+                    onChange={(e) => setNuevo({ ...nuevo, rol: e.target.value })}
+                  >
+                    {ROLES.map((r) => (
+                      <option key={r} value={r}>
+                        {ROL_DISPLAY[r]?.label || r}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-ghost" onClick={() => setNuevo(null)}>
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-primary" disabled={creando}>
+                  {creando ? "Creando..." : "Crear cuenta"}
                 </button>
               </div>
             </form>
