@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import Icono from "../components/Icono.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getEstudio0, editarEstudio0, getImagenUrl } from "../services/estudio0.services.js";
-
+import { User, Pencil, Ruler, CircleCheck, CircleX } from "@sketchicon/lucide";
+import "../styles/Estudio.css";
 import "../styles/Estudio0.css";
 
 const GESTORES = ["Admin", "Fundador/a"];
@@ -88,126 +90,128 @@ export default function Estudio0() {
 
   const set = (campo) => (e) => setForm({ ...form, [campo]: e.target.value });
 
+  const irAAgenda = () => navigate("/estudio0/agenda");
+
   return (
-    <div className="e0-page">
+    <div className="estudios-page">
       <Navbar />
 
-      <div className="e0-hero">
+      <div className="estudios-hero">
         <h1>Estudio 0</h1>
         <p>Reserva el espacio adecuado para tu oficio: una sala equipada, por hora.</p>
       </div>
 
-      <main className="e0-wrap">
-        {loading && <p className="e0-estado">Cargando Estudio 0...</p>}
-        {!loading && error && <p className="e0-estado e0-estado-error">{error}</p>}
+      <div className="estudios-wrap">
+        {loading && <p className="estado-msg">Cargando Estudio 0...</p>}
+        {!loading && error && <p className="estado-msg estado-error">{error}</p>}
 
         {!loading && estudio && (
-          <article className="e0-card">
-            <span className="e0-cinta" aria-hidden="true" />
+          <div className="e0-unico">
+            <div className="estudio-card">
+              <div
+                className="estudio-img"
+                style={estudio.imagen ? { backgroundImage: `url(${getImagenUrl(estudio.imagen)})` } : undefined}
+              >
+                <span className="estudio-badge">Estudio 0</span>
+                <span className={`estado-icono ${estudio.disponible ? "libre" : "ocupado"}`}>
+                  {estudio.disponible ? <Icono icon={CircleCheck} size={22} /> : <Icono icon={CircleX} size={22} />}
+                </span>
+              </div>
 
-            {esGestor && (
-              <button type="button" className="e0-editar" onClick={abrirEdicion}>
-                Editar
-              </button>
-            )}
-
-            <div className="e0-foto">
-              {estudio.imagen ? (
-                <img src={getImagenUrl(estudio.imagen)} alt="Foto del Estudio 0" />
-              ) : (
-                <span>Aún no hay foto del Estudio 0</span>
-              )}
-            </div>
-
-            <div className="e0-datos">
-              <ul className="e0-lista">
-                <li>Hasta {estudio.capacidad} {estudio.capacidad === 1 ? "persona" : "personas"}</li>
-                <li>
+              <div className="estudio-info">
+                <p>
+                  <span className="ico"><Icono icon={User} size={18} /></span>
+                  Hasta {estudio.capacidad} {Number(estudio.capacidad) === 1 ? "persona" : "personas"}
+                </p>
+                <p>
+                  <span className="ico"><Icono icon={Ruler} size={18} /></span>
                   {numero(estudio.ancho_metros)} x {numero(estudio.largo_metros)} metros (
                   {numero(Number(estudio.ancho_metros) * Number(estudio.largo_metros))} m²)
-                </li>
-              </ul>
+                </p>
 
-              <div className="e0-botones">
-                <button type="button" className="btn-ghost" onClick={() => navigate("/estudio0/agenda")}>
-                  Ver agenda
-                </button>
-                <button
-                  type="button"
-                  className="btn-primary"
-                  disabled={!estudio.disponible}
-                  onClick={() => navigate("/estudio0/agenda")}
-                >
-                  Reservar
-                </button>
+                {estudio.descripcion && <p className="e0-descripcion-card">{estudio.descripcion}</p>}
+
+                <div className="estudio-footer">
+                  <span className="estudio-precio">${numero(estudio.precio)} / hora</span>
+                  <button className="reservar-btn" disabled={!estudio.disponible} onClick={irAAgenda}>
+                    Reservar
+                  </button>
+                </div>
+
+                <p className="e0-nota-card">
+                  {estudio.disponible
+                    ? "Confirmación inmediata si la hora está libre."
+                    : "No acepta reservas por ahora."}
+                </p>
+
+                <div className="admin-actions">
+                  <button onClick={irAAgenda}>Ver agenda</button>
+                  {esGestor && (
+                    <>
+                      <button onClick={abrirEdicion}>
+                        <Icono icon={Pencil} size={18} /> Editar
+                      </button>
+                      <button onClick={() => navigate("/estudio0/horarios")}>Gestionar horarios</button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
-
-            {estudio.descripcion && <p className="e0-descripcion">{estudio.descripcion}</p>}
-
-            <div className="e0-pie">
-              <div className="e0-precio">
-                ${numero(estudio.precio)} <small>/ hora</small>
-              </div>
-              {estudio.disponible ? (
-                <span className="e0-nota">Confirmación inmediata si la hora está libre</span>
-              ) : (
-                <span className="e0-nota e0-nota-aviso">No disponible por ahora</span>
-              )}
-            </div>
-
-            {esGestor && (
-              <div className="e0-gestion">
-                <button type="button" className="btn-ghost" onClick={() => navigate("/estudio0/horarios")}>
-                  Gestionar horarios
-                </button>
-              </div>
-            )}
-          </article>
+          </div>
         )}
-      </main>
+      </div>
 
       <Footer />
 
       {form && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setForm(null)}>
-          <div className="modal-box modal-box-ancho">
+          <div className="modal-box">
             <h2>Editar Estudio 0</h2>
             <form onSubmit={handleGuardar}>
-              <div className="modal-field">
-                <label htmlFor="e0-descripcion">Descripción</label>
-                <textarea id="e0-descripcion" rows={3} maxLength={1000} value={form.descripcion} onChange={set("descripcion")} />
+              <div className="form-group">
+                <label>Descripción</label>
+                <textarea rows={3} maxLength={1000} value={form.descripcion} onChange={set("descripcion")} />
               </div>
 
-              <div className="modal-row">
-                <div className="modal-field">
-                  <label htmlFor="e0-capacidad">Capacidad (personas)</label>
-                  <input id="e0-capacidad" type="number" min="1" step="1" value={form.capacidad} onChange={set("capacidad")} required />
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Capacidad (personas)</label>
+                  <input type="number" min="1" step="1" value={form.capacidad} onChange={set("capacidad")} required />
                 </div>
-                <div className="modal-field">
-                  <label htmlFor="e0-precio">Precio por hora ($)</label>
-                  <input id="e0-precio" type="number" min="0" step="500" value={form.precio} onChange={set("precio")} required />
-                </div>
-              </div>
-
-              <div className="modal-row">
-                <div className="modal-field">
-                  <label htmlFor="e0-ancho">Ancho (m)</label>
-                  <input id="e0-ancho" type="number" min="0.5" step="0.1" value={form.ancho_metros} onChange={set("ancho_metros")} required />
-                </div>
-                <div className="modal-field">
-                  <label htmlFor="e0-largo">Largo (m)</label>
-                  <input id="e0-largo" type="number" min="0.5" step="0.1" value={form.largo_metros} onChange={set("largo_metros")} required />
+                <div className="form-group">
+                  <label>Precio por hora (CLP)</label>
+                  <input type="number" min="0" step="500" value={form.precio} onChange={set("precio")} required />
                 </div>
               </div>
 
-              <div className="modal-field">
-                <label htmlFor="e0-imagen">Foto</label>
-                <input id="e0-imagen" type="file" accept="image/jpeg,image/png,image/webp" onChange={elegirImagen} />
-                {imagen && <small className="e0-ayuda">Se subirá: {imagen.name}</small>}
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Ancho (m)</label>
+                  <input type="number" min="0.5" step="0.1" value={form.ancho_metros} onChange={set("ancho_metros")} required />
+                </div>
+                <div className="form-group">
+                  <label>Largo (m)</label>
+                  <input type="number" min="0.5" step="0.1" value={form.largo_metros} onChange={set("largo_metros")} required />
+                </div>
               </div>
 
-              <label className="e0-check">
+              <div className="form-group">
+                <label>Foto (opcional)</label>
+                <div className="file-upload-container">
+                  <label className="custom-file-upload">
+                    Subir Imagen
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={elegirImagen}
+                      style={{ display: "none" }}
+                    />
+                  </label>
+                  <span className="file-upload-name">{imagen ? imagen.name : "Ningún archivo seleccionado"}</span>
+                </div>
+              </div>
+
+              <label className="checkbox-row">
                 <input
                   type="checkbox"
                   checked={form.disponible}
@@ -221,7 +225,7 @@ export default function Estudio0() {
                   Cancelar
                 </button>
                 <button type="submit" className="btn-primary" disabled={guardando}>
-                  {guardando ? "Guardando..." : "Guardar cambios"}
+                  {guardando ? "Guardando..." : "Guardar"}
                 </button>
               </div>
             </form>
