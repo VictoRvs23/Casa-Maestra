@@ -43,14 +43,13 @@ function App() {
         {/* Ruta de Estudios */}
         <Route path="/estudios" element={<Estudio />} />
 
-        {/* Ruta de Estudio 0 */}
-        <Route path="/estudios/0" element={<Estudio0 />} />
+        {/* Rutas de Estudio 0 */}
+        <Route path="/estudio0" element={<Estudio0 />} />
+        <Route path="/estudio0/agenda" element={<Estudio0Agenda />} />
+        <Route path="/estudio0/horarios" element={<Estudio0Horarios />} />
 
-        {/* Ruta de Agenda de Estudio 0 */}
-        <Route path="/estudios/0/agenda" element={<Estudio0Agenda />} />
-
-        {/* Ruta de Horarios de Estudio 0 */}
-        <Route path="/estudios/0/horarios" element={<Estudio0Horarios />} />
+        {/* Compatibilidad con la URL anterior */}
+        <Route path="/estudios/0" element={<Navigate to="/estudio0" replace />} />
 
         {/* Ruta de Soporte */}
         <Route path="/soporte" element={<Soporte />} />
