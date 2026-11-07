@@ -15,6 +15,7 @@ import Estudio0 from "./pages/Estudio0.jsx";
 import Estudio0Agenda from "./pages/Estudio0Agenda.jsx";
 import Estudio0Horarios from "./pages/Estudio0Horarios.jsx";
 import Estudio0Reservas from "./pages/Estudio0Reservas.jsx";
+import EstudiosArriendos from "./pages/EstudioArriendos.jsx";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
 
         {/* Ruta de Estudios */}
         <Route path="/estudios" element={<Estudio />} />
+        <Route path="/estudios/arriendos" element={<EstudiosArriendos />} />
 
         {/* Rutas de Estudio 0 */}
         <Route path="/estudio0" element={<Estudio0 />} />

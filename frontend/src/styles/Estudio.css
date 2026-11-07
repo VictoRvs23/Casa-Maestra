@@ -42,7 +42,7 @@
 }
 
 .estudios-wrap {
-  max-width: 1100px;
+  max-width: 1480px;
   margin: 0 auto;
   padding: 1.5rem 2rem 4rem;
 }
@@ -207,4 +207,159 @@
 
 .checkbox-row input {
   accent-color: var(--cafe);
+}
+
+.arriendos-link {
+  padding: 0.65rem 1.3rem;
+  border: 2px solid var(--cafe);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cafe);
+  font-family: var(--fuente-texto);
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.arriendos-link:hover {
+  background-color: var(--beige-claro);
+}
+
+.estudios-lista {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4rem 3rem;
+  padding-top: 0.6rem;
+}
+
+.estudio-h {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1rem 1.4rem;
+}
+
+.estudio-h .estudio-img {
+  height: 280px;
+}
+
+.estudio-h-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.3rem 0.6rem 0;
+}
+
+.estudio-info .estudio-h-desc {
+  display: block;
+  margin: 0 0 1rem;
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+.estudio-h-datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.1rem 1.8rem;
+}
+
+.estudio-h-datos p {
+  font-size: 0.98rem;
+}
+
+.estudio-meses {
+  margin: 1rem 0 1.2rem;
+}
+
+.estudio-meses-titulo {
+  display: block;
+  margin-bottom: 0.55rem;
+  color: var(--verde);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.estudio-meses ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.estudio-meses li {
+  padding: 0.35rem 0;
+  border: 2px solid var(--cafe);
+  border-radius: 6px;
+  background: var(--papel-claro);
+  color: var(--cafe-oscuro);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.estudio-meses li.ocupado {
+  border-color: #c9b48f;
+  background: var(--beige-claro);
+  color: #a8916a;
+  text-decoration: line-through;
+}
+
+.estudio-h .estudio-footer {
+  margin-top: auto;
+}
+
+.estudio-h .estudio-precio {
+  font-size: 1.45rem;
+}
+
+.estudio-h .reservar-btn:disabled {
+  background-color: var(--deshabilitado);
+  border-color: var(--deshabilitado);
+  box-shadow: none;
+  transform: none;
+  cursor: not-allowed;
+}
+
+.arriendo-resumen {
+  margin-bottom: 1.3rem;
+  padding: 0.9rem 1rem;
+  border: 2px dashed var(--linea);
+  border-radius: 10px;
+}
+
+.arriendo-resumen p {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.arriendo-resumen .arriendo-total b {
+  font-family: var(--fuente-titulo);
+  font-size: 1.25rem;
+  color: var(--verde);
+}
+
+.arriendo-resumen small {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .estudios-lista {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .estudio-h .estudio-img {
+    height: 220px;
+  }
+
+  .estudio-meses ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
