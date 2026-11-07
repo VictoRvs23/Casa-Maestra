@@ -40,6 +40,11 @@ export const updateAgenda = async (id_estudio, bloques) => {
   return data;
 };
 
+export const getReservas = async (params) => {
+  const { data } = await api.get("/reservas", { params });
+  return data;
+};
+
 export const getMisReservas = async () => {
   const { data } = await api.get("/reservas/mias");
   return data;
