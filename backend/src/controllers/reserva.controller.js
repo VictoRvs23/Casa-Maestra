@@ -1,6 +1,10 @@
 "use strict";
 import * as reservaService from "../services/reserva.services.js";
-import { CrearReservaValidation, DisponibilidadQueryValidation } from "../validations/reserva.validation.js";
+import {
+    CrearReservaValidation,
+    DisponibilidadQueryValidation,
+    ListadoReservasQueryValidation,
+} from "../validations/reserva.validation.js";
 
 export const getEstudio0 = async (req, res) => {
     try {
@@ -59,5 +63,19 @@ export const getMisReservas = async (req, res) => {
     } catch (error) {
         console.error("Error en getMisReservas:", error);
         res.status(500).json({ message: "Error interno al obtener tus reservas" });
+    }
+};
+
+export const getReservas = async (req, res) => {
+    try {
+        const { error, value } = ListadoReservasQueryValidation.validate(req.query);
+        if (error) return res.status(400).json({ message: error.details[0].message });
+
+        const listado = await reservaService.getReservasService(value);
+        res.status(200).json(listado);
+    } catch (error) {
+        if (error.status) return res.status(error.status).json({ message: error.message });
+        console.error("Error en getReservas:", error);
+        res.status(500).json({ message: "Error interno al obtener las reservas" });
     }
 };

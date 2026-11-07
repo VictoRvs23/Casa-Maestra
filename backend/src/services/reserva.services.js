@@ -4,6 +4,7 @@ import AgendaEntity from "../entities/agenda.entity.js";
 import EstudioEntity from "../entities/estudio.entity.js";
 import {
     ahoraEnChile,
+    aHora,
     aMinutos,
     diaSemanaDe,
     esFechaValida,
@@ -137,4 +138,87 @@ export const getMisReservasService = async (id_usuario) => {
         relations: ["estudio"],
         order: { fecha: "DESC", hora_inicio: "DESC" },
     });
+};
+
+export const PERIODOS_RESERVAS = ["proximas", "pasadas", "canceladas", "todas"];
+
+const aplicarPeriodo = (qb, periodo, hoy, hora) => {
+    const futura = "(r.fecha > :hoy OR (r.fecha = :hoy AND r.hora_fin > :hora))";
+    switch (periodo) {
+        case "proximas":
+            return qb.andWhere("r.estado = 'confirmada'").andWhere(futura, { hoy, hora });
+        case "pasadas":
+            return qb.andWhere("r.estado = 'confirmada'").andWhere("NOT " + futura, { hoy, hora });
+        case "canceladas":
+            return qb.andWhere("r.estado = 'cancelada'");
+        default:
+            return qb;
+    }
+};
+
+export const getReservasService = async ({ periodo = "proximas", page = 1, limit = 10 }) => {
+    const estudio = await getEstudio0Service();
+    const ahora = ahoraEnChile();
+    const hoy = ahora.fecha;
+    const hora = aHora(ahora.minutos);
+
+    const qb = reservaRepository
+        .createQueryBuilder("r")
+        .leftJoin("r.usuario", "u")
+        .select([
+            "r.id_reserva",
+            "r.fecha",
+            "r.hora_inicio",
+            "r.hora_fin",
+            "r.estado",
+            "r.created_at",
+            "u.id_usuario",
+            "u.nombre",
+            "u.apellido",
+            "u.email",
+            "u.telefono",
+        ])
+        .where("r.id_estudio = :id", { id: estudio.id_estudio });
+
+    aplicarPeriodo(qb, periodo, hoy, hora);
+
+    const ascendente = periodo === "proximas";
+    const orden = ascendente ? "ASC" : "DESC";
+    const [filas, total] = await qb
+        .orderBy("r.fecha", orden)
+        .addOrderBy("r.hora_inicio", orden)
+        .skip((page - 1) * limit)
+        .take(limit)
+        .getManyAndCount();
+
+    const cuentas = {};
+    for (const p of PERIODOS_RESERVAS) {
+        const q = reservaRepository.createQueryBuilder("r").where("r.id_estudio = :id", { id: estudio.id_estudio });
+        cuentas[p] = await aplicarPeriodo(q, p, hoy, hora).getCount();
+    }
+
+    const reservas = filas.map((r) => {
+        const horas = (aMinutos(r.hora_fin) - aMinutos(r.hora_inicio)) / 60;
+        return {
+            id_reserva: r.id_reserva,
+            fecha: r.fecha,
+            hora_inicio: normalizarHora(r.hora_inicio),
+            hora_fin: normalizarHora(r.hora_fin),
+            estado: r.estado,
+            horas,
+            total: horas * estudio.precio,
+            created_at: r.created_at,
+            usuario: r.usuario
+                ? {
+                    id_usuario: r.usuario.id_usuario,
+                    nombre: r.usuario.nombre,
+                    apellido: r.usuario.apellido,
+                    email: r.usuario.email,
+                    telefono: r.usuario.telefono,
+                }
+                : null,
+        };
+    });
+
+    return { reservas, total, page, limit, totalPages: Math.max(1, Math.ceil(total / limit)), cuentas };
 };

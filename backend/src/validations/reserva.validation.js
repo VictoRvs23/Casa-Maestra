@@ -35,3 +35,12 @@ export const DisponibilidadQueryValidation = Joi.object({
             "any.required": "Debes indicar el mes (?mes=YYYY-MM).",
         }),
 });
+
+export const ListadoReservasQueryValidation = Joi.object({
+    periodo: Joi.string()
+        .valid("proximas", "pasadas", "canceladas", "todas")
+        .default("proximas")
+        .messages({ "any.only": "El período debe ser proximas, pasadas, canceladas o todas." }),
+    page: Joi.number().integer().min(1).default(1),
+    limit: Joi.number().integer().min(1).max(50).default(10),
+}).unknown(false);  
