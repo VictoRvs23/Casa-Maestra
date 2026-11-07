@@ -2,10 +2,12 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import Icono from "../components/Icono.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getDisponibilidad, reservarEstudio0, hoyEnChile } from "../services/estudio0.services.js";
 
+import { ArrowLeft } from "@sketchicon/lucide";
 import "../styles/Estudio0.css";
 
 const MAX_HORAS = 4;
@@ -146,8 +148,14 @@ export default function Estudio0Agenda() {
       <Navbar />
 
       <div className="e0-hero">
-        <button type="button" className="e0-volver" onClick={() => navigate("/estudio0")}>
-          ← Volver al Estudio 0
+        <button
+          type="button"
+          className="e0-volver"
+          aria-label="Volver al Estudio 0"
+          title="Volver al Estudio 0"
+          onClick={() => navigate("/estudio0")}
+        >
+          <Icono icon={ArrowLeft} size={18} />
         </button>
         <h1>Agenda</h1>
         <p>

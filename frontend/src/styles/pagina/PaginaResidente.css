@@ -30,6 +30,7 @@
 }
 
 .pagina-publica-estado {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,17 +68,24 @@
 }
 
 .pagina-volver-simple {
+  position: absolute;
+  top: 16px;
+  left: 16px;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  color: var(--cafe-oscuro);
-  font-weight: 600;
-  font-size: 0.9rem;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--cafe);
+  border-radius: 50%;
+  color: var(--cafe);
   text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .pagina-volver-simple:hover {
-  color: var(--verde);
+  background-color: var(--cafe);
+  color: #ffffff;
 }
 
 .pagina-publica-page {

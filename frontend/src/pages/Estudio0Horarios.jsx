@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import Icono from "../components/Icono.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getEstudio0, getAgenda, updateAgenda } from "../services/estudio0.services.js";
+import { ArrowLeft } from "@sketchicon/lucide";
 import "../styles/Estudio0.css";
 
 const GESTORES = ["Admin", "Fundador/a"];
@@ -146,8 +148,14 @@ export default function Estudio0Horarios() {
       <Navbar />
 
       <div className="e0-hero">
-        <button type="button" className="e0-volver" onClick={() => navigate("/estudio0")}>
-          ← Volver al Estudio 0
+        <button
+          type="button"
+          className="e0-volver"
+          aria-label="Volver al Estudio 0"
+          title="Volver al Estudio 0"
+          onClick={() => navigate("/estudio0")}
+        >
+          <Icono icon={ArrowLeft} size={18} />
         </button>
         <h1>Horarios</h1>
         <p>Define qué días y entre qué horas se puede reservar. Cada bloque se reparte en horas de una hora.</p>

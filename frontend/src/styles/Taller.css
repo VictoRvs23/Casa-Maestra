@@ -22,22 +22,34 @@
 }
 
 .taller-wrap {
-  padding: 1rem max(2rem, calc((100% - 900px) / 2)) 4rem;
+  position: relative;
+  padding: 4.5rem max(2rem, calc((100% - 900px) / 2)) 4rem;
 }
 
 .taller-volver {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  color: var(--cafe-oscuro);
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  border: 2px solid var(--cafe);
+  border-radius: 50%;
+  color: var(--cafe);
   text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 1.6rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .taller-volver:hover {
-  color: var(--verde);
+  background-color: var(--cafe);
+  color: #ffffff;
+}
+
+.taller-volver:focus-visible {
+  outline: 3px solid var(--verde);
+  outline-offset: 2px;
 }
 
 .taller-banner {

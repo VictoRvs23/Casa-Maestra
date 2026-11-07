@@ -94,8 +94,8 @@ export default function PaginaResidente() {
       {!loading && error && (
         <div className="pagina-publica-estado">
           <p className="estado-msg estado-error">{error}</p>
-          <Link to="/residentes" className="pagina-volver-simple">
-            <Icono icon={ArrowLeft} size={18} /> Volver a residentes
+          <Link to="/residentes" className="pagina-volver-simple" aria-label="Volver a residentes" title="Volver a residentes">
+            <Icono icon={ArrowLeft} size={18} />
           </Link>
         </div>
       )}

@@ -47,8 +47,8 @@ export default function Taller() {
       <Navbar />
 
       <div className="taller-wrap">
-        <Link to="/" className="taller-volver">
-          <Icono icon={ArrowLeft} size={18} /> Volver a los talleres
+        <Link to="/" className="taller-volver" aria-label="Volver a los talleres" title="Volver a los talleres">
+          <Icono icon={ArrowLeft} size={18} />
         </Link>
 
         {loading && <p className="estado-msg">Cargando taller...</p>}
