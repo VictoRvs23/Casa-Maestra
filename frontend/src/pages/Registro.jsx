@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
+import CampoContrasena from "../components/CampoContrasena.jsx";
 import "../styles/Registro.css";
 import { registroService } from "../services/auth.services";
+import { useAlerta } from "../context/AlertaContext.jsx";
 
 const Registro = () => {
   const [formData, setFormData] = useState({
@@ -14,8 +16,8 @@ const Registro = () => {
     contraseña: "",
     confirmar_contraseña: ""
   });
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { alerta } = useAlerta();
 
   const handleChange = (e) => {
     setFormData({
@@ -26,10 +28,9 @@ const Registro = () => {
 
   const handleRegistro = async (e) => {
     e.preventDefault();
-    setError("");
 
     if (formData.contraseña !== formData.confirmar_contraseña) {
-      setError("Las contraseñas no coinciden");
+      alerta("Las contraseñas no coinciden.", { tipo: "advertencia" });
       return;
     }
 
@@ -37,10 +38,16 @@ const Registro = () => {
 
     try {
       await registroService(payload);
-      alert("¡Registro exitoso! Ahora puedes iniciar sesión.");
+      await alerta("¡Registro exitoso! Ahora puedes iniciar sesión.", {
+        tipo: "exito",
+        titulo: "Cuenta creada",
+      });
       navigate("/login");
     } catch (err) {
-      setError(err);
+      alerta(typeof err === "string" ? err : "No se pudo crear la cuenta.", {
+        tipo: "error",
+        titulo: "No pudimos crear tu cuenta",
+      });
     }
   };
 
@@ -51,8 +58,6 @@ const Registro = () => {
         <p className="registro-subtitle">
           Crea tu cuenta para agendar sesiones, talleres u ofrecer tu oficio como residente o artista
         </p>
-
-        {error && <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>}
 
         <form className="registro-form" onSubmit={handleRegistro}>
 
@@ -127,31 +132,28 @@ const Registro = () => {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="contraseña">Contraseña</label>
-              <div className="password-input-wrapper">
-                <input
-                  id="contraseña"
-                  name="contraseña"
-                  type="password"
-                  placeholder="Mínimo 8 Caracteres"
-                  value={formData.contraseña}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <CampoContrasena
+                id="contraseña"
+                name="contraseña"
+                placeholder="Mínimo 8 Caracteres"
+                autoComplete="new-password"
+                value={formData.contraseña}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="form-group">
               <label htmlFor="confirmar_contraseña">Confirmar contraseña</label>
-              <div className="password-input-wrapper">
-                <input
-                  id="confirmar_contraseña"
-                  name="confirmar_contraseña"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.confirmar_contraseña}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <CampoContrasena
+                conOjo={false}
+                id="confirmar_contraseña"
+                name="confirmar_contraseña"
+                placeholder="••••••••"
+                autoComplete="new-password"
+                value={formData.confirmar_contraseña}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
 

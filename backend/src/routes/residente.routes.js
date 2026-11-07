@@ -3,6 +3,7 @@ import { Router } from "express";
 import {
     getResidentes,
     getResidente,
+    getCuentasDisponibles,
     createResidente,
     updateResidente,
     deleteResidente,
@@ -16,13 +17,20 @@ import { CrearResidenteValidation, ActualizarResidenteValidation } from "../vali
 
 const router = Router();
 
-const GestionResidentes = authorizeRoles("Fundador/a", "Admin");
+const puedeGestionarResidentes = authorizeRoles("Fundador/a", "Admin");
 
 router.get("/", getResidentes);
+
+router.get("/cuentas-disponibles", verifyToken, puedeGestionarResidentes, getCuentasDisponibles);
+
 router.get("/:id_residente", getResidente);
 
-router.post("/", verifyToken, GestionResidentes, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(CrearResidenteValidation), createResidente);
-router.put("/:id_residente", verifyToken, GestionResidentes, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(ActualizarResidenteValidation), updateResidente);
-router.delete("/:id_residente", verifyToken, GestionResidentes, deleteResidente);
+router.post(
+    "/", verifyToken, puedeGestionarResidentes, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(CrearResidenteValidation), createResidente
+);
+router.put(
+    "/:id_residente", verifyToken, puedeGestionarResidentes, uploadImagenResidente.single("imagen"), handleMulterError, validateBody(ActualizarResidenteValidation), updateResidente
+);
+router.delete("/:id_residente", verifyToken, puedeGestionarResidentes, deleteResidente);
 
 export default router;

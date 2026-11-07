@@ -16,6 +16,12 @@ const ResidenteEntity = new EntitySchema({
             length: 80,
             nullable: false,
         },
+        slug: {
+            type: "varchar",
+            length: 100,
+            nullable: false,
+            unique: true,
+        },
         descripcion: {
             type: "varchar",
             length: 150,
@@ -26,6 +32,10 @@ const ResidenteEntity = new EntitySchema({
             length: 255,
             nullable: true,
         },
+        id_usuario: {
+            type: "int",
+            nullable: true,
+        },
         created_at: {
             type: "timestamp",
             createDate: true,
@@ -33,6 +43,15 @@ const ResidenteEntity = new EntitySchema({
         updated_at: {
             type: "timestamp",
             updateDate: true,
+        },
+    },
+    relations: {
+        usuario: {
+            type: "one-to-one",
+            target: "Usuario",
+            joinColumn: { name: "id_usuario", referencedColumnName: "id_usuario" },
+            nullable: true,
+            onDelete: "SET NULL",
         },
     },
 });

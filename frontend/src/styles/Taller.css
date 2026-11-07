@@ -1,0 +1,178 @@
+.taller-page {
+  background-color: var(--papel);
+  min-height: 100vh;
+  font-family: var(--fuente-texto);
+  color: var(--cafe-oscuro);
+  position: relative;
+  z-index: 0;
+}
+
+.taller-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
+  background-color: var(--papel);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.taller-wrap {
+  position: relative;
+  padding: 4.5rem max(2rem, calc((100% - 900px) / 2)) 4rem;
+}
+
+.taller-volver {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  border: 2px solid var(--cafe);
+  border-radius: 50%;
+  color: var(--cafe);
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.taller-volver:hover {
+  background-color: var(--cafe);
+  color: #ffffff;
+}
+
+.taller-volver:focus-visible {
+  outline: 3px solid var(--verde);
+  outline-offset: 2px;
+}
+
+.taller-banner {
+  height: 280px;
+  border: 2px solid var(--cafe);
+  border-radius: var(--radio-papel);
+  background-color: var(--beige-claro);
+  background-size: cover;
+  background-position: center;
+  box-shadow: var(--sombra-dura);
+  outline: 12px solid var(--papel-claro);
+  outline-offset: -14px;
+}
+
+.taller-titulo {
+  font-family: var(--fuente-titulo);
+  font-size: 2.8rem;
+  letter-spacing: 2px;
+  margin: 2rem 0 0.5rem;
+  color: var(--cafe);
+}
+
+.taller-seccion {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px dashed var(--linea);
+}
+
+.taller-seccion h2 {
+  font-family: var(--fuente-titulo);
+  font-size: 1.5rem;
+  margin: 0 0 0.9rem;
+  color: var(--verde);
+}
+
+.taller-descripcion {
+  margin: 0;
+  line-height: 1.7;
+  font-size: 0.98rem;
+  white-space: pre-line;
+}
+
+.artistas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2.2rem 1.6rem;
+  padding-top: 0.6rem;
+}
+
+.artista-card {
+  padding: 1.5rem 1rem 1.2rem;
+  text-align: center;
+}
+
+.artista-avatar {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid var(--cafe);
+  margin: 0 auto 0.7rem;
+  display: block;
+}
+
+.artista-avatar-iniciales {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--beige-claro);
+  color: var(--cafe);
+  font-family: var(--fuente-titulo);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.artista-card h3 {
+  font-family: var(--fuente-titulo);
+  font-size: 1.1rem;
+  margin: 0;
+  color: var(--cafe);
+}
+
+.artista-card p {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--cafe-oscuro);
+}
+.artistas-checklist {
+  max-height: 170px;
+  overflow-y: auto;
+  border: 2px solid var(--cafe);
+  border-radius: 14px;
+  background-color: var(--papel-claro);
+  padding: 0.4rem 0.8rem;
+}
+
+.form-group .artista-check {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0.4rem 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--cafe-oscuro);
+  cursor: pointer;
+}
+
+.form-group .artista-check input {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--cafe);
+}
+
+.form-group .artista-check small {
+  color: var(--cafe);
+  margin-left: auto;
+  font-weight: 400;
+}
+
+.artistas-vacio {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--cafe);
+}

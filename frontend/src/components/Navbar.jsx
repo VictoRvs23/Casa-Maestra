@@ -1,0 +1,106 @@
+import React, { useState, useRef, useEffect } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import logoCasaMaestra from "../assets/logoCasaMaestra.png";
+import { IoIosNotifications } from "react-icons/io";
+import { IoPersonCircleOutline } from "react-icons/io5";
+import { useAuth } from "../context/AuthContext.jsx";
+import "../styles/Tema.css";
+import "../styles/Navbar.css";
+
+const Navbar = () => {
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                setMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const handleLogout = () => {
+        setMenuOpen(false);
+        logout();
+        navigate("/");
+    };
+
+    return (
+        <>
+        <nav className="navbar-container">
+            <div className="navbar-left">
+                <Link to="/">
+                    <div
+                        className="navbar-logo"
+                        style={{ WebkitMaskImage: `url(${logoCasaMaestra})`, maskImage: `url(${logoCasaMaestra})` }}
+                        role="img"
+                        aria-label="Logo Casa Maestra"
+                    />
+                </Link>
+                <ul className="navbar-links">
+                    <li><NavLink to="/residentes" className={({ isActive }) => (isActive ? "activo" : "")}>Residentes</NavLink></li>
+                    <li><NavLink to="/estudios" className={({ isActive }) => (isActive ? "activo" : "")}>Estudios</NavLink></li>
+                    <li><NavLink to="/estudio0" className={({ isActive }) => (isActive ? "activo" : "")}>Estudio 0</NavLink></li>
+                    <li><NavLink to="/soporte" className={({ isActive }) => (isActive ? "activo" : "")}>Soporte</NavLink></li>
+                    {user?.rol === "Residente" && (
+                        <li><NavLink to="/mi-pagina" className={({ isActive }) => (isActive ? "activo" : "")}>Mi página</NavLink></li>
+                    )}
+                    {(user?.rol === "Admin" || user?.rol === "Fundador/a") && (
+                        <li><NavLink to="/usuarios" className={({ isActive }) => (isActive ? "activo" : "")}>Usuarios</NavLink></li>
+                    )}
+                </ul>
+            </div>
+
+            <div className="navbar-right">
+                <button className="campana-btn">
+                    <IoIosNotifications size={24} />
+                </button>
+
+                {user ? (
+                    <div className="account-menu" ref={menuRef}>
+                        <button className="nav-account-btn" onClick={() => setMenuOpen((v) => !v)}>
+                            <IoPersonCircleOutline size={22} /> Mi Cuenta
+                        </button>
+
+                        {menuOpen && (
+                            <div className="account-dropdown">
+                                <div className="account-dropdown-username">
+                                    {user.nombre_usuario || user.nombre}
+                                </div>
+                                <div className="account-dropdown-divider"></div>
+                                <Link to="/perfil?tab=datos-personales" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Datos Personales
+                                </Link>
+                                <Link to="/perfil?tab=seguridad" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Seguridad
+                                </Link>
+                                <Link to="/perfil?tab=reservas" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Mis Reservas
+                                </Link>
+                                <Link to="/perfil?tab=seguidos" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Mis Seguidos
+                                </Link>
+                                <div className="account-dropdown-divider"></div>
+                                <button className="account-dropdown-item account-dropdown-logout" onClick={handleLogout}>
+                                    Cerrar Sesión
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <Link to="/login" className="nav-login-btn">
+                        <IoPersonCircleOutline size={22} /> Registrar/Iniciar Sesion
+                    </Link>
+                )}
+            </div>
+        </nav>
+        <div className="divisor-hojas" role="presentation" aria-hidden="true" />
+        </>
+    );
+};
+
+export default Navbar;

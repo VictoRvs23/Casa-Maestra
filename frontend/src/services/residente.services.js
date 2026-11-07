@@ -39,3 +39,9 @@ export const deleteResidente = async (id_residente) => {
   const { data } = await api.delete(`/residentes/${id_residente}`);
   return data;
 };
+
+export const getCuentasDisponibles = async (id_residente) => {
+  const params = id_residente ? { id_residente } : {};
+  const { data } = await api.get("/residentes/cuentas-disponibles", { params });
+  return data;
+};

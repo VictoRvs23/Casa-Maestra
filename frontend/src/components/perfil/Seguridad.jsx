@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { cambiarContrasena, deleteUsuario } from "../../services/usuario.services.js";
+import { useAlerta } from "../../context/AlertaContext.jsx";
+import CampoContrasena from "../CampoContrasena.jsx";
 import "../../styles/perfil/Seguridad.css";
 
 export default function Seguridad({ userId }) {
   const { logout } = useAuth();
+  const { alerta, confirmar } = useAlerta();
   const navigate = useNavigate();
 
   const [passActual, setPassActual] = useState("");
@@ -17,32 +20,33 @@ export default function Seguridad({ userId }) {
     e.preventDefault();
 
     if (passNueva !== passConfirmar) {
-      alert("La nueva contraseña y su confirmación no coinciden.");
+      alerta("La nueva contraseña y su confirmación no coinciden.", { tipo: "advertencia" });
       return;
     }
     if (passNueva.length < 8) {
-      alert("La nueva contraseña debe tener al menos 8 caracteres.");
+      alerta("La nueva contraseña debe tener al menos 8 caracteres.", { tipo: "advertencia" });
       return;
     }
 
     setGuardando(true);
     try {
       await cambiarContrasena(userId, passActual, passNueva);
-      alert("Contraseña actualizada correctamente.");
+      alerta("Tu contraseña se actualizó correctamente.", { tipo: "exito" });
       setPassActual("");
       setPassNueva("");
       setPassConfirmar("");
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "No se pudo actualizar la contraseña.");
+      alerta(err.response?.data?.message || "No se pudo actualizar la contraseña.", { tipo: "error" });
     } finally {
       setGuardando(false);
     }
   };
 
   const handleEliminarCuenta = async () => {
-    const ok = window.confirm(
-      "¿Eliminar tu cuenta? Esta acción es permanente y no se puede deshacer."
+    const ok = await confirmar(
+      "¿Eliminar tu cuenta? Esta acción es permanente y no se puede deshacer.",
+      { textoConfirmar: "Eliminar cuenta" }
     );
     if (!ok) return;
 
@@ -50,9 +54,10 @@ export default function Seguridad({ userId }) {
       await deleteUsuario(userId);
       logout();
       navigate("/");
+      alerta("Tu cuenta se eliminó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "No se pudo eliminar la cuenta.");
+      alerta(err.response?.data?.message || "No se pudo eliminar la cuenta.", { tipo: "error" });
     }
   };
 
@@ -64,8 +69,8 @@ export default function Seguridad({ userId }) {
       <form onSubmit={handleActualizarContrasena}>
         <div className="form-group">
           <label>Contraseña Actual</label>
-          <input
-            type="password"
+          <CampoContrasena
+            autoComplete="current-password"
             value={passActual}
             onChange={(e) => setPassActual(e.target.value)}
             required
@@ -75,9 +80,9 @@ export default function Seguridad({ userId }) {
         <div className="form-row">
           <div className="form-group">
             <label>Nueva contraseña</label>
-            <input
-              type="password"
+            <CampoContrasena
               placeholder="Mínimo 8 Caracteres"
+              autoComplete="new-password"
               value={passNueva}
               onChange={(e) => setPassNueva(e.target.value)}
               required
@@ -85,8 +90,9 @@ export default function Seguridad({ userId }) {
           </div>
           <div className="form-group">
             <label>Confirmar nueva contraseña</label>
-            <input
-              type="password"
+            <CampoContrasena
+              conOjo={false}
+              autoComplete="new-password"
               value={passConfirmar}
               onChange={(e) => setPassConfirmar(e.target.value)}
               required

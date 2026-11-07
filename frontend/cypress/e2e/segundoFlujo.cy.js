@@ -28,7 +28,10 @@ describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
       cy.get('button[type="submit"]').click();
     });
 
+    //Alerta de creación de estudio exitoso (solo si el estudio se guardó bien)
     cy.get(".modal-box").should("not.exist");
+    cy.contains(".alerta-box", "El estudio se creó correctamente").should("be.visible");
+    cy.contains(".alerta-box button", "Aceptar").click();
 
     // 3) Crear contenedor de residente
     cy.contains("a", "Residentes").click();
@@ -42,7 +45,10 @@ describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
       cy.get('button[type="submit"]').click();
     });
 
+    //Alerta de creación de residente exitoso (solo si el residente se guardó bien)
     cy.get(".modal-box").should("not.exist");
+    cy.contains(".alerta-box", "El residente se creó correctamente").should("be.visible");
+    cy.contains(".alerta-box button", "Aceptar").click();
     cy.contains(".residente-card", nombreResidente).should("be.visible");
   });
 });

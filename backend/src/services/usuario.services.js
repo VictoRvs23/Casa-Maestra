@@ -1,6 +1,7 @@
 import { AppDataSource } from "../config/configDb.js";
 import UsuarioEntity from "../entities/usuario.entity.js";
 import bcrypt from "bcrypt";
+import { ILike } from "typeorm";
 
 const usuarioRepository = AppDataSource.getRepository(UsuarioEntity);
 
@@ -52,30 +53,49 @@ export const getUsuariosService = async (query) => {
     };
 };
 
+export const createUsuarioService = async (data) => {
+    const existeEmail = await usuarioRepository.findOneBy({ email: data.email });
+    if (existeEmail) throw { status: 409, message: "Ya existe una cuenta con ese correo." };
+
+    const existeUsuario = await usuarioRepository.findOneBy({ nombre_usuario: data.nombre_usuario });
+    if (existeUsuario) throw { status: 409, message: "Ese nombre de usuario ya está en uso." };
+
+    const nuevo = usuarioRepository.create({
+        ...data,
+        contraseña: await bcrypt.hash(data.contraseña, 10),
+    });
+    const guardado = await usuarioRepository.save(nuevo);
+
+    const { contraseña, ...publico } = guardado;
+    return publico;
+};
+
 export const updateUsuarioService = async (id_usuario, data) => {
     const usuario = await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
- 
+
     if (!usuario) throw { status: 404, message: "Usuario no encontrado" };
- 
+
     delete data.contraseña;
- 
+
+    if (data.fecha_nacimiento === "") data.fecha_nacimiento = null;
+
     await usuarioRepository.update(id_usuario, data);
     return await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
 };
 
 export const cambiarContrasenaService = async (id_usuario, contraseñaActual, contraseñaNueva) => {
     const usuario = await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
- 
+
     if (!usuario) throw { status: 404, message: "Usuario no encontrado" };
- 
+
     const coincide = await bcrypt.compare(contraseñaActual, usuario.contraseña);
     if (!coincide) {
         throw { status: 401, message: "La contraseña actual es incorrecta" };
     }
- 
+
     const nuevaEncriptada = await bcrypt.hash(contraseñaNueva, 10);
     await usuarioRepository.update(id_usuario, { contraseña: nuevaEncriptada });
- 
+
     return true;
 };
 

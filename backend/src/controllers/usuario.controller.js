@@ -26,14 +26,40 @@ export const getUsuarios = async (req, res) => {
     }
 };
 
+export const createUsuario = async (req, res) => {
+    try {
+        const usuario = await usuarioService.createUsuarioService(req.body);
+        res.status(201).json({ message: "Usuario creado correctamente.", usuario });
+
+    } catch (error) {
+        if (error.status) return res.status(error.status).json({ message: error.message });
+
+        if ((error.code || error.driverError?.code) === "23505") {
+            return res.status(409).json({ message: "El correo o el nombre de usuario ya está en uso." });
+        }
+
+        console.error("Error en createUsuario:", error);
+        res.status(500).json({ message: "Error interno al crear el usuario" });
+    }
+};
+
 export const updateUsuario = async (req, res) => {
     try {
-        const usuario = await usuarioService.updateUsuarioService(req.params.id_usuario, req.body);
+        const data = { ...req.body };
+        
+        if (!["Admin", "Fundador/a"].includes(req.usuario.rol)) delete data.rol;
+
+        const usuario = await usuarioService.updateUsuarioService(req.params.id_usuario, data);
         res.status(200).json({ message: "Usuario actualizado", usuario });
 
     } catch (error) {
 
         if (error.status) return res.status(error.status).json({ message: error.message });
+
+        if ((error.code || error.driverError?.code) === "23505") {
+            return res.status(409).json({ message: "El correo o el nombre de usuario ya está en uso." });
+        }
+
         console.error("Error en updateUsuario:", error);
         res.status(500).json({ message: "Error interno al actualizar" });
     }

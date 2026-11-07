@@ -15,7 +15,7 @@ describe("Flujo 1 - Registro, login y filtrado de estudios", () => {
     cy.get('[id="confirmar_contraseña"]').type(contraseña);
     cy.get("button.registro-btn").click();
 
-    //Alerta
+    //Alerta de registro exitoso
     cy.contains(".alerta-box", "Registro exitoso").should("be.visible");
     cy.contains(".alerta-box button", "Aceptar").click();
     cy.url().should("include", "/login");

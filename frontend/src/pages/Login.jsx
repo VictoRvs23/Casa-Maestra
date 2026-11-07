@@ -1,26 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
+import CampoContrasena from "../components/CampoContrasena.jsx";
 import "../styles/Login.css";
-import { useAuth } from "../context/AuthContext"; 
+import { useAuth } from "../context/AuthContext";
+import { useAlerta } from "../context/AlertaContext.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); 
-  
+
   const { login } = useAuth();
+  const { alerta } = useAlerta();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
-    
+
     try {
       await login(email, password);
       navigate("/"); 
     } catch (err) {
-      setError(err);
+      alerta(typeof err === "string" ? err : "No se pudo iniciar sesión.", {
+        tipo: "error",
+        titulo: "No pudimos iniciar sesión",
+      });
     }
   };
 
@@ -31,7 +35,6 @@ const Login = () => {
         <p className="login-subtitle">
           Ingresa para agendar hora con tus artistas favoritos, revisar talleres y más
         </p>
-        {error && <p style={{ color: "red", marginBottom: "1rem" }}>{error}</p>}
 
         <form className="login-form" onSubmit={handleLogin}>
           
@@ -49,16 +52,14 @@ const Login = () => {
 
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
-            <div className="password-input-wrapper">
-              <input 
-                id="password"
-                type="password" 
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
+            <CampoContrasena
+              id="password"
+              placeholder="••••••••"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
           <div className="login-options">
