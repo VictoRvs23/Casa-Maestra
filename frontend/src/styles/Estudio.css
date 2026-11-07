@@ -42,7 +42,7 @@
 }
 
 .estudios-wrap {
-  max-width: 1200px;
+  max-width: 1480px;
   margin: 0 auto;
   padding: 1.5rem 2rem 4rem;
 }
@@ -227,35 +227,33 @@
 }
 
 .estudios-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 3.4rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4rem 3rem;
   padding-top: 0.6rem;
 }
 
 .estudio-h {
-  display: grid;
-  grid-template-columns: minmax(260px, 42%) 1fr;
-  gap: 1.8rem;
-  align-items: stretch;
-  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1rem 1.4rem;
 }
 
 .estudio-h .estudio-img {
-  height: auto;
-  min-height: 300px;
+  height: 280px;
 }
 
 .estudio-h-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0.5rem 0.8rem 0.4rem 0;
+  padding: 1.3rem 0.6rem 0;
 }
 
 .estudio-info .estudio-h-desc {
   display: block;
   margin: 0 0 1rem;
-  font-size: 1rem;
+  font-size: 1.02rem;
   line-height: 1.6;
 }
 
@@ -266,7 +264,7 @@
 }
 
 .estudio-h-datos p {
-  font-size: 0.95rem;
+  font-size: 0.98rem;
 }
 
 .estudio-meses {
@@ -350,18 +348,15 @@
   line-height: 1.45;
 }
 
-@media (max-width: 760px) {
-  .estudio-h {
+@media (max-width: 900px) {
+  .estudios-lista {
     grid-template-columns: 1fr;
-    gap: 1rem;
   }
+}
 
+@media (max-width: 560px) {
   .estudio-h .estudio-img {
-    min-height: 210px;
-  }
-
-  .estudio-h-info {
-    padding: 0.2rem 0.4rem 0.4rem;
+    height: 220px;
   }
 
   .estudio-meses ul {
