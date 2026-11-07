@@ -71,7 +71,6 @@ export default function EstudiosArriendos() {
         setCuentas(data.cuentas);
         setTotalPaginas(data.totalPages);
       } else {
-        // Los arriendos propios son pocos: se filtran aquí mismo.
         const propios = await getMisArriendos();
         const lista = propios
           .filter((a) => coincide(a, periodo, hoy))
@@ -194,7 +193,6 @@ export default function EstudiosArriendos() {
                     a.estado === "confirmada" && a.fecha_fin >= hoy && (esGestor || a.fecha_inicio > hoy);
                   return (
                     <li className="e0-reserva" key={a.id_arriendo}>
-                      <span className="e0-cinta" aria-hidden="true" />
                       <div className="e0-reserva-fecha">
                         <b>{abreviado(a.fecha_inicio)}</b>
                         <small>{a.fecha_inicio.slice(0, 4)}</small>
