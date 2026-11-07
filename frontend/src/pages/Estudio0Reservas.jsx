@@ -219,7 +219,6 @@ export default function Estudio0Reservas() {
                   const puedeCancelar = r.estado === "confirmada" && esFutura(r, hoy, ahora);
                   return (
                     <li className="e0-reserva" key={r.id_reserva}>
-                      <span className="e0-cinta" aria-hidden="true" />
                       <div className="e0-reserva-fecha">
                         <b>{f.dia}</b>
                         <small>{f.mes}</small>
