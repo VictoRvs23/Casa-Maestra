@@ -11,6 +11,10 @@ import Taller from "./pages/Taller.jsx";
 import Soporte from "./pages/Soporte.jsx";
 import MiPagina from "./pages/MiPagina.jsx";
 import PaginaResidente from "./pages/PaginaResidente.jsx";
+import Estudio0 from "./pages/Estudio0.jsx";
+import Estudio0Agenda from "./pages/Estudio0Agenda.jsx";
+import Estudio0Horarios from "./pages/Estudio0Horarios.jsx";
+import Estudio0Reservas from "./pages/Estudio0Reservas.jsx";
 
 function App() {
   return (
@@ -39,6 +43,15 @@ function App() {
 
         {/* Ruta de Estudios */}
         <Route path="/estudios" element={<Estudio />} />
+
+        {/* Rutas de Estudio 0 */}
+        <Route path="/estudio0" element={<Estudio0 />} />
+        <Route path="/estudio0/agenda" element={<Estudio0Agenda />} />
+        <Route path="/estudio0/horarios" element={<Estudio0Horarios />} />
+        <Route path="/estudio0/reservas" element={<Estudio0Reservas />} />
+
+        {/* Compatibilidad con la URL anterior */}
+        <Route path="/estudios/0" element={<Navigate to="/estudio0" replace />} />
 
         {/* Ruta de Soporte */}
         <Route path="/soporte" element={<Soporte />} />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
+import CampoContrasena from "../components/CampoContrasena.jsx";
 import "../styles/Login.css";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
@@ -51,16 +52,14 @@ const Login = () => {
 
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
-            <div className="password-input-wrapper">
-              <input 
-                id="password"
-                type="password" 
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
+            <CampoContrasena
+              id="password"
+              placeholder="••••••••"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
           <div className="login-options">

@@ -76,7 +76,7 @@ export default function PaginaResidente() {
   const clases = [
     "pagina-publica-page",
     datos && "con-pagina",
-    conFoto && "con-foto", 
+    conFoto && "con-foto",
     datos && tinta === "#ffffff" && "cabecera-clara",
     datos && acentoOscuro && "pie-claro",
   ]
@@ -94,8 +94,8 @@ export default function PaginaResidente() {
       {!loading && error && (
         <div className="pagina-publica-estado">
           <p className="estado-msg estado-error">{error}</p>
-          <Link to="/residentes" className="pagina-volver-simple">
-            <Icono icon={ArrowLeft} size={18} /> Volver a residentes
+          <Link to="/residentes" className="pagina-volver-simple" aria-label="Volver a residentes" title="Volver a residentes">
+            <Icono icon={ArrowLeft} size={18} />
           </Link>
         </div>
       )}
@@ -108,8 +108,8 @@ export default function PaginaResidente() {
           avatarUrl={datos.avatar ? getAvatarUrl(datos.avatar) : null}
           iniciales={iniciales}
           accionPortada={
-            <Link to="/residentes" className="pagina-volver">
-              <Icono icon={ArrowLeft} size={16} /> Residentes
+            <Link to="/residentes" className="pagina-volver" aria-label="Volver a residentes" title="Volver a residentes">
+              <Icono icon={ArrowLeft} size={18} />
             </Link>
           }
           onAgendar={proximamente("Agendar")}

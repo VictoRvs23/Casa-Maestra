@@ -8,8 +8,10 @@ import ResidenteEntity from "../entities/residente.entity.js";
 import TallerEntity from "../entities/taller.entity.js";
 import PreguntaFrecuenteEntity from "../entities/preguntaFrecuente.entity.js";
 import TicketEntity from "../entities/ticket.entity.js";
-import paginaResidenteEntity from "../entities/paginaResidente.entity.js";
+import PaginaResidenteEntity from "../entities/paginaResidente.entity.js";
+import ReservasEntity from "../entities/reserva.entity.js";
 import { createUsuarios, createEstudios} from "./InitDb.js";
+import { createEstudio0 } from "./InitEstudio0.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -26,7 +28,8 @@ export const AppDataSource = new DataSource({
     TallerEntity,
     PreguntaFrecuenteEntity,
     TicketEntity,
-    paginaResidenteEntity
+    PaginaResidenteEntity,
+    ReservasEntity
   ],
   synchronize: true,
   logging: false,
@@ -40,6 +43,7 @@ export async function connectDB() {
 
     await createUsuarios();
     await createEstudios();
+    await createEstudio0();
     
   } catch (error) {
     console.error("=> Error al conectar a BD:", error);
