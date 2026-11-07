@@ -24,7 +24,7 @@ export default function Estudio0() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [form, setForm] = useState(null); // null = modal cerrado
+  const [form, setForm] = useState(null);
   const [imagen, setImagen] = useState(null);
   const [guardando, setGuardando] = useState(false);
 
@@ -135,7 +135,7 @@ export default function Estudio0() {
                 <div className="estudio-footer">
                   <span className="estudio-precio">${numero(estudio.precio)} / hora</span>
                   <button className="reservar-btn" disabled={!estudio.disponible} onClick={irAAgenda}>
-                    Reservar
+                    Ver agenda
                   </button>
                 </div>
 
@@ -146,7 +146,6 @@ export default function Estudio0() {
                 </p>
 
                 <div className="admin-actions">
-                  <button onClick={irAAgenda}>Ver agenda</button>
                   {user && (
                     <button onClick={() => navigate("/estudio0/reservas")}>
                       {esGestor ? "Ver reservas" : "Mis reservas"}
