@@ -7,6 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getEstudio0, editarEstudio0, getImagenUrl } from "../services/estudio0.services.js";
 import { User, Pencil, Ruler, CircleCheck, CircleX } from "@sketchicon/lucide";
+
 import "../styles/Estudio.css";
 import "../styles/Estudio0.css";
 
@@ -23,7 +24,7 @@ export default function Estudio0() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [form, setForm] = useState(null);
+  const [form, setForm] = useState(null); // null = modal cerrado
   const [imagen, setImagen] = useState(null);
   const [guardando, setGuardando] = useState(false);
 
@@ -146,6 +147,11 @@ export default function Estudio0() {
 
                 <div className="admin-actions">
                   <button onClick={irAAgenda}>Ver agenda</button>
+                  {user && (
+                    <button onClick={() => navigate("/estudio0/reservas")}>
+                      {esGestor ? "Ver reservas" : "Mis reservas"}
+                    </button>
+                  )}
                   {esGestor && (
                     <>
                       <button onClick={abrirEdicion}>
