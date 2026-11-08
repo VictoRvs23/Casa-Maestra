@@ -229,7 +229,7 @@
 /* ---------- Agenda y horarios ---------- */
 
 .e0-agenda {
-  max-width: 1100px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 2rem 2rem 4.5rem;
   display: flex;
@@ -251,7 +251,7 @@
 
 .e0-columna {
   flex: 1 1 360px;
-  max-width: 500px;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
@@ -685,7 +685,7 @@
 }
 
 .e0-unico {
-  max-width: 780px;
+  max-width: 1080px;
   margin: 1rem auto 0;
 }
 

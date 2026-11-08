@@ -2,9 +2,9 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import request from "supertest";
 import express from "express";
 import jwt from "jsonwebtoken";
-import indexRoutes from "../../routes/index.routes.js";
-import { AppDataSource } from "../../config/configDb.js";
-import { JWT_SECRET } from "../../config/configEnv.js";
+import indexRoutes from "../../../routes/index.routes.js";
+import { AppDataSource } from "../../../config/configDb.js";
+import { JWT_SECRET } from "../../../config/configEnv.js";
 
 const app = express();
 app.use(express.json());

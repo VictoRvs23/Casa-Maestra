@@ -1,3 +1,6 @@
+import { iniciarSesion, usuarios } from "../support/login";
+import { cerrarAlerta } from "../support/alertas";
+
 describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
   const sufijo = Date.now();
   const nombreEstudio = `Estudio Cypress ${sufijo}`;
@@ -5,11 +8,7 @@ describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
 
   it("debe iniciar sesión con AdminDemo, crear un estudio y crear un residente", () => {
     // 1) Login con AdminDemo
-    cy.visit("http://localhost:5173/login");
-    cy.get("#email").type("admin@casamaestra.cl");
-    cy.get("#password").type("admin123");
-    cy.get("button.login-btn").click();
-    cy.url().should("not.include", "/login");
+    iniciarSesion(usuarios.admin);
     cy.contains("Mi Cuenta").should("be.visible");
 
     // 2) Crear estudio
@@ -31,7 +30,7 @@ describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
     //Alerta de creación de estudio exitoso (solo si el estudio se guardó bien)
     cy.get(".modal-box").should("not.exist");
     cy.contains(".alerta-box", "El estudio se creó correctamente").should("be.visible");
-    cy.contains(".alerta-box button", "Aceptar").click();
+    cerrarAlerta();
 
     // 3) Crear contenedor de residente
     cy.contains("a", "Residentes").click();
@@ -48,7 +47,7 @@ describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
     //Alerta de creación de residente exitoso (solo si el residente se guardó bien)
     cy.get(".modal-box").should("not.exist");
     cy.contains(".alerta-box", "El residente se creó correctamente").should("be.visible");
-    cy.contains(".alerta-box button", "Aceptar").click();
+    cerrarAlerta();
     cy.contains(".residente-card", nombreResidente).should("be.visible");
   });
 });
