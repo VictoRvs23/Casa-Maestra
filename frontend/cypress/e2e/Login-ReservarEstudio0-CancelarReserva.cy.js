@@ -1,4 +1,5 @@
 import { iniciarSesion, usuarios } from "../support/login";
+import { cerrarAlerta, aceptarConfirmacion } from "../support/alertas";
 
 describe("Flujo e2e: reservar una hora en el Estudio 0", () => {
   it("un cliente reserva una hora desde la agenda y luego la cancela", () => {
@@ -23,7 +24,7 @@ describe("Flujo e2e: reservar una hora en el Estudio 0", () => {
     // 5. Confirma la reserva y ve el aviso de éxito.
     cy.contains("button", "Confirmar reserva").click();
     cy.get(".alerta-exito").should("contain", "Reserva confirmada");
-    cy.cerrarAlerta();
+    cerrarAlerta();
 
     // 6. La reserva aparece en "Mis reservas" como confirmada.
     cy.visit("/estudio0/reservas");
@@ -31,7 +32,7 @@ describe("Flujo e2e: reservar una hora en el Estudio 0", () => {
 
     // 7. La cancela y se muestra el aviso.
     cy.get(".e0-reserva").last().contains("button", "Cancelar").click();
-    cy.aceptarConfirmacion();
+    aceptarConfirmacion();
     cy.get(".alerta-exito").should("contain", "La reserva se canceló");
   });
 });
