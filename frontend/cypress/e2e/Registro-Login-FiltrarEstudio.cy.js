@@ -1,3 +1,6 @@
+import { iniciarSesion } from "../support/login";
+import { cerrarAlerta } from "../support/alertas";
+
 describe("Flujo 1 - Registro, login y filtrado de estudios", () => {
   it("debe registrar un usuario, iniciar sesión y filtrar estudios por nombre", () => {
     const sufijo = Date.now();
@@ -5,7 +8,7 @@ describe("Flujo 1 - Registro, login y filtrado de estudios", () => {
     const contraseña = "Password123!";
 
     // 1) Registro
-    cy.visit("http://localhost:5173/registro");
+    cy.visit("/registro");
     cy.get("#nombre_usuario").type(`cypress_${sufijo}`);
     cy.get("#nombre").type("Cypress");
     cy.get("#apellido").type("Prueba");
@@ -17,14 +20,11 @@ describe("Flujo 1 - Registro, login y filtrado de estudios", () => {
 
     //Alerta de registro exitoso
     cy.contains(".alerta-box", "Registro exitoso").should("be.visible");
-    cy.contains(".alerta-box button", "Aceptar").click();
+    cerrarAlerta();
     cy.url().should("include", "/login");
 
-    // 2) Login
-    cy.get("#email").type(email);
-    cy.get("#password").type(contraseña);
-    cy.get("button.login-btn").click();
-    cy.url().should("not.include", "/login");
+    // 2) Login con el usuario recién registrado (login compartido de support/login.js)
+    iniciarSesion({ email, contraseña });
     cy.contains("Mi Cuenta").should("be.visible");
 
     // 3) Estudios y filtrado
