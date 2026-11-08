@@ -1,3 +1,5 @@
+import { iniciarSesion, usuarios } from "../support/login";
+
 describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
   const sufijo = Date.now();
   const nombreEstudio = `Estudio Cypress ${sufijo}`;
@@ -5,11 +7,7 @@ describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
 
   it("debe iniciar sesión con AdminDemo, crear un estudio y crear un residente", () => {
     // 1) Login con AdminDemo
-    cy.visit("http://localhost:5173/login");
-    cy.get("#email").type("admin@casamaestra.cl");
-    cy.get("#password").type("admin123");
-    cy.get("button.login-btn").click();
-    cy.url().should("not.include", "/login");
+    iniciarSesion(usuarios.admin);
     cy.contains("Mi Cuenta").should("be.visible");
 
     // 2) Crear estudio
