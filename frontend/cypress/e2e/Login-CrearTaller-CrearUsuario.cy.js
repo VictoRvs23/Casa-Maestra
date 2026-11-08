@@ -1,4 +1,5 @@
 import { iniciarSesion, usuarios } from "../support/login";
+import { cerrarAlerta } from "../support/alertas";
 
 describe("Flujo e2e: el Fundador crea un taller y un usuario nuevo", () => {
   const sufijo = Date.now();
@@ -27,7 +28,7 @@ describe("Flujo e2e: el Fundador crea un taller y un usuario nuevo", () => {
     });
     cy.get(".modal-box").should("not.exist");
     cy.get(".alerta-exito").should("contain", "El taller se creó correctamente");
-    cy.cerrarAlerta();
+    cerrarAlerta();
     cy.contains(".category-card", nombreTaller).should("be.visible");
 
     // 3. Crea un usuario
@@ -46,6 +47,6 @@ describe("Flujo e2e: el Fundador crea un taller y un usuario nuevo", () => {
     });
     cy.get(".modal-box").should("not.exist");
     cy.get(".alerta-exito").should("contain", "La cuenta se creó correctamente");
-    cy.cerrarAlerta();
+    cerrarAlerta();
   });
 });
