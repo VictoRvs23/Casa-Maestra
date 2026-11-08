@@ -24,7 +24,7 @@ export const getDisponibilidadArriendosService = async (cantidad = MESES_VISIBLE
     const arriendos = await arriendoRepository
         .createQueryBuilder("a")
         .innerJoin("a.estudio", "e")
-        .select(["a.fecha_inicio", "a.fecha_fin", "e.id_estudio"])
+        .select(["a.id_arriendo", "a.fecha_inicio", "a.fecha_fin", "e.id_estudio"])
         .where("a.estado = 'confirmada'")
         .andWhere("e.tipo_arriendo = 'mensual'")
         .andWhere("a.fecha_inicio <= :hasta", { hasta: ultimaFecha })
