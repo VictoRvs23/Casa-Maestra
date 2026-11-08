@@ -1,4 +1,5 @@
 import { iniciarSesion, usuarios } from "../support/login";
+import { cerrarAlerta } from "../support/alertas";
 
 describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
   const sufijo = Date.now();
@@ -29,7 +30,7 @@ describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
     //Alerta de creación de estudio exitoso (solo si el estudio se guardó bien)
     cy.get(".modal-box").should("not.exist");
     cy.contains(".alerta-box", "El estudio se creó correctamente").should("be.visible");
-    cy.contains(".alerta-box button", "Aceptar").click();
+    cerrarAlerta();
 
     // 3) Crear contenedor de residente
     cy.contains("a", "Residentes").click();
@@ -46,7 +47,7 @@ describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
     //Alerta de creación de residente exitoso (solo si el residente se guardó bien)
     cy.get(".modal-box").should("not.exist");
     cy.contains(".alerta-box", "El residente se creó correctamente").should("be.visible");
-    cy.contains(".alerta-box button", "Aceptar").click();
+    cerrarAlerta();
     cy.contains(".residente-card", nombreResidente).should("be.visible");
   });
 });
