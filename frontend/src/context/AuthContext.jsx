@@ -2,6 +2,13 @@ import React from "react";
 import { createContext, useState, useContext, useEffect } from "react";
 import { loginService } from "../services/auth.services";
 
+const limpiarSesion = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("user");
+  sessionStorage.removeItem("token");
+  sessionStorage.removeItem("user");
+};
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -9,8 +16,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const savedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    const savedUser = localStorage.getItem("user") || sessionStorage.getItem("user");
 
     try {
       if (token && savedUser && savedUser !== "undefined") {
@@ -18,24 +25,24 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error al leer el usuario guardado:", error);
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
+      limpiarSesion();
     }
 
     setLoading(false);
-  }, []);
+}, []);
 
-  const login = async (email, password) => {
+  const login = async (email, password, recordarme = false) => {
     const data = await loginService({ email, contraseña: password });
-    localStorage.setItem("token", data.token);
-    localStorage.setItem("user", JSON.stringify(data.usuario));
+    limpiarSesion();
+    const almacen = recordarme ? localStorage : sessionStorage;
+    almacen.setItem("token", data.token);
+    almacen.setItem("user", JSON.stringify(data.usuario));
     setUser(data.usuario);
     return data.usuario;
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    limpiarSesion();
     setUser(null);
   };
 
