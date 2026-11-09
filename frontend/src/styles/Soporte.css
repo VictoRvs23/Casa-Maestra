@@ -264,11 +264,7 @@
 .ticket-lista .ticket-card:nth-child(even) { --giro: 0.5deg; }
 
 .ticket-card::before {
-  left: 2.5rem;
-  margin-left: 0;
-  width: 70px;
-  height: 22px;
-  top: -11px;
+  display: none;
 }
 
 .ticket-card-head {
