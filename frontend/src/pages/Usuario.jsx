@@ -242,11 +242,21 @@ const usuariosOrdenados = Array.isArray(usuarios)
         </div>
 
         <div className="pagination">
-          <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
+          <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} aria-label="Página anterior">
             ‹
           </button>
-          <span>{page} / {totalPages}</span>
-          <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+            <button
+              key={n}
+              className={`pagina-num ${n === page ? "activa" : ""}`}
+              aria-label={`Página ${n}`}
+              aria-current={n === page ? "page" : undefined}
+              onClick={() => setPage(n)}
+            >
+              {n}
+            </button>
+          ))}
+          <button disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} aria-label="Página siguiente">
             ›
           </button>
         </div>
