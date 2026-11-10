@@ -13,7 +13,6 @@ import {
   getArtistasDisponibles,
   getImagenUrl,
 } from "../services/taller.services.js";
-import { getMiPagina } from "../services/pagina.services.js";
 import { Pencil, Trash2 } from "@sketchicon/lucide";
 import Icono from "../components/Icono.jsx";
 import "../styles/Inicio.css";
@@ -26,8 +25,6 @@ const Inicio = () => {
   const { user } = useAuth();
   const { alerta, confirmar } = useAlerta();
   const puedeGestionar = user?.rol === "Fundador/a" || user?.rol === "Admin";
-  const esResidente = user?.rol === "Residente";
-  const [miPagina, setMiPagina] = useState(null);
 
   const [talleres, setTalleres] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -58,22 +55,6 @@ const Inicio = () => {
   useEffect(() => {
     fetchTalleres();
   }, [fetchTalleres]);
-
-  useEffect(() => {
-    if (!esResidente) {
-      setMiPagina(null);
-      return;
-    }
-
-    let cancelado = false;
-    getMiPagina()
-      .then((datos) => !cancelado && setMiPagina(datos))
-      .catch(() => !cancelado && setMiPagina(null));
-
-    return () => {
-      cancelado = true;
-    };
-  }, [esResidente]);
 
   const cargarArtistas = async () => {
     try {
@@ -194,28 +175,6 @@ const Inicio = () => {
           </div>
         </div>
       </section>
-
-      {esResidente && miPagina && (
-        <section className="mipagina-aviso" aria-label="Tu página de residente">
-          <div className="mipagina-aviso-caja">
-            <p className="mipagina-aviso-texto">
-              {miPagina.pagina.publicada ? (
-                <>
-                  Tu página ya está publicada. Puedes <Link to="/mi-pagina">modificarla</Link> cuando quieras.
-                </>
-              ) : (
-                <>
-                  ¿Todavía no tienes tu página publicada? <Link to="/mi-pagina">Presiona aquí</Link> para crearla y
-                  personalizarla.
-                </>
-              )}
-            </p>
-            <Link to="/mi-pagina" className="hero-btn mipagina-aviso-btn">
-              Ir a Mi página
-            </Link>
-          </div>
-        </section>
-      )}
 
       <section className="categories-section">
         {puedeGestionar && (
