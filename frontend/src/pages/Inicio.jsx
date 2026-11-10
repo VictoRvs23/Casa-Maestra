@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
@@ -13,6 +13,7 @@ import {
   getArtistasDisponibles,
   getImagenUrl,
 } from "../services/taller.services.js";
+import { getMiPagina } from "../services/pagina.services.js";
 import { Pencil, Trash2 } from "@sketchicon/lucide";
 import Icono from "../components/Icono.jsx";
 import "../styles/Inicio.css";
@@ -25,8 +26,8 @@ const Inicio = () => {
   const { user } = useAuth();
   const { alerta, confirmar } = useAlerta();
   const puedeGestionar = user?.rol === "Fundador/a" || user?.rol === "Admin";
-
-  const seccionTalleresRef = useRef(null);
+  const esResidente = user?.rol === "Residente";
+  const [miPagina, setMiPagina] = useState(null);
 
   const [talleres, setTalleres] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,6 +58,22 @@ const Inicio = () => {
   useEffect(() => {
     fetchTalleres();
   }, [fetchTalleres]);
+
+  useEffect(() => {
+    if (!esResidente) {
+      setMiPagina(null);
+      return;
+    }
+
+    let cancelado = false;
+    getMiPagina()
+      .then((datos) => !cancelado && setMiPagina(datos))
+      .catch(() => !cancelado && setMiPagina(null));
+
+    return () => {
+      cancelado = true;
+    };
+  }, [esResidente]);
 
   const cargarArtistas = async () => {
     try {
@@ -162,10 +179,6 @@ const Inicio = () => {
     }
   };
 
-  const irATalleres = () => {
-    seccionTalleresRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <div className="inicio-container">
       <Navbar />
@@ -175,7 +188,6 @@ const Inicio = () => {
           <h1 className="hero-title">CASA MAESTRA</h1>
           <p className="hero-subtitle">Explora talleres, modificaciones corporales y más</p>
           <div className="hero-buttons">
-            <button className="hero-btn" onClick={irATalleres}>Conoce nuestros talleres</button>
             <button className="hero-btn" onClick={() => navigate("/residentes")}>
               Conoce a nuestros artistas
             </button>
@@ -183,7 +195,29 @@ const Inicio = () => {
         </div>
       </section>
 
-      <section className="categories-section" ref={seccionTalleresRef}>
+      {esResidente && miPagina && (
+        <section className="mipagina-aviso" aria-label="Tu página de residente">
+          <div className="mipagina-aviso-caja">
+            <p className="mipagina-aviso-texto">
+              {miPagina.pagina.publicada ? (
+                <>
+                  Tu página ya está publicada. Puedes <Link to="/mi-pagina">modificarla</Link> cuando quieras.
+                </>
+              ) : (
+                <>
+                  ¿Todavía no tienes tu página publicada? <Link to="/mi-pagina">Presiona aquí</Link> para crearla y
+                  personalizarla.
+                </>
+              )}
+            </p>
+            <Link to="/mi-pagina" className="hero-btn mipagina-aviso-btn">
+              Ir a Mi página
+            </Link>
+          </div>
+        </section>
+      )}
+
+      <section className="categories-section">
         {puedeGestionar && (
           <div className="talleres-toolbar">
             <button className="talleres-create-btn" onClick={abrirCrear}>
