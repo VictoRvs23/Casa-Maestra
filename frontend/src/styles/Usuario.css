@@ -42,7 +42,7 @@
 }
 
 .usuarios-wrap {
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 1.5rem 2rem 4rem;
 }
@@ -110,7 +110,7 @@
   background-color: var(--papel-claro);
   border: 2px solid var(--cafe);
   border-radius: 8px 10px 7px 9px;
-  overflow: hidden;
+  overflow-x: auto;
   box-shadow: 6px 6px 0 var(--cafe);
 }
 
