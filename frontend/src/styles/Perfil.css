@@ -1,6 +1,9 @@
 .perfil-page {
   background-color: var(--papel);
   min-height: 100vh;
+  /* Columna a pantalla completa: el pie queda siempre al fondo. */
+  display: flex;
+  flex-direction: column;
   font-family: var(--fuente-texto);
   color: var(--cafe-oscuro);
   position: relative;
@@ -21,13 +24,23 @@
   pointer-events: none;
 }
 
+/* El pie baja al fondo cuando el contenido es corto. */
+.perfil-page > .pie-pagina {
+  margin-top: auto;
+}
+
 .perfil-hero {
   padding: 3rem 2rem 1.5rem;
   text-align: center;
 }
 
 .perfil-wrap {
-  padding: 1.5rem max(2rem, calc((100% - 1000px) / 2)) 4rem;
+  /* Ocupa el espacio entre la barra y el pie, y centra los dos contenedores. */
+  flex: 1;
+  align-content: center;
+  /* Alto mínimo igual en todas las pestañas: no saltan al cambiar de una a otra. */
+  grid-auto-rows: minmax(520px, auto);
+  padding: 2.5rem max(2rem, calc((100% - 1000px) / 2));
   display: grid;
   grid-template-columns: 260px 1fr;
   gap: 2rem;

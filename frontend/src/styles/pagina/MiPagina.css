@@ -2,6 +2,8 @@
   --barra-alto: 68px;
   background-color: var(--papel);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--fuente-texto);
   color: var(--cafe-oscuro);
   position: relative;
@@ -34,8 +36,9 @@
   gap: 0.8rem 1.4rem;
   min-height: var(--barra-alto);
   padding: 0.6rem 2rem;
-  background-color: var(--papel);
-  border-bottom: 2px dashed var(--linea);
+  background-color: var(--papel-claro);
+  border-top: 2px solid var(--cafe);
+  border-bottom: 2px solid var(--cafe);
 }
 
 .mipagina-barra-titulo {
@@ -121,14 +124,25 @@
   outline-offset: 3px;
 }
 
+.mipagina-page > .estado-msg {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  min-height: 50vh;
+  font-size: 1.05rem;
+}
+
 .mipagina-editor {
+  flex: 1;
   display: grid;
   grid-template-columns: 310px minmax(0, 1fr);
 }
 
 .mipagina-lateral {
-  background-color: transparent;
-  border-right: 2px dashed var(--linea);
+  background-color: var(--papel-claro);
+  border-right: 2px solid var(--cafe);
 }
 
 .mipagina-lateral-contenido {
@@ -151,8 +165,6 @@
 
 .mipagina-lienzo-wrap > .pagina-lienzo {
   flex: 1;
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 64px), transparent);
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 64px), transparent);
 }
 
 .mipagina-vacio {
@@ -775,7 +787,6 @@
     z-index: 30;
     max-height: 70vh;
     overflow-y: auto;
-    background-color: var(--papel-claro);
     padding: 0 1.2rem 1.5rem;
     border-right: none;
     border-top: 2px solid var(--cafe);
@@ -836,12 +847,5 @@
   .mipagina-lateral,
   .mipagina-lateral-toggle svg {
     transition: none;
-  }
-}
-
-@media (min-width: 901px) {
-  .mipagina-lateral {
-    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 64px), transparent);
-    mask-image: linear-gradient(to bottom, #000 calc(100% - 64px), transparent);
   }
 }
