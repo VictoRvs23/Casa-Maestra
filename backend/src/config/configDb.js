@@ -11,6 +11,7 @@ import TicketEntity from "../entities/ticket.entity.js";
 import PaginaResidenteEntity from "../entities/paginaResidente.entity.js";
 import ReservasEntity from "../entities/reserva.entity.js";
 import ArriendoEntity from "../entities/arriendo.entity.js";
+import SeguimientoEntity from "../entities/seguimiento.entity.js";
 import { createUsuarios, createEstudios} from "./InitDb.js";
 import { createEstudio0 } from "./InitEstudio0.js";
 
@@ -33,6 +34,7 @@ export const AppDataSource = new DataSource({
     ReservasEntity,
     AgendaEntity,
     ArriendoEntity,
+    SeguimientoEntity
   ],
   synchronize: true,
   logging: false,
