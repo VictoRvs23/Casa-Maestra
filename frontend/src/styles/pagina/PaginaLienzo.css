@@ -1,35 +1,27 @@
-.pagina-marco {
-  background-color: var(--papel-claro);
-  border: 2px solid var(--cafe);
-  border-radius: var(--radio-papel);
-  box-shadow: 6px 6px 0 var(--cafe);
-  padding: 14px;
-}
-
 .pagina-lienzo {
   background-color: var(--fondo-pagina, var(--papel));
   color: #2b1f15;
-  border-radius: 4px;
-  overflow: hidden;
 }
 
 .pagina-portada {
   position: relative;
-  height: 220px;
+  height: 260px;
   background-color: var(--acento);
   background-size: cover;
   background-position: center;
 }
 
 .pagina-cuerpo {
-  padding: 0 3rem 3rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
 }
 
 .pagina-cabecera {
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 1.4rem;
   margin-top: -56px;
 }
@@ -63,7 +55,7 @@
 .pagina-identidad {
   flex: 1 1 260px;
   min-width: 0;
-  padding-bottom: 0.4rem;
+  padding-top: 68px;
 }
 
 .pagina-nombre {
@@ -79,18 +71,26 @@
   margin: 0.25rem 0 0;
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--acento);
+  color: var(--detalle);
+}
+
+.pagina-seguidores {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2b1f15;
+  opacity: 0.75;
 }
 
 .pagina-acciones {
   display: flex;
   gap: 0.8rem;
-  padding-bottom: 0.5rem;
+  padding-top: 72px;
 }
 
 .pagina-btn {
   padding: 0.65rem 1.7rem;
-  border: 2px solid var(--acento);
+  border: 2px solid var(--detalle);
   font-family: inherit;
   font-size: 0.9rem;
   font-weight: 600;
@@ -100,15 +100,19 @@
 
 .pagina-btn-lleno {
   border-radius: 22px 18px 24px 20px / 20px 24px 18px 22px;
-  background-color: var(--acento);
-  color: var(--texto-acento);
+  background-color: var(--detalle);
+  color: var(--texto-detalle);
   box-shadow: 3px 3px 0 rgba(43, 31, 21, 0.35);
 }
 
 .pagina-btn-borde {
   border-radius: 20px 24px 18px 22px / 24px 18px 22px 20px;
   background-color: transparent;
-  color: var(--acento);
+  color: var(--detalle);
+}
+
+.pagina-btn-borde.siguiendo {
+  background-color: color-mix(in srgb, var(--detalle) 18%, transparent);
 }
 
 .pagina-btn:not(:disabled):hover {
@@ -195,18 +199,19 @@
   display: flex;
   align-items: center;
   gap: 0.9rem;
-  color: var(--acento);
+  color: var(--detalle);
 }
 
 .bloque-separador span {
   flex: 1;
   height: 2px;
-  background-color: var(--acento);
+  background-color: var(--detalle);
   opacity: 0.55;
 }
 
 .bloque-redes {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 0.9rem;
 }
@@ -214,9 +219,9 @@
 .bloque-redes a {
   width: 46px;
   height: 46px;
-  border: 2px solid var(--acento);
+  border: 2px solid var(--detalle);
   border-radius: 50%;
-  color: var(--acento);
+  color: var(--detalle);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -224,24 +229,39 @@
 }
 
 .bloque-redes a:hover {
-  background-color: var(--acento);
-  color: var(--texto-acento);
+  background-color: var(--detalle);
+  color: var(--texto-detalle);
 }
 
 @media (max-width: 720px) {
   .pagina-portada {
-    height: 150px;
+    height: 170px;
   }
 
   .pagina-cuerpo {
-    padding: 0 1.3rem 2rem;
+    padding: 0 1.2rem 3rem;
   }
 
   .pagina-cabecera {
     margin-top: -48px;
   }
 
+  .pagina-identidad {
+    padding-top: 60px;
+  }
+
+  .pagina-acciones {
+    padding-top: 64px;
+  }
+
   .pagina-nombre {
     font-size: 1.7rem;
+  }
+}
+
+@media (max-width: 460px) {
+  .pagina-identidad,
+  .pagina-acciones {
+    padding-top: 0.6rem;
   }
 }
