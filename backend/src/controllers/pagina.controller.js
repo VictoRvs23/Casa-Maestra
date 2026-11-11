@@ -41,3 +41,14 @@ export const getPaginaPublica = async (req, res) => {
         res.status(500).json({ message: "Error interno al obtener la página" });
     }
 };
+
+export const registrarVisita = async (req, res) => {
+    try {
+        const resultado = await paginaService.registrarVisitaService(req.params.slug, req.usuario?.id_usuario);
+        res.status(200).json(resultado);
+    } catch (error) {
+        if (error.status) return res.status(error.status).json({ message: error.message });
+        console.error("Error en registrarVisita:", error);
+        res.status(500).json({ message: "Error interno al registrar la visita" });
+    }
+};
