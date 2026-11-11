@@ -18,15 +18,13 @@ import {
 } from "../components/pagina/Iconos.js";
 import { Pencil } from "@sketchicon/lucide";
 import { useAlerta } from "../context/AlertaContext.jsx";
-import { getMiPagina, updateMiPagina, subirImagenPagina } from "../services/pagina.services.js";
-import { getAvatarUrl } from "../services/usuario.services.js";
+import { getMiPagina, updateMiPagina, subirImagenPagina, getImagenUrl } from "../services/pagina.services.js";
 import {
   FUENTES,
   COLORES_ACENTO,
   COLORES_FONDO,
   MAX_BLOQUES,
   TIPOS_BLOQUE,
-  ESTADISTICAS_EJEMPLO,
   crearBloque,
   normalizarBloque,
   CLAVES_REDES,
@@ -64,6 +62,7 @@ const aFormulario = (pagina) => ({
   color_fondo: pagina.color_fondo,
   fuente: pagina.fuente,
   portada: pagina.portada,
+  foto: pagina.foto,
   bloques: pagina.bloques.map(normalizarBloque),
 });
 
@@ -83,6 +82,7 @@ export default function MiPagina() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [info, setInfo] = useState(null);
+  const [estadisticas, setEstadisticas] = useState(null);
   const [form, setForm] = useState(null);
   const [guardado, setGuardado] = useState(null);
   const [guardando, setGuardando] = useState(false);
@@ -98,10 +98,11 @@ export default function MiPagina() {
     let cancelado = false;
 
     getMiPagina()
-      .then(({ pagina, residente, usuario }) => {
+      .then(({ pagina, residente, estadisticas }) => {
         if (cancelado) return;
         const inicial = aFormulario(pagina);
-        setInfo({ residente, usuario });
+        setInfo({ residente });
+        setEstadisticas(estadisticas);
         setForm(inicial);
         setGuardado(inicial);
       })
@@ -227,6 +228,14 @@ export default function MiPagina() {
     if (url) cambiar({ portada: url });
   };
 
+  const handleFoto = async (e) => {
+    const archivo = e.target.files[0];
+    e.target.value = "";
+    if (!archivo) return;
+    const url = await subirImagen(archivo, "foto");
+    if (url) cambiar({ foto: url });
+  };
+
   const handleGuardar = async () => {
     setGuardando(true);
     try {
@@ -275,7 +284,7 @@ export default function MiPagina() {
     );
   }
 
-  const { residente, usuario } = info;
+  const { residente } = info;
   const iniciales = residente.nombre
     .split(" ")
     .filter(Boolean)
@@ -455,18 +464,25 @@ export default function MiPagina() {
             {pestana === "resumen" && (
               <div role="tabpanel" id="mp-panel-resumen" aria-labelledby="mp-tab-resumen">
                 <div className="mipagina-stats-grid">
-                  {ESTADISTICAS_EJEMPLO.map((e, i) => (
+                  {[
+                    { etiqueta: "Visitas del mes", valor: estadisticas?.visitas_mes },
+                    { etiqueta: "Agendas generadas", valor: estadisticas?.agendas },
+                    { etiqueta: "Seguidores", valor: estadisticas?.seguidores },
+                  ].map((e, i) => (
                     <article
                       className="estadistica-card"
                       key={e.etiqueta}
                       style={{ "--giro": ["-1deg", "0.8deg", "-0.6deg"][i] }}
                     >
                       <p className="estadistica-etiqueta">{e.etiqueta}</p>
-                      <p className="estadistica-valor">{e.valor}</p>
+                      <p className="estadistica-valor">{e.valor ?? "—"}</p>
                     </article>
                   ))}
                 </div>
-                <p className="mipagina-nota">Valores de ejemplo: se conectarán a datos reales más adelante.</p>
+                <p className="mipagina-nota">
+                  Las visitas se cuentan una vez por persona y por sesión, sin sumar las tuyas. Las agendas se
+                  activarán junto con el sistema de reservas.
+                </p>
               </div>
             )}
           </div>
@@ -479,7 +495,7 @@ export default function MiPagina() {
             estilo={form}
             nombre={residente.nombre}
             descripcion={residente.descripcion}
-            avatarUrl={usuario?.avatar ? getAvatarUrl(usuario.avatar) : null}
+            avatarUrl={form.foto ? getImagenUrl(form.foto) : null}
             iniciales={iniciales}
             accionPortada={
               <div className="pagina-portada-acciones">
@@ -501,14 +517,32 @@ export default function MiPagina() {
               </div>
             }
             accionAvatar={
-              <Link
-                to="/perfil?tab=datos-personales"
-                className="pagina-avatar-edit"
-                aria-label="Cambiar foto de perfil"
-                title="La foto se cambia desde tu perfil"
-              >
-                <Icono icon={Pencil} size={14} />
-              </Link>
+              <>
+                <label
+                  className="pagina-avatar-edit"
+                  title="Cambiar la foto de tu página"
+                  aria-label="Cambiar la foto de tu página"
+                >
+                  <Icono icon={Pencil} size={14} />
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    disabled={subiendoClave === "foto"}
+                    onChange={handleFoto}
+                  />
+                </label>
+                {form.foto && (
+                  <button
+                    type="button"
+                    className="pagina-avatar-quitar"
+                    title="Quitar la foto"
+                    aria-label="Quitar la foto de la página"
+                    onClick={() => cambiar({ foto: null })}
+                  >
+                    <Icono icon={IconoCerrar} size={14} />
+                  </button>
+                )}
+              </>
             }
           >
             {form.bloques.length === 0 && (
