@@ -74,6 +74,14 @@
   color: var(--detalle);
 }
 
+.pagina-seguidores {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2b1f15;
+  opacity: 0.75;
+}
+
 .pagina-acciones {
   display: flex;
   gap: 0.8rem;
@@ -101,6 +109,10 @@
   border-radius: 20px 24px 18px 22px / 24px 18px 22px 20px;
   background-color: transparent;
   color: var(--detalle);
+}
+
+.pagina-btn-borde.siguiendo {
+  background-color: color-mix(in srgb, var(--detalle) 18%, transparent);
 }
 
 .pagina-btn:not(:disabled):hover {
