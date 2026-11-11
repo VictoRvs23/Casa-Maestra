@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAlerta } from "../../context/AlertaContext.jsx";
-import { getMisSeguidos, dejarDeSeguirResidente } from "../../services/seguidos.services.js";
+import { getMisSeguidos } from "../../services/seguidos.services.js";
 import { getImagenUrl } from "../../services/residente.services.js";
 import "../../styles/perfil/Seguidos.css";
 
@@ -15,11 +14,9 @@ const iniciales = (nombre = "") =>
     .toUpperCase();
 
 export default function Seguidos() {
-  const { alerta } = useAlerta();
   const [seguidos, setSeguidos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quitando, setQuitando] = useState(null);
 
   useEffect(() => {
     getMisSeguidos()
@@ -30,19 +27,6 @@ export default function Seguidos() {
       })
       .finally(() => setLoading(false));
   }, []);
-
-  const dejarDeSeguir = async (residente) => {
-    setQuitando(residente.id_residente);
-    try {
-      await dejarDeSeguirResidente(residente.id_residente);
-      setSeguidos((lista) => lista.filter((s) => s.residente.id_residente !== residente.id_residente));
-      alerta(`Dejaste de seguir a ${residente.nombre}.`, { tipo: "exito" });
-    } catch (err) {
-      alerta(err.response?.data?.message || "No se pudo dejar de seguir.", { tipo: "error" });
-    } finally {
-      setQuitando(null);
-    }
-  };
 
   return (
     <div className="seguidos">
@@ -78,14 +62,6 @@ export default function Seguidos() {
               </div>
 
               <div className="seguido-acciones">
-                <button
-                  type="button"
-                  className="seguido-quitar"
-                  disabled={quitando === residente.id_residente}
-                  onClick={() => dejarDeSeguir(residente)}
-                >
-                  Dejar de seguir
-                </button>
                 <Link to={`/residentes/${residente.slug}`} className="seguido-ver">
                   Ver
                 </Link>
