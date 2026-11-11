@@ -59,6 +59,7 @@ export const ActualizarPaginaValidation = Joi.object({
         "any.only": "La fuente elegida no es válida.",
     }),
     portada: urlImagen.allow(null),
+    foto: urlImagen.allow(null),
     bloques: Joi.array()
         .items(Joi.alternatives().try(bloqueTexto, bloqueImagen, bloqueGaleria, bloqueSeparador, bloqueRedes))
         .max(MAX_BLOQUES)
