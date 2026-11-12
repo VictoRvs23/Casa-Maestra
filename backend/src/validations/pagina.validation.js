@@ -40,6 +40,23 @@ const bloqueSeparador = Joi.object({
     tipo: Joi.string().valid("separador").required(),
 }).unknown(false);
 
+const enlaceVideo = Joi.string()
+    .trim()
+    .allow("")
+    .max(200)
+    .pattern(
+        /^(https?:\/\/)?((www\.|m\.)?youtube\.com\/(watch\?[\w=&%.-]*v=[\w-]{11}[\w=&%.-]*|(shorts|embed)\/[\w-]{11}[\w=&%.?-]*)|youtu\.be\/[\w-]{11}[\w=&%.?-]*|(www\.)?vimeo\.com\/(\d+\/?[\w=&%.?/-]*)|player\.vimeo\.com\/video\/\d+[\w=&%.?-]*)$/i
+    )
+    .messages({
+        "string.pattern.base": "El video debe ser un enlace de YouTube o Vimeo.",
+    });
+
+const bloqueVideo = Joi.object({
+    id,
+    tipo: Joi.string().valid("video").required(),
+    url: enlaceVideo.required(),
+}).unknown(false);
+
 const bloqueRedes = Joi.object({
     id,
     tipo: Joi.string().valid("redes").required(),
@@ -61,7 +78,7 @@ export const ActualizarPaginaValidation = Joi.object({
     portada: urlImagen.allow(null),
     foto: urlImagen.allow(null),
     bloques: Joi.array()
-        .items(Joi.alternatives().try(bloqueTexto, bloqueImagen, bloqueGaleria, bloqueSeparador, bloqueRedes))
+        .items(Joi.alternatives().try(bloqueTexto, bloqueImagen, bloqueGaleria, bloqueSeparador, bloqueRedes, bloqueVideo))
         .max(MAX_BLOQUES)
         .unique("id")
         .messages({
