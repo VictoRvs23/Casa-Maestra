@@ -19,7 +19,7 @@ services:
     build:
       context: ./backend
     env_file:
-      - ./backend/src/config/.env
+      - ./backend/.env
     environment:
       HOST: db
       DB_PORT: "5432"
