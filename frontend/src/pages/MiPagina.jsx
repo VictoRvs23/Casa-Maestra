@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
@@ -28,7 +28,6 @@ import {
   TIPOS_BLOQUE,
   crearBloque,
   normalizarBloque,
-  CLAVES_REDES,
 } from "../constants/paginaEstilos.js";
 import "../styles/pagina/MiPagina.css";
 
@@ -69,13 +68,27 @@ const aFormulario = (pagina) => ({
   bloques: pagina.bloques.map(normalizarBloque),
 });
 
-const bloqueTieneContenido = (b) => {
-  switch (b.tipo) {
-    case "texto": return b.contenido.trim() !== "";
-    case "imagen": return Boolean(b.url);
-    case "galeria": return b.imagenes.some(Boolean);
-    case "redes": return CLAVES_REDES.some((c) => b[c]);
-    default: return false;
+const claveBorrador = (slug) => `mipagina-borrador-${slug}`;
+
+const leerBorrador = (slug) => {
+  try {
+    return JSON.parse(localStorage.getItem(claveBorrador(slug)));
+  } catch {
+    return null;
+  }
+};
+
+const guardarBorrador = (slug, form) => {
+  try {
+    localStorage.setItem(claveBorrador(slug), JSON.stringify({ form, fecha: Date.now() }));
+  } catch {
+  }
+};
+
+const borrarBorrador = (slug) => {
+  try {
+    localStorage.removeItem(claveBorrador(slug));
+  } catch {
   }
 };
 
@@ -90,6 +103,8 @@ export default function MiPagina() {
   const [guardado, setGuardado] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [subiendoClave, setSubiendoClave] = useState(null);
+  const [eliminado, setEliminado] = useState(null);
+  const temporizadorDeshacer = useRef(null);
 
   const [pestana, setPestana] = useState("bloques");
   const [panelAbierto, setPanelAbierto] = useState(false);
@@ -108,6 +123,20 @@ export default function MiPagina() {
         setEstadisticas(estadisticas);
         setForm(inicial);
         setGuardado(inicial);
+
+        const borrador = leerBorrador(residente.slug);
+        if (borrador?.form && JSON.stringify(borrador.form) !== JSON.stringify(inicial)) {
+          const cuando = new Date(borrador.fecha).toLocaleString("es-CL", { dateStyle: "short", timeStyle: "short" });
+          confirmar(`Encontramos cambios sin guardar de tu última sesión (${cuando}). ¿Quieres recuperarlos?`, {
+            textoConfirmar: "Recuperar",
+          }).then((ok) => {
+            if (cancelado) return;
+            if (ok) setForm({ ...inicial, ...borrador.form, bloques: (borrador.form.bloques || []).map(normalizarBloque) });
+            else borrarBorrador(residente.slug);
+          });
+        } else {
+          borrarBorrador(residente.slug);
+        }
       })
       .catch((err) => {
         if (cancelado) return;
@@ -132,6 +161,15 @@ export default function MiPagina() {
     window.addEventListener("beforeunload", avisar);
     return () => window.removeEventListener("beforeunload", avisar);
   }, [hayCambios]);
+
+  const slug = info?.residente?.slug;
+  useEffect(() => {
+    if (!slug || !form || !hayCambios) return;
+    const t = setTimeout(() => guardarBorrador(slug, form), 600);
+    return () => clearTimeout(t);
+  }, [slug, form, hayCambios]);
+
+  useEffect(() => () => clearTimeout(temporizadorDeshacer.current), []);
 
   useEffect(() => {
     if (!nuevoId) return;
@@ -190,14 +228,28 @@ export default function MiPagina() {
     setSobreId(null);
   };
 
-  const eliminarBloque = async (bloque) => {
-    if (bloqueTieneContenido(bloque)) {
-      const ok = await confirmar("¿Eliminar este bloque? Perderás lo que escribiste o subiste en él.", {
-        textoConfirmar: "Eliminar",
-      });
-      if (!ok) return;
-    }
+  const eliminarBloque = (bloque) => {
+    const indice = form.bloques.findIndex((b) => b.id === bloque.id);
+    if (indice < 0) return;
+
     setForm((f) => ({ ...f, bloques: f.bloques.filter((b) => b.id !== bloque.id) }));
+    setEliminado({ bloque, indice });
+
+    clearTimeout(temporizadorDeshacer.current);
+    temporizadorDeshacer.current = setTimeout(() => setEliminado(null), 8000);
+  };
+
+  const deshacerEliminar = () => {
+    if (!eliminado) return;
+    const { bloque, indice } = eliminado;
+    clearTimeout(temporizadorDeshacer.current);
+    setForm((f) => {
+      const bloques = [...f.bloques];
+      bloques.splice(Math.min(indice, bloques.length), 0, bloque);
+      return { ...f, bloques };
+    });
+    setEliminado(null);
+    setNuevoId(bloque.id);
   };
 
   const subirImagen = async (archivo, clave) => {
@@ -246,6 +298,7 @@ export default function MiPagina() {
       const nuevo = aFormulario(pagina);
       setForm(nuevo);
       setGuardado(nuevo);
+      borrarBorrador(info.residente.slug);
       alerta(
         nuevo.publicada ? "Tu página se guardó y está publicada." : "Tu página se guardó como borrador.",
         { tipo: "exito" }
@@ -585,6 +638,15 @@ export default function MiPagina() {
           </PaginaLienzo>
         </main>
       </div>
+
+      {eliminado && (
+        <div className="mipagina-deshacer" role="status">
+          <span>Bloque eliminado</span>
+          <button type="button" onClick={deshacerEliminar}>
+            Deshacer
+          </button>
+        </div>
+      )}
 
       <Footer />
     </div>
