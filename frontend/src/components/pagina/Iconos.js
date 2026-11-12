@@ -4,6 +4,7 @@ export {
   LayoutGrid as IconoGaleria,
   Minus as IconoSeparador,
   Globe as IconoWeb,
+  Video as IconoVideo,
   Mail as IconoCorreo,
   ArrowUp as IconoSubir,
   ArrowDown as IconoBajar,
