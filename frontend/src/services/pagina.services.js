@@ -27,3 +27,8 @@ export const getPaginaPublica = async (slug) => {
   const { data } = await api.get(`/paginas/${encodeURIComponent(slug)}`);
   return data;
 };
+
+export const registrarVisitaPagina = async (slug) => {
+  const { data } = await api.post(`/paginas/${encodeURIComponent(slug)}/visita`);
+  return data;
+};

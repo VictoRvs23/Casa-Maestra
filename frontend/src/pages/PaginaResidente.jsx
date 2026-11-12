@@ -14,8 +14,7 @@ import {
   seguirResidente,
   dejarDeSeguirResidente,
 } from "../services/seguidos.services.js";
-import { getPaginaPublica } from "../services/pagina.services.js";
-import { getAvatarUrl } from "../services/usuario.services.js";
+import { getPaginaPublica, registrarVisitaPagina, getImagenUrl } from "../services/pagina.services.js";
 import { textoSobre, detalleLegible } from "../constants/paginaEstilos.js";
 import "../styles/pagina/PaginaResidente.css";
 
@@ -53,6 +52,17 @@ export default function PaginaResidente() {
       cancelado = true;
     };
   }, [slug]);
+
+  useEffect(() => {
+    if (!datos) return;
+    const clave = `visita-${slug}`;
+    try {
+      if (sessionStorage.getItem(clave)) return;
+      sessionStorage.setItem(clave, "1");
+    } catch {
+    }
+    registrarVisitaPagina(slug).catch(() => {});
+  }, [datos, slug]);
 
   useEffect(() => {
     if (!datos) return;
@@ -161,7 +171,7 @@ export default function PaginaResidente() {
           estilo={datos.pagina}
           nombre={datos.residente.nombre}
           descripcion={datos.residente.descripcion}
-          avatarUrl={datos.avatar ? getAvatarUrl(datos.avatar) : null}
+          avatarUrl={datos.pagina.foto ? getImagenUrl(datos.pagina.foto) : null}
           iniciales={iniciales}
           accionPortada={
             <Link to="/residentes" className="pagina-volver" aria-label="Volver a residentes" title="Volver a residentes">
