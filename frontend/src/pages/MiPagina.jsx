@@ -11,6 +11,7 @@ import {
   IconoGaleria,
   IconoSeparador,
   IconoWeb,
+  IconoVideo,
   IconoCamara,
   IconoCerrar,
   IconoMas,
@@ -37,6 +38,7 @@ const ICONOS_BLOQUE = {
   galeria: IconoGaleria,
   separador: IconoSeparador,
   redes: IconoWeb,
+  video: IconoVideo,
 };
 
 const AYUDA_BLOQUE = {
@@ -45,6 +47,7 @@ const AYUDA_BLOQUE = {
   galeria: "Hasta 6 fotos pequeñas",
   separador: "Una línea con una hoja",
   redes: "Instagram, TikTok, WhatsApp y más",
+  video: "Un video de YouTube o Vimeo",
 };
 
 const PESTANAS = [

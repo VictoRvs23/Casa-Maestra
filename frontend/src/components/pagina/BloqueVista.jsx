@@ -2,6 +2,7 @@ import React from "react";
 import Icono from "../Icono.jsx";
 import { IconoHoja } from "./Iconos.js";
 import { REDES } from "./Redes.jsx";
+import { videoEmbedUrl } from "../../constants/paginaEstilos.js";
 import { getImagenUrl } from "../../services/pagina.services.js";
 
 const GIROS = ["-1.2deg", "0.9deg", "-0.6deg", "1.1deg", "-0.8deg", "0.7deg"];
@@ -15,9 +16,11 @@ export default function BloqueVista({ bloque }) {
     case "imagen": {
       const url = getImagenUrl(bloque.url);
       if (!url) return null;
+      const descripcion = bloque.alt?.trim();
       return (
-        <figure className="bloque-imagen">
-          <img src={url} alt={bloque.alt || ""} />
+        <figure className={`bloque-imagen ${descripcion ? "con-descripcion" : ""}`}>
+          <img src={url} alt={descripcion || ""} />
+          {descripcion && <figcaption className="bloque-descripcion">{descripcion}</figcaption>}
         </figure>
       );
     }
@@ -62,6 +65,23 @@ export default function BloqueVista({ bloque }) {
               {r.icono(20)}
             </a>
           ))}
+        </div>
+      );
+    }
+
+    case "video": {
+      const embed = videoEmbedUrl(bloque.url);
+      if (!embed) return null;
+      return (
+        <div className="bloque-video">
+          <iframe
+            src={embed}
+            title="Video"
+            loading="lazy"
+            allow="encrypted-media; picture-in-picture; fullscreen"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+          />
         </div>
       );
     }

@@ -10,7 +10,7 @@ import {
   IconoCerrar,
   IconoMas,
 } from "./Iconos.js";
-import { MAX_FOTOS_GALERIA, TIPOS_BLOQUE } from "../../constants/paginaEstilos.js";
+import { MAX_FOTOS_GALERIA, TIPOS_BLOQUE, videoEmbedUrl } from "../../constants/paginaEstilos.js";
 import { getImagenUrl } from "../../services/pagina.services.js";
 import { REDES } from "./Redes.jsx";
 
@@ -99,7 +99,7 @@ export default function BloqueEditor({
               type="text"
               className="bloque-alt"
               aria-label="Descripción de la imagen"
-              placeholder="Describe la imagen (ayuda a quienes usan lector de pantalla)"
+              placeholder="Descripción de la imagen (opcional). Ej: Rosa en línea fina, antebrazo"
               maxLength={120}
               value={bloque.alt}
               onChange={(e) => onCambiar({ alt: e.target.value })}
@@ -168,6 +168,35 @@ export default function BloqueEditor({
             ))}
           </div>
         );
+
+      case "video": {
+        const embed = videoEmbedUrl(bloque.url);
+        const hayTexto = bloque.url?.trim();
+        return (
+          <>
+            <input
+              type="url"
+              className="bloque-alt"
+              aria-label="Enlace del video"
+              placeholder="Pega aquí el enlace de YouTube o Vimeo"
+              maxLength={200}
+              value={bloque.url || ""}
+              onChange={(e) => onCambiar({ url: e.target.value })}
+            />
+            {embed ? (
+              <div className="bloque-video bloque-video-previa">
+                <iframe src={embed} title="Vista previa del video" loading="lazy" allowFullScreen />
+              </div>
+            ) : (
+              <p className={`bloque-video-ayuda ${hayTexto ? "error" : ""}`}>
+                {hayTexto
+                  ? "Ese enlace no parece de YouTube ni de Vimeo."
+                  : "Sube tu video a YouTube o Vimeo y pega aquí su enlace."}
+              </p>
+            )}
+          </>
+        );
+      }
 
       default:
         return null;
