@@ -36,8 +36,13 @@
   gap: 0.8rem 1.4rem;
   min-height: var(--barra-alto);
   padding: 0.6rem 2rem;
-  background-color: var(--papel-claro);
-  border-top: 2px solid var(--cafe);
+  background-color: var(--papel);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--papel) 87%, transparent), color-mix(in srgb, var(--papel) 87%, transparent)),
+    url("../../assets/hojaArrugada.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   border-bottom: 2px solid var(--cafe);
 }
 
@@ -141,8 +146,19 @@
 }
 
 .mipagina-lateral {
-  background-color: var(--papel-claro);
-  border-right: 2px solid var(--cafe);
+  position: relative;
+  background: transparent;
+}
+
+.mipagina-lateral::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--cafe) calc(100% - 220px), transparent calc(100% - 50px));
+  pointer-events: none;
 }
 
 .mipagina-lateral-contenido {
@@ -161,6 +177,8 @@
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - var(--barra-alto));
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 96px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 96px), transparent);
 }
 
 .mipagina-lienzo-wrap > .pagina-lienzo {
@@ -808,6 +826,8 @@
 
   .mipagina-lienzo-wrap {
     min-height: 0;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   .mipagina-lateral {
@@ -820,6 +840,7 @@
     max-height: 70vh;
     overflow-y: auto;
     padding: 0 1.2rem 1.5rem;
+    background: var(--papel-claro);
     border-right: none;
     border-top: 2px solid var(--cafe);
     box-shadow: 0 -4px 0 rgba(132, 87, 54, 0.25);
@@ -829,6 +850,10 @@
 
   .mipagina-lateral.abierto {
     transform: none;
+  }
+
+  .mipagina-lateral::after {
+    display: none;
   }
 
   .mipagina-lateral-toggle {
