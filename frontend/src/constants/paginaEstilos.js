@@ -43,13 +43,41 @@ export const TIPOS_BLOQUE = [
   { tipo: "galeria", label: "Galería" },
   { tipo: "separador", label: "Separador" },
   { tipo: "redes", label: "Redes" },
+  { tipo: "video", label: "Video" },
 ];
 
-export const ESTADISTICAS_EJEMPLO = [
-  { etiqueta: "Visitas del mes", valor: 130 },
-  { etiqueta: "Agendas generadas", valor: 35 },
-  { etiqueta: "Seguidores", valor: 86 },
-];
+export const videoEmbedUrl = (texto) => {
+  const enlace = (texto || "").trim();
+  if (!enlace) return null;
+
+  let url;
+  try {
+    url = new URL(/^https?:\/\//i.test(enlace) ? enlace : `https://${enlace}`);
+  } catch {
+    return null;
+  }
+
+  const host = url.hostname.replace(/^(www\.|m\.)/, "");
+  const idYoutube = /^[\w-]{11}$/;
+
+  if (host === "youtu.be") {
+    const id = url.pathname.slice(1).split("/")[0];
+    return idYoutube.test(id) ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+  }
+
+  if (host === "youtube.com") {
+    const partes = url.pathname.split("/").filter(Boolean);
+    const id = partes[0] === "watch" ? url.searchParams.get("v") : ["shorts", "embed"].includes(partes[0]) ? partes[1] : null;
+    return id && idYoutube.test(id) ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+  }
+
+  if (host === "vimeo.com" || host === "player.vimeo.com") {
+    const id = url.pathname.split("/").filter(Boolean).find((p) => /^\d+$/.test(p));
+    return id ? `https://player.vimeo.com/video/${id}` : null;
+  }
+
+  return null;
+};
 
 const luminancia = (hex) => {
   const limpio = (hex || "").replace("#", "");
@@ -88,6 +116,8 @@ export const crearBloque = (tipo) => {
       return { id, tipo };
     case "redes":
       return { id, tipo, ...REDES_VACIAS };
+    case "video":
+      return { id, tipo, url: "" };
     default:
       return null;
   }
