@@ -474,6 +474,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+}
+
+.pagina-avatar-edit input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pagina-avatar-edit:focus-within {
+  outline: 3px solid var(--detalle);
+  outline-offset: 2px;
+}
+
+.pagina-avatar-quitar {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid var(--fondo-pagina);
+  border-radius: 50%;
+  background-color: #2b1f15;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .bloque-editor {
