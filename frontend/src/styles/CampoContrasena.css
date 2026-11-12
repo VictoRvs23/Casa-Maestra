@@ -1,0 +1,41 @@
+.password-input-wrapper {
+  position: relative;
+}
+
+.form-group .password-input-wrapper.con-ojo input:not([type="checkbox"]):not([type="radio"]):not([type="file"]) {
+  padding-right: 3rem;
+}
+
+.ojo-contrasena {
+  position: absolute;
+  top: 50%;
+  right: 0.45rem;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cafe);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.ojo-contrasena:hover {
+  color: var(--verde);
+  background-color: var(--beige-claro);
+}
+
+.ojo-contrasena:focus-visible {
+  outline: 3px solid var(--verde);
+  outline-offset: 1px;
+}
+
+.password-input-wrapper input::-ms-reveal,
+.password-input-wrapper input::-ms-clear {
+  display: none;
+}

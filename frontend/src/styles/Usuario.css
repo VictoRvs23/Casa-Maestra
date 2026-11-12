@@ -1,6 +1,8 @@
 .usuarios-page {
   background-color: var(--papel);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--fuente-texto);
   color: var(--cafe-oscuro);
   position: relative;
@@ -20,6 +22,14 @@
   opacity: 0.13;
   z-index: -1;
   pointer-events: none;
+}
+
+.usuarios-page > .pie-pagina {
+  margin-top: auto;
+}
+
+.usuarios-page > .usuarios-wrap {
+  width: 100%;
 }
 
 .usuarios-hero {
@@ -42,14 +52,15 @@
 }
 
 .usuarios-wrap {
-  max-width: 1100px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 1.5rem 2rem 4rem;
 }
 
 .usuarios-toolbar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1.6rem;
   position: relative;
 }
@@ -109,7 +120,7 @@
   background-color: var(--papel-claro);
   border: 2px solid var(--cafe);
   border-radius: 8px 10px 7px 9px;
-  overflow: hidden;
+  overflow-x: auto;
   box-shadow: 6px 6px 0 var(--cafe);
 }
 
@@ -144,6 +155,13 @@ table.usuarios-table tbody tr:last-child td {
 
 table.usuarios-table tbody tr:hover {
   background-color: #f8f1e1;
+}
+
+table.usuarios-table tbody td.celda-email {
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .rol-pill {
@@ -208,14 +226,33 @@ table.usuarios-table tbody tr:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-top: 1.8rem;
 }
 
-.pagination span {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--cafe-oscuro);
+.pagination .pagina-num {
+  width: auto;
+  min-width: 34px;
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  background-color: transparent;
+  color: var(--cafe);
+  font-family: var(--fuente-texto);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: background-color 0.2s ease;
+}
+
+.pagination .pagina-num:hover {
+  background-color: var(--beige-claro);
+}
+
+.pagination .pagina-num.activa {
+  background-color: var(--verde);
+  border-color: var(--verde);
+  color: #ffffff;
+  cursor: default;
 }
 
 .usuarios-page .modal-box {
@@ -234,4 +271,32 @@ table.usuarios-table tbody tr:hover {
 
 .usuarios-page .modal-actions {
   margin-top: 1.3rem;
+}
+
+.usuarios-page .modal-box.modal-box-ancho {
+  max-width: 600px;
+}
+
+.modal-ayuda {
+  margin: -0.4rem 0 1.3rem;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--cafe-oscuro);
+}
+
+.modal-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.modal-row .modal-field {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 560px) {
+  .modal-row {
+    flex-direction: column;
+    gap: 0;
+  }
 }

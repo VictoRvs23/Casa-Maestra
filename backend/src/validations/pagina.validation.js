@@ -44,8 +44,11 @@ const bloqueRedes = Joi.object({
     id,
     tipo: Joi.string().valid("redes").required(),
     instagram: Joi.string().trim().allow("").max(30).pattern(/^@?[\w.]*$/).default(""),
+    tiktok: Joi.string().trim().allow("").max(30).pattern(/^@?[\w.]*$/).default(""),
+    facebook: Joi.string().trim().allow("").max(50).pattern(/^@?[\w.-]*$/).default(""),
+    youtube: Joi.string().trim().allow("").max(40).pattern(/^@?[\w.-]*$/).default(""),
+    whatsapp: Joi.string().trim().allow("").max(20).pattern(/^\+?[\d\s-]{8,20}$/).default(""),
     email: Joi.string().trim().allow("").email({ tlds: { allow: false } }).max(200).default(""),
-    web: Joi.string().trim().allow("").uri({ scheme: ["http", "https"] }).max(255).default(""),
 }).unknown(false);
 
 export const ActualizarPaginaValidation = Joi.object({
@@ -56,6 +59,7 @@ export const ActualizarPaginaValidation = Joi.object({
         "any.only": "La fuente elegida no es válida.",
     }),
     portada: urlImagen.allow(null),
+    foto: urlImagen.allow(null),
     bloques: Joi.array()
         .items(Joi.alternatives().try(bloqueTexto, bloqueImagen, bloqueGaleria, bloqueSeparador, bloqueRedes))
         .max(MAX_BLOQUES)

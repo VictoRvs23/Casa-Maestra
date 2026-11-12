@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout";
+import CampoContrasena from "../components/CampoContrasena.jsx";
 import "../styles/Login.css";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
@@ -8,6 +9,7 @@ import { useAlerta } from "../context/AlertaContext.jsx";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [recordarme, setRecordarme] = useState(false);
 
   const { login } = useAuth();
   const { alerta } = useAlerta();
@@ -17,7 +19,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      await login(email, password);
+      await login(email, password, recordarme);
       navigate("/"); 
     } catch (err) {
       alerta(typeof err === "string" ? err : "No se pudo iniciar sesión.", {
@@ -51,21 +53,23 @@ const Login = () => {
 
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
-            <div className="password-input-wrapper">
-              <input 
-                id="password"
-                type="password" 
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
+            <CampoContrasena
+              id="password"
+              placeholder="••••••••"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
 
           <div className="login-options">
             <label className="checkbox-container">
-              <input type="checkbox" />
+              <input
+                type="checkbox"
+                checked={recordarme}
+                onChange={(e) => setRecordarme(e.target.checked)}
+              />
               <span>Recordarme</span>
             </label>
             <a href="#" className="forgot-password">¿Olvidaste tu contraseña?</a>

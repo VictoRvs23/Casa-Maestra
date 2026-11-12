@@ -30,6 +30,7 @@
 }
 
 .pagina-publica-estado {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,10 +45,12 @@
   left: 16px;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.9rem;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
   border: 2px solid var(--papel-claro);
-  border-radius: 16px;
+  border-radius: 50%;
   background-color: rgba(43, 31, 21, 0.5);
   color: #ffffff;
   text-decoration: none;
@@ -65,17 +68,24 @@
 }
 
 .pagina-volver-simple {
+  position: absolute;
+  top: 16px;
+  left: 16px;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  color: var(--cafe-oscuro);
-  font-weight: 600;
-  font-size: 0.9rem;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--cafe);
+  border-radius: 50%;
+  color: var(--cafe);
   text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .pagina-volver-simple:hover {
-  color: var(--verde);
+  background-color: var(--cafe);
+  color: #ffffff;
 }
 
 .pagina-publica-page {
@@ -146,13 +156,15 @@
   filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(43, 31, 21, 0.35));
 }
 
-.pie-claro .pagina-publica-pie .divisor-hojas {
-  filter: brightness(0) invert(1);
+.pagina-publica-pie {
+  background-color: transparent;
+  color: #2b1f15;
 }
 
-.pagina-publica-pie {
-  background-color: var(--acento, transparent);
-  color: var(--texto-acento, inherit);
+.pagina-publica-pie .divisor-hojas {
+  background: var(--acento, var(--verde));
+  -webkit-mask: url("../../assets/enredadera.png") repeat-x center / auto 44px;
+  mask: url("../../assets/enredadera.png") repeat-x center / auto 44px;
 }
 
 .pagina-publica-pie .pie-pagina {
