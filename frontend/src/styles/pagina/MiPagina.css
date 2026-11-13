@@ -905,7 +905,8 @@
   .mipagina-lateral-toggle svg {
     transition: none;
   }
-} 
+}
+
 .mipagina-deshacer {
   position: fixed;
   left: 50%;
@@ -937,4 +938,32 @@
 
 .mipagina-deshacer button:hover {
   background: #ecdfc7;
+}
+
+.selector-tamano {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--detalle);
+}
+
+.selector-tamano button {
+  padding: 0.25rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--detalle);
+  background: transparent;
+  border: 2px solid var(--detalle);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.selector-tamano button.activo {
+  color: var(--fondo-pagina);
+  background: var(--detalle);
 }
