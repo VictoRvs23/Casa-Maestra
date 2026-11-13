@@ -46,37 +46,69 @@ export const TIPOS_BLOQUE = [
   { tipo: "video", label: "Video" },
 ];
 
-export const videoEmbedUrl = (texto) => {
+export const TAMANOS_BLOQUE = [
+  { valor: "pequeno", label: "Pequeño" },
+  { valor: "mediano", label: "Mediano" },
+  { valor: "grande", label: "Grande" },
+];
+
+export const analizarVideo = (texto) => {
   const enlace = (texto || "").trim();
-  if (!enlace) return null;
+  if (!enlace) return { motivo: "vacio" };
 
   let url;
   try {
     url = new URL(/^https?:\/\//i.test(enlace) ? enlace : `https://${enlace}`);
   } catch {
-    return null;
+    return { motivo: "invalido" };
   }
 
   const host = url.hostname.replace(/^(www\.|m\.)/, "");
+  const partes = url.pathname.split("/").filter(Boolean);
   const idYoutube = /^[\w-]{11}$/;
+  const youtube = (id) =>
+    id && idYoutube.test(id)
+      ? { src: `https://www.youtube-nocookie.com/embed/${id}`, formato: "horizontal" }
+      : { motivo: "invalido" };
 
-  if (host === "youtu.be") {
-    const id = url.pathname.slice(1).split("/")[0];
-    return idYoutube.test(id) ? `https://www.youtube-nocookie.com/embed/${id}` : null;
-  }
+  if (host === "youtu.be") return youtube(partes[0]);
 
   if (host === "youtube.com") {
-    const partes = url.pathname.split("/").filter(Boolean);
     const id = partes[0] === "watch" ? url.searchParams.get("v") : ["shorts", "embed"].includes(partes[0]) ? partes[1] : null;
-    return id && idYoutube.test(id) ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+    return youtube(id);
   }
 
   if (host === "vimeo.com" || host === "player.vimeo.com") {
-    const id = url.pathname.split("/").filter(Boolean).find((p) => /^\d+$/.test(p));
-    return id ? `https://player.vimeo.com/video/${id}` : null;
+    const id = partes.find((p) => /^\d+$/.test(p));
+    return id ? { src: `https://player.vimeo.com/video/${id}`, formato: "horizontal" } : { motivo: "invalido" };
   }
 
-  return null;
+  if (host === "instagram.com") {
+    const i = partes.findIndex((p) => ["p", "reel", "tv"].includes(p));
+    const codigo = i >= 0 ? partes[i + 1] : null;
+    return codigo && /^[\w-]{5,30}$/.test(codigo)
+      ? { src: `https://www.instagram.com/${partes[i]}/${codigo}/embed`, formato: "instagram" }
+      : { motivo: "invalido" };
+  }
+
+  if (host === "tiktok.com") {
+    if (partes[0] === "t") return { motivo: "tiktok-corto" };
+    const i = partes.indexOf("video");
+    const id = i >= 0 ? partes[i + 1] : null;
+    return id && /^\d{10,25}$/.test(id)
+      ? { src: `https://www.tiktok.com/embed/v2/${id}`, formato: "vertical" }
+      : { motivo: "invalido" };
+  }
+
+  if (host === "vm.tiktok.com" || host === "vt.tiktok.com") return { motivo: "tiktok-corto" };
+
+  return { motivo: "invalido" };
+};
+
+export const MENSAJES_VIDEO = {
+  invalido: "Ese enlace no parece de YouTube, Vimeo, Instagram ni TikTok.",
+  "tiktok-corto":
+    "Ese es un enlace corto de TikTok. Abre el video en el navegador y copia la dirección larga (tiktok.com/@usuario/video/…).",
 };
 
 const luminancia = (hex) => {
@@ -109,7 +141,7 @@ export const crearBloque = (tipo) => {
     case "texto":
       return { id, tipo, contenido: "" };
     case "imagen":
-      return { id, tipo, url: null, alt: "" };
+      return { id, tipo, url: null, alt: "", tamano: "grande" };
     case "galeria":
       return { id, tipo, imagenes: [null, null, null] };
     case "separador":
@@ -117,7 +149,7 @@ export const crearBloque = (tipo) => {
     case "redes":
       return { id, tipo, ...REDES_VACIAS };
     case "video":
-      return { id, tipo, url: "" };
+      return { id, tipo, url: "", tamano: "grande" };
     default:
       return null;
   }

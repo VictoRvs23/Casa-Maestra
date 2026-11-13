@@ -906,3 +906,64 @@
     transition: none;
   }
 }
+
+.mipagina-deshacer {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  transform: translateX(-50%);
+  font-weight: 700;
+  color: #fffcf5;
+  background: #2b1f15;
+  border: 2px solid #845736;
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 #845736;
+}
+
+.mipagina-deshacer button {
+  padding: 0.3rem 0.8rem;
+  font-family: inherit;
+  font-weight: 700;
+  color: #2b1f15;
+  background: #f6f1e8;
+  border: 2px solid #f6f1e8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mipagina-deshacer button:hover {
+  background: #ecdfc7;
+}
+
+.selector-tamano {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--detalle);
+}
+
+.selector-tamano button {
+  padding: 0.25rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--detalle);
+  background: transparent;
+  border: 2px solid var(--detalle);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.selector-tamano button.activo {
+  color: var(--fondo-pagina);
+  background: var(--detalle);
+}

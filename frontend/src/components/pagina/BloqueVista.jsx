@@ -2,7 +2,7 @@ import React from "react";
 import Icono from "../Icono.jsx";
 import { IconoHoja } from "./Iconos.js";
 import { REDES } from "./Redes.jsx";
-import { videoEmbedUrl } from "../../constants/paginaEstilos.js";
+import { analizarVideo } from "../../constants/paginaEstilos.js";
 import { getImagenUrl } from "../../services/pagina.services.js";
 
 const GIROS = ["-1.2deg", "0.9deg", "-0.6deg", "1.1deg", "-0.8deg", "0.7deg"];
@@ -18,7 +18,7 @@ export default function BloqueVista({ bloque }) {
       if (!url) return null;
       const descripcion = bloque.alt?.trim();
       return (
-        <figure className={`bloque-imagen ${descripcion ? "con-descripcion" : ""}`}>
+        <figure className={`bloque-imagen tam-${bloque.tamano || "grande"} ${descripcion ? "con-descripcion" : ""}`}>
           <img src={url} alt={descripcion || ""} />
           {descripcion && <figcaption className="bloque-descripcion">{descripcion}</figcaption>}
         </figure>
@@ -70,18 +70,20 @@ export default function BloqueVista({ bloque }) {
     }
 
     case "video": {
-      const embed = videoEmbedUrl(bloque.url);
-      if (!embed) return null;
+      const { src, formato } = analizarVideo(bloque.url);
+      if (!src) return null;
       return (
-        <div className="bloque-video">
-          <iframe
-            src={embed}
-            title="Video"
-            loading="lazy"
-            allow="encrypted-media; picture-in-picture; fullscreen"
-            allowFullScreen
-            referrerPolicy="strict-origin-when-cross-origin"
-          />
+        <div className={`bloque-tam tam-${bloque.tamano || "grande"}`}>
+          <div className={`bloque-video formato-${formato}`}>
+            <iframe
+              src={src}
+              title="Video"
+              loading="lazy"
+              allow="encrypted-media; picture-in-picture; fullscreen"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+            />
+          </div>
         </div>
       );
     }
