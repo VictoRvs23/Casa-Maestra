@@ -46,7 +46,7 @@ const AYUDA_BLOQUE = {
   galeria: "Hasta 6 fotos pequeñas",
   separador: "Una línea con una hoja",
   redes: "Instagram, TikTok, WhatsApp y más",
-  video: "Un video de YouTube o Vimeo",
+  video: "YouTube, Vimeo, Instagram o TikTok",
 };
 
 const PESTANAS = [
