@@ -23,19 +23,19 @@
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 1.4rem;
-  margin-top: -56px;
+  margin-top: -84px;
 }
 
 .pagina-avatar-wrap {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 168px;
+  height: 168px;
   flex-shrink: 0;
 }
 
 .pagina-avatar {
-  width: 120px;
-  height: 120px;
+  width: 168px;
+  height: 168px;
   box-sizing: border-box;
   border: 4px solid var(--fondo-pagina);
   border-radius: 50%;
@@ -44,7 +44,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.2rem;
+  font-size: 3rem;
   font-weight: 700;
 }
 
@@ -55,7 +55,7 @@
 .pagina-identidad {
   flex: 1 1 260px;
   min-width: 0;
-  padding-top: 68px;
+  padding-top: 96px;
 }
 
 .pagina-nombre {
@@ -85,7 +85,7 @@
 .pagina-acciones {
   display: flex;
   gap: 0.8rem;
-  padding-top: 72px;
+  padding-top: 100px;
 }
 
 .pagina-btn {
@@ -257,15 +257,21 @@
   }
 
   .pagina-cabecera {
-    margin-top: -48px;
+    margin-top: -66px;
+  }
+
+  .pagina-avatar-wrap,
+  .pagina-avatar {
+    width: 132px;
+    height: 132px;
   }
 
   .pagina-identidad {
-    padding-top: 60px;
+    padding-top: 78px;
   }
 
   .pagina-acciones {
-    padding-top: 64px;
+    padding-top: 82px;
   }
 
   .pagina-nombre {
@@ -308,4 +314,32 @@
 .bloque-video-ayuda.error {
   color: #a3321f;
   opacity: 1;
+}
+
+.bloque-video.formato-vertical {
+  aspect-ratio: 9 / 17;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.bloque-video.formato-instagram {
+  aspect-ratio: 9 / 18;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.bloque-tam,
+.bloque-imagen.tam-pequeno,
+.bloque-imagen.tam-mediano {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tam-grande { width: 100%; }
+.tam-mediano { width: 75%; }
+.tam-pequeno { width: 50%; }
+
+@media (max-width: 720px) {
+  .tam-mediano { width: 88%; }
+  .tam-pequeno { width: 70%; }
 }
