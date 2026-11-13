@@ -905,4 +905,36 @@
   .mipagina-lateral-toggle svg {
     transition: none;
   }
+} 
+.mipagina-deshacer {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  transform: translateX(-50%);
+  font-weight: 700;
+  color: #fffcf5;
+  background: #2b1f15;
+  border: 2px solid #845736;
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 #845736;
+}
+
+.mipagina-deshacer button {
+  padding: 0.3rem 0.8rem;
+  font-family: inherit;
+  font-weight: 700;
+  color: #2b1f15;
+  background: #f6f1e8;
+  border: 2px solid #f6f1e8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mipagina-deshacer button:hover {
+  background: #ecdfc7;
 }
