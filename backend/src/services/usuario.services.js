@@ -2,6 +2,7 @@ import { AppDataSource } from "../config/configDb.js";
 import UsuarioEntity from "../entities/usuario.entity.js";
 import bcrypt from "bcrypt";
 import { ILike } from "typeorm";
+import { notificarCambioContrasena, notificarCambioCorreo, notificarCambioRol } from "./notificacion.eventos.js";
 
 const usuarioRepository = AppDataSource.getRepository(UsuarioEntity);
 
@@ -53,23 +54,6 @@ export const getUsuariosService = async (query) => {
     };
 };
 
-export const createUsuarioService = async (data) => {
-    const existeEmail = await usuarioRepository.findOneBy({ email: data.email });
-    if (existeEmail) throw { status: 409, message: "Ya existe una cuenta con ese correo." };
-
-    const existeUsuario = await usuarioRepository.findOneBy({ nombre_usuario: data.nombre_usuario });
-    if (existeUsuario) throw { status: 409, message: "Ese nombre de usuario ya está en uso." };
-
-    const nuevo = usuarioRepository.create({
-        ...data,
-        contraseña: await bcrypt.hash(data.contraseña, 10),
-    });
-    const guardado = await usuarioRepository.save(nuevo);
-
-    const { contraseña, ...publico } = guardado;
-    return publico;
-};
-
 export const updateUsuarioService = async (id_usuario, data) => {
     const usuario = await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
 
@@ -79,8 +63,15 @@ export const updateUsuarioService = async (id_usuario, data) => {
 
     if (data.fecha_nacimiento === "") data.fecha_nacimiento = null;
 
+    const { rol: rolAnterior, email: emailAnterior } = usuario;
+
     await usuarioRepository.update(id_usuario, data);
-    return await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
+    const actualizado = await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
+
+    if (actualizado.rol !== rolAnterior) await notificarCambioRol(actualizado.id_usuario, actualizado.rol);
+    if (actualizado.email !== emailAnterior) await notificarCambioCorreo(actualizado.id_usuario);
+
+    return actualizado;
 };
 
 export const cambiarContrasenaService = async (id_usuario, contraseñaActual, contraseñaNueva) => {
@@ -95,6 +86,7 @@ export const cambiarContrasenaService = async (id_usuario, contraseñaActual, co
 
     const nuevaEncriptada = await bcrypt.hash(contraseñaNueva, 10);
     await usuarioRepository.update(id_usuario, { contraseña: nuevaEncriptada });
+    await notificarCambioContrasena(usuario.id_usuario);
 
     return true;
 };
