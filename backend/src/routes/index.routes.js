@@ -13,6 +13,7 @@ import reservaRoutes from "./reserva.routes.js";
 import estudio0Routes from "./estudio0.routes.js";
 import arriendoRoutes from "./arriendo.routes.js";
 import seguimientoRoutes from "./seguimiento.routes.js";
+import notificacionRoutes from "./notificacion.routes.js";
 
 const router = Router();
 
@@ -29,5 +30,6 @@ router.use("/reservas", reservaRoutes);
 router.use("/estudio0", estudio0Routes);
 router.use("/arriendos", arriendoRoutes);
 router.use("/seguidos", seguimientoRoutes);
+router.use("/notificaciones", notificacionRoutes);
 
 export default router;
