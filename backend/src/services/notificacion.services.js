@@ -1,14 +1,26 @@
 import { AppDataSource } from "../config/configDb.js";
 import NotificacionEntity from "../entities/notificacion.entity.js";
+import UsuarioEntity from "../entities/usuario.entity.js";
 
 const notificacionRepository = AppDataSource.getRepository(NotificacionEntity);
+const usuarioRepository = AppDataSource.getRepository(UsuarioEntity);
+
+export const ROLES_STAFF = ["Admin", "Fundador/a"];
+
+export const idsPorRol = async (roles = ROLES_STAFF) => {
+    const usuarios = await usuarioRepository.find({
+        where: roles.map((rol) => ({ rol })),
+        select: { id_usuario: true },
+    });
+    return usuarios.map((u) => u.id_usuario);
+};
 
 export const MAX_NOTIFICACIONES_POR_USUARIO = 100;
 
 const contarNoLeidas = (id_usuario) =>
     notificacionRepository.count({ where: { usuario: { id_usuario }, leida: false } });
 
-export const crearNotificacionService = async (id_usuario, { tipo, titulo, mensaje, enlace = null }) => {
+export const crearNotificacionService = async (id_usuario, { tipo, titulo, mensaje, enlace = null, clave = null }) => {
     try {
         if (!id_usuario) return null;
 
@@ -19,14 +31,28 @@ export const crearNotificacionService = async (id_usuario, { tipo, titulo, mensa
                 titulo: String(titulo).slice(0, 120),
                 mensaje: String(mensaje).slice(0, 300),
                 enlace,
+                clave,
             })
         );
 
         await limpiarAntiguas(id_usuario);
         return nueva;
     } catch (error) {
+        if (error.code === "23505") return null;
         console.error("No se pudo crear la notificación:", error.message);
         return null;
+    }
+};
+
+export const crearNotificacionParaVariosService = async (ids, datos) => {
+    for (const id of new Set(ids)) {
+        await crearNotificacionService(id, datos);
+    }
+};
+
+export const crearOActualizarParaVariosService = async (ids, datos) => {
+    for (const id of new Set(ids)) {
+        await crearOActualizarNoLeidaService(id, datos);
     }
 };
 
