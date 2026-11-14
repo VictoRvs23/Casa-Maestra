@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logoCasaMaestra from "../assets/logoCasaMaestra.png";
-import { IoIosNotifications } from "react-icons/io";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { useAuth } from "../context/AuthContext.jsx";
+import Notificaciones from "./Notificaciones.jsx";
 import "../styles/Tema.css";
 import "../styles/Navbar.css";
 
@@ -56,9 +56,7 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-right">
-                <button className="campana-btn">
-                    <IoIosNotifications size={24} />
-                </button>
+                {user && <Notificaciones />}
 
                 {user ? (
                     <div className="account-menu" ref={menuRef}>

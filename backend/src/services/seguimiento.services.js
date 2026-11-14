@@ -1,6 +1,7 @@
 import { AppDataSource } from "../config/configDb.js";
 import SeguimientoEntity from "../entities/seguimiento.entity.js";
 import ResidenteEntity from "../entities/residente.entity.js";
+import { notificarNuevoSeguidor } from "./notificacion.eventos.js";
 
 const seguimientoRepository = AppDataSource.getRepository(SeguimientoEntity);
 const residenteRepository = AppDataSource.getRepository(ResidenteEntity);
@@ -12,7 +13,7 @@ const buscarSeguimiento = (id_usuario, id_residente) =>
     seguimientoRepository.findOne({
         where: { usuario: { id_usuario }, residente: { id_residente } },
     });
-    
+
 export const getResumenSeguidoresService = async (slug) => {
     const residente = await residenteRepository.findOneBy({ slug });
     if (!residente) throw { status: 404, message: "No encontramos a este residente." };
@@ -44,7 +45,11 @@ export const seguirResidenteService = async (id_usuario, id_residente) => {
         throw error;
     }
 
-    return { id_residente, siguiendo: true, seguidores: await contarSeguidores(id_residente) };
+    const seguidores = await contarSeguidores(id_residente);
+
+    if (residente.id_usuario) await notificarNuevoSeguidor(residente.id_usuario, seguidores);
+
+    return { id_residente, siguiendo: true, seguidores };
 };
 
 export const dejarDeSeguirResidenteService = async (id_usuario, id_residente) => {
