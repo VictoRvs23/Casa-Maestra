@@ -7,6 +7,7 @@ import { connectDB } from "./config/configDb.js";
 import indexRoutes from "./routes/index.routes.js"; 
 import { PORT, HOST } from "./config/configEnv.js";
 import { createUsuarios } from "./config/InitDb.js";
+import { iniciarRecordatorios } from "./services/notificacion.recordatorios.js";
 
 const app = express();
 
@@ -27,10 +28,13 @@ app.get("/", (req, res) => {
 async function startServer() {
   try {
     await connectDB();
+    await createUsuarios();
 
     app.use("/uploads", express.static("uploads"));
     
     app.use("/api", indexRoutes);
+
+    iniciarRecordatorios();
 
     app.listen(PORT, () => {
         console.log ("\n-------------------------------------------");
