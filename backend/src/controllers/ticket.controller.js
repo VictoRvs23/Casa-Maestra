@@ -44,7 +44,7 @@ export const getTickets = async (req, res) => {
 
 export const updateTicket = async (req, res) => {
     try {
-        const ticket = await ticketService.updateTicketService(req.params.id_ticket, req.body);
+        const ticket = await ticketService.updateTicketService(req.params.id_ticket, req.body, req.usuario.id_usuario);
         res.status(200).json({ message: "Ticket actualizado", ticket });
     } catch (error) {
         if (error.status) return res.status(error.status).json({ message: error.message });
