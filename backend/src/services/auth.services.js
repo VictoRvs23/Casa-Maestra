@@ -3,6 +3,7 @@ import UsuarioEntity from "../entities/usuario.entity.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/configEnv.js";
+import { notificarBienvenida } from "./notificacion.eventos.js";
 
 const usuarioRepository = AppDataSource.getRepository(UsuarioEntity);
 
@@ -63,6 +64,8 @@ export const registroService = async ({ nombre_usuario, nombre, apellido, email,
     });
 
     const usuarioGuardado = await usuarioRepository.save(nuevoUsuario);
+
+    await notificarBienvenida(usuarioGuardado.id_usuario, usuarioGuardado.nombre);
 
     const token = jwt.sign(
         {
