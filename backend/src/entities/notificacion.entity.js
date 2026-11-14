@@ -35,6 +35,11 @@ const NotificacionEntity = new EntitySchema({
             type: "boolean",
             default: false,
         },
+        clave: {
+            type: "varchar",
+            length: 80,
+            nullable: true,
+        },
         created_at: {
             type: "timestamp",
             createDate: true,
@@ -50,6 +55,7 @@ const NotificacionEntity = new EntitySchema({
         },
     },
     indices: [{ name: "IDX_notificacion_usuario_leida", columns: ["usuario", "leida"] }],
+    uniques: [{ name: "UQ_notificacion_usuario_clave", columns: ["usuario", "clave"] }],
 });
 
 export default NotificacionEntity;
