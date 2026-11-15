@@ -1,14 +1,11 @@
 "use strict";
-import fs from "fs";
 import * as residenteService from "../services/residente.services.js";
 
-const descartarArchivoSubido = (req) => {
-    if (req.file) fs.unlink(req.file.path, () => {});
-};
+const esStaff = (req) => ["Fundador/a", "Admin"].includes(req.usuario?.rol);
 
 export const getResidentes = async (req, res) => {
     try {
-        const resultado = await residenteService.getResidentesService(req.query);
+        const resultado = await residenteService.getResidentesService(req.query, { esStaff: esStaff(req) });
         res.status(200).json(resultado);
     } catch (error) {
         console.error("Error en getResidentes:", error);
@@ -18,7 +15,9 @@ export const getResidentes = async (req, res) => {
 
 export const getResidente = async (req, res) => {
     try {
-        const residente = await residenteService.getResidenteService(req.params.id_residente);
+        const residente = await residenteService.getResidenteService(req.params.id_residente, {
+            esStaff: esStaff(req),
+        });
         res.status(200).json(residente);
     } catch (error) {
         if (error.status) return res.status(error.status).json({ message: error.message });
@@ -27,56 +26,11 @@ export const getResidente = async (req, res) => {
     }
 };
 
-export const getCuentasDisponibles = async (req, res) => {
-    try {
-        const cuentas = await residenteService.getCuentasDisponiblesService(req.query.id_residente);
-        res.status(200).json({ cuentas });
-    } catch (error) {
-        console.error("Error en getCuentasDisponibles:", error);
-        res.status(500).json({ message: "Error interno al obtener las cuentas disponibles" });
-    }
-};
-
-export const createResidente = async (req, res) => {
-    try {
-        const data = { ...req.body };
-
-        if (req.file) {
-            data.imagen = `/uploads/residentes/${req.file.filename}`;
-        }
-
-        const residente = await residenteService.createResidenteService(data);
-
-        if (!residente || !residente.id_residente) {
-            return res.status(500).json({ message: "El residente no se pudo guardar correctamente." });
-        }
-
-        res.status(201).json({ message: "Residente creado", residente });
-    } catch (error) {
-        descartarArchivoSubido(req);
-        if (error.status) return res.status(error.status).json({ message: error.message });
-        console.error("Error en createResidente:", error);
-        res.status(500).json({ message: "Error interno al crear el residente" });
-    }
-};
-
 export const updateResidente = async (req, res) => {
     try {
-        const data = { ...req.body };
-
-        if (req.file) {
-            data.imagen = `/uploads/residentes/${req.file.filename}`;
-        }
-
-        const residente = await residenteService.updateResidenteService(req.params.id_residente, data);
-
-        if (!residente || !residente.id_residente) {
-            return res.status(500).json({ message: "Los cambios no se pudieron guardar correctamente." });
-        }
-
+        const residente = await residenteService.updateResidenteService(req.params.id_residente, req.body);
         res.status(200).json({ message: "Residente actualizado", residente });
     } catch (error) {
-        descartarArchivoSubido(req);
         if (error.status) return res.status(error.status).json({ message: error.message });
         console.error("Error en updateResidente:", error);
         res.status(500).json({ message: "Error interno al actualizar el residente" });
