@@ -24,6 +24,7 @@ import {
   FUENTES,
   COLORES_ACENTO,
   COLORES_FONDO,
+  PALETAS,
   MAX_BLOQUES,
   TIPOS_BLOQUE,
   crearBloque,
@@ -50,6 +51,7 @@ const AYUDA_BLOQUE = {
 };
 
 const PESTANAS = [
+  { id: "tarjeta", label: "Tarjeta" },
   { id: "bloques", label: "Bloques" },
   { id: "estilo", label: "Estilo" },
   { id: "resumen", label: "Resumen" },
@@ -58,7 +60,19 @@ const PESTANAS = [
 const TIPOS_IMAGEN = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 5 * 1024 * 1024;
 
-const aFormulario = (pagina) => ({
+const slugDe = (texto = "") =>
+  String(texto)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "residente";
+
+const aFormulario = (pagina, residente) => ({
+  nombre: residente.nombre,
+  descripcion: residente.descripcion || "",
   publicada: pagina.publicada,
   color_acento: pagina.color_acento,
   color_fondo: pagina.color_fondo,
@@ -106,7 +120,7 @@ export default function MiPagina() {
   const [eliminado, setEliminado] = useState(null);
   const temporizadorDeshacer = useRef(null);
 
-  const [pestana, setPestana] = useState("bloques");
+  const [pestana, setPestana] = useState("tarjeta");
   const [panelAbierto, setPanelAbierto] = useState(false);
   const [nuevoId, setNuevoId] = useState(null);
   const [arrastrandoId, setArrastrandoId] = useState(null);
@@ -118,7 +132,7 @@ export default function MiPagina() {
     getMiPagina()
       .then(({ pagina, residente, estadisticas }) => {
         if (cancelado) return;
-        const inicial = aFormulario(pagina);
+        const inicial = aFormulario(pagina, residente);
         setInfo({ residente });
         setEstadisticas(estadisticas);
         setForm(inicial);
@@ -292,15 +306,26 @@ export default function MiPagina() {
   };
 
   const handleGuardar = async () => {
+    if (form.publicada && !form.descripcion.trim()) {
+      setPestana("tarjeta");
+      alerta("Para publicar, escribe una descripción corta de tu trabajo. Aparece en tu tarjeta de Residentes.", {
+        tipo: "error",
+      });
+      return;
+    }
+
     setGuardando(true);
     try {
-      const { pagina } = await updateMiPagina(form);
-      const nuevo = aFormulario(pagina);
+      const { pagina, residente: residenteGuardado } = await updateMiPagina(form);
+      const nuevo = aFormulario(pagina, residenteGuardado);
       setForm(nuevo);
       setGuardado(nuevo);
       borrarBorrador(info.residente.slug);
+      setInfo({ residente: residenteGuardado });
       alerta(
-        nuevo.publicada ? "Tu página se guardó y está publicada." : "Tu página se guardó como borrador.",
+        nuevo.publicada
+          ? "Tu página se guardó y está publicada. Ya puedes copiar el enlace para compartirla."
+          : "Tu página se guardó como borrador. Solo tú puedes verla.",
         { tipo: "exito" }
       );
     } catch (err) {
@@ -308,6 +333,17 @@ export default function MiPagina() {
       alerta(err.response?.data?.message || "No se pudo guardar tu página.", { tipo: "error" });
     } finally {
       setGuardando(false);
+    }
+  };
+
+  const copiarEnlace = async () => {
+    const enlace = `${window.location.origin}/residentes/${info.residente.slug}`;
+    try {
+      await navigator.clipboard.writeText(enlace);
+      alerta("Enlace copiado. Ya puedes compartirlo.", { tipo: "exito" });
+    } catch {
+      // Sin permiso para el portapapeles: se muestra el enlace para copiarlo a mano.
+      window.prompt("Copia el enlace de tu página:", enlace);
     }
   };
 
@@ -341,7 +377,7 @@ export default function MiPagina() {
   }
 
   const { residente } = info;
-  const iniciales = residente.nombre
+  const iniciales = (form.nombre || residente.nombre)
     .split(" ")
     .filter(Boolean)
     .slice(0, 2)
@@ -368,6 +404,11 @@ export default function MiPagina() {
               Ver mi página
             </Link>
           )}
+          {guardado.publicada && (
+            <button type="button" className="mipagina-copiar" onClick={copiarEnlace}>
+              Copiar enlace
+            </button>
+          )}
 
           <div className="mipagina-publicar">
             <span>{form.publicada ? "Publicada" : "Borrador"}</span>
@@ -388,6 +429,14 @@ export default function MiPagina() {
           </button>
         </div>
       </div>
+
+      <p className="mipagina-aviso-publicacion" role="note">
+        {form.publicada && guardado.publicada && "Tu página está publicada: cualquier persona con el enlace puede verla."}
+        {form.publicada && !guardado.publicada && "Activaste «Publicada», pero falta guardar para que el público la vea."}
+        {!form.publicada && !guardado.publicada && "Tu página está en borrador: solo tú puedes verla. Activa «Publicada» y guarda para mostrarla."}
+        {!form.publicada && guardado.publicada && "Al guardar, tu página dejará de verse para el público."}
+        {!residente.activa && " El equipo ocultó tu tarjeta temporalmente: no aparece en Residentes."}
+      </p>
 
       <div className="mipagina-editor">
         {/* SideBar Tools */}
@@ -422,6 +471,52 @@ export default function MiPagina() {
               ))}
             </div>
 
+            {/* Tarjeta */}
+            {pestana === "tarjeta" && (
+              <div role="tabpanel" id="mp-panel-tarjeta" aria-labelledby="mp-tab-tarjeta">
+                <p className="lateral-ayuda">
+                  Así te verá la gente en Residentes. Tu página se publica junto con tu tarjeta, así que ambas deben
+                  estar completas.
+                </p>
+
+                <div className="tarjeta-campo">
+                  <label htmlFor="tarjeta-nombre">Nombre artístico</label>
+                  <input
+                    id="tarjeta-nombre"
+                    type="text"
+                    value={form.nombre}
+                    maxLength={80}
+                    onChange={(e) => cambiar({ nombre: e.target.value })}
+                  />
+                  <small>
+                    Tu enlace será <strong>/residentes/{slugDe(form.nombre)}</strong>.
+                    {slugDe(form.nombre) !== residente.slug && " Si lo cambias, los enlaces anteriores seguirán funcionando."}
+                  </small>
+                </div>
+
+                <div className="tarjeta-campo">
+                  <label htmlFor="tarjeta-descripcion">Descripción corta</label>
+                  <input
+                    id="tarjeta-descripcion"
+                    type="text"
+                    value={form.descripcion}
+                    maxLength={150}
+                    placeholder="Ej: Piercings y Tatuajes"
+                    onChange={(e) => cambiar({ descripcion: e.target.value })}
+                  />
+                  <small>
+                    {form.descripcion.length}/150 · Obligatoria para publicar. Tu foto de perfil se usa como imagen de la
+                    tarjeta.
+                  </small>
+                </div>
+
+                <p className="tarjeta-requisitos" role="note">
+                  Para publicar necesitas: nombre artístico {form.nombre.trim() ? "✓" : "✗"} · descripción{" "}
+                  {form.descripcion.trim() ? "✓" : "✗"}
+                </p>
+              </div>
+            )}
+
             {/* Bloques */}
             {pestana === "bloques" && (
               <div role="tabpanel" id="mp-panel-bloques" aria-labelledby="mp-tab-bloques">
@@ -449,6 +544,29 @@ export default function MiPagina() {
             {/* Estilo */}
             {pestana === "estilo" && (
               <div role="tabpanel" id="mp-panel-estilo" aria-labelledby="mp-tab-estilo">
+                <h2 className="lateral-subtitulo">Paletas listas</h2>
+                <div className="mipagina-paletas">
+                  {PALETAS.map((pal) => {
+                    const activa = form.color_acento === pal.acento && form.color_fondo === pal.fondo;
+                    return (
+                      <button
+                        type="button"
+                        key={pal.nombre}
+                        className={`paleta ${activa ? "activa" : ""}`}
+                        aria-pressed={activa}
+                        onClick={() => cambiar({ color_acento: pal.acento, color_fondo: pal.fondo })}
+                      >
+                        <span
+                          className="paleta-muestra"
+                          style={{ background: `linear-gradient(135deg, ${pal.fondo} 50%, ${pal.acento} 50%)` }}
+                        />
+                        <span>{pal.nombre}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="mipagina-nota">También puedes personalizar cada color aquí abajo.</p>
+
                 <h2 className="lateral-subtitulo">Color de detalles</h2>
                 <div className="mipagina-swatches">
                   {COLORES_ACENTO.map((c) => (
@@ -549,8 +667,8 @@ export default function MiPagina() {
           <PaginaLienzo
             editor
             estilo={form}
-            nombre={residente.nombre}
-            descripcion={residente.descripcion}
+            nombre={form.nombre}
+            descripcion={form.descripcion}
             avatarUrl={form.foto ? getImagenUrl(form.foto) : null}
             iniciales={iniciales}
             accionPortada={
