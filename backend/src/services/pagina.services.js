@@ -6,6 +6,7 @@ import ResidenteEntity from "../entities/residente.entity.js";
 import UsuarioEntity from "../entities/usuario.entity.js";
 import SeguimientoEntity from "../entities/seguimiento.entity.js";
 import { PREFIJO_URL_PAGINA } from "../config/paginaEstilos.js";
+import { asegurarTarjetaDeUsuario, buscarPorSlug, cambiosPorNombre } from "./tarjeta.services.js";
 
 const paginaRepository = AppDataSource.getRepository(PaginaResidenteEntity);
 const residenteRepository = AppDataSource.getRepository(ResidenteEntity);
@@ -46,14 +47,15 @@ const urlsDePagina = ({ portada, foto, bloques }) => {
 
 const getResidenteDeUsuario = async (id_usuario) => {
     const residente = await residenteRepository.findOneBy({ id_usuario });
+    if (residente) return residente;
 
-    if (!residente) {
-        throw {
-            status: 404,
-            message: "Tu cuenta aún no está asociada a una tarjeta de residente. Pídele al Fundador/a que la vincule.",
-        };
-    }
-    return residente;
+    const usuario = await usuarioRepository.findOneBy({ id_usuario });
+    if (usuario?.rol === "Residente") return (await asegurarTarjetaDeUsuario(usuario)).residente;
+
+    throw {
+        status: 404,
+        message: "Tu cuenta no tiene una página de residente. Se crea cuando el equipo te asigna el rol Residente.",
+    };
 };
 
 const getOCrearPagina = async (residente) => {
@@ -66,6 +68,14 @@ const getOCrearPagina = async (residente) => {
     }
     return pagina;
 };
+
+const datosDeResidente = (r) => ({
+    id_residente: r.id_residente,
+    nombre: r.nombre,
+    descripcion: r.descripcion,
+    slug: r.slug,
+    activa: r.activa,
+});
 
 export const getMiPaginaService = async (id_usuario) => {
     const residente = await getResidenteDeUsuario(id_usuario);
@@ -92,12 +102,7 @@ export const getMiPaginaService = async (id_usuario) => {
             seguidores,
             agendas: null,
         },
-        residente: {
-            id_residente: residente.id_residente,
-            nombre: residente.nombre,
-            descripcion: residente.descripcion,
-            slug: residente.slug,
-        },
+        residente: datosDeResidente(residente),
         usuario,
     };
 };
@@ -106,7 +111,9 @@ export const updateMiPaginaService = async (id_usuario, data) => {
     const residente = await getResidenteDeUsuario(id_usuario);
     const pagina = await getOCrearPagina(residente);
 
-    const resultado = { ...pagina, ...data };
+    const { nombre, descripcion, ...cambiosPagina } = data;
+
+    const resultado = { ...pagina, ...cambiosPagina };
     const despues = urlsDePagina(resultado);
 
     const prefijoPropio = `${PREFIJO_URL_PAGINA}pagina-${id_usuario}-`;
@@ -114,14 +121,33 @@ export const updateMiPaginaService = async (id_usuario, data) => {
         throw { status: 400, message: "Una de las imágenes no pertenece a tu cuenta." };
     }
 
+    const cambiosTarjeta = {};
+    if (nombre !== undefined) Object.assign(cambiosTarjeta, await cambiosPorNombre(residente, nombre));
+    if (descripcion !== undefined) cambiosTarjeta.descripcion = String(descripcion).trim() || null;
+
+    if (resultado.publicada) {
+        const descripcionFinal = "descripcion" in cambiosTarjeta ? cambiosTarjeta.descripcion : residente.descripcion;
+        if (!descripcionFinal) {
+            throw {
+                status: 400,
+                message: "Para publicar, escribe una descripción corta de tu trabajo (aparece en tu tarjeta).",
+            };
+        }
+    }
+
     const antes = urlsDePagina(pagina);
 
-    Object.assign(pagina, data);
+    if (Object.keys(cambiosTarjeta).length > 0) {
+        await residenteRepository.update(residente.id_residente, cambiosTarjeta);
+    }
+
+    Object.assign(pagina, cambiosPagina);
     const guardada = await paginaRepository.save(pagina);
 
     antes.filter((url) => !despues.includes(url)).forEach(borrarImagenLocal);
 
-    return guardada;
+    const residenteActual = await residenteRepository.findOneBy({ id_residente: residente.id_residente });
+    return { pagina: guardada, residente: datosDeResidente(residenteActual) };
 };
 
 export const limpiarImagenesDeResidenteService = async (id_residente) => {
@@ -130,16 +156,20 @@ export const limpiarImagenesDeResidenteService = async (id_residente) => {
     urlsDePagina(pagina).forEach(borrarImagenLocal);
 };
 
-export const getPaginaPublicaService = async (slug) => {
-    const residente = await residenteRepository.findOneBy({ slug });
-
+const getVisiblePorSlug = async (slug) => {
+    const residente = await buscarPorSlug(slug);
     if (!residente) throw { status: 404, message: "No encontramos a este residente." };
 
     const pagina = await paginaRepository.findOneBy({ id_residente: residente.id_residente });
 
-    if (!pagina || !pagina.publicada) {
+    if (!residente.activa || !pagina || !pagina.publicada) {
         throw { status: 404, message: "Esta página aún no está disponible." };
     }
+    return { residente, pagina };
+};
+
+export const getPaginaPublicaService = async (slug) => {
+    const { residente, pagina } = await getVisiblePorSlug(slug);
 
     return {
         residente: {
@@ -159,11 +189,7 @@ export const getPaginaPublicaService = async (slug) => {
 };
 
 export const registrarVisitaService = async (slug, id_usuario_visitante) => {
-    const residente = await residenteRepository.findOneBy({ slug });
-    if (!residente) throw { status: 404, message: "No encontramos a este residente." };
-
-    const pagina = await paginaRepository.findOneBy({ id_residente: residente.id_residente });
-    if (!pagina || !pagina.publicada) throw { status: 404, message: "Esta página aún no está disponible." };
+    const { residente } = await getVisiblePorSlug(slug);
 
     if (id_usuario_visitante && residente.id_usuario === id_usuario_visitante) return { contada: false };
 

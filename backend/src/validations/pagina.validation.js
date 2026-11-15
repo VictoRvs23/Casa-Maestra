@@ -107,6 +107,14 @@ const bloqueRedes = Joi.object({
 
 export const ActualizarPaginaValidation = Joi.object({
     publicada: Joi.boolean(),
+    nombre: Joi.string().trim().min(2).max(80).messages({
+        "string.empty": "El nombre artístico es obligatorio.",
+        "string.min": "El nombre artístico debe tener al menos 2 caracteres.",
+        "string.max": "El nombre artístico debe tener máximo 80 caracteres.",
+    }),
+    descripcion: Joi.string().trim().allow("").max(150).messages({
+        "string.max": "La descripción debe tener máximo 150 caracteres.",
+    }),
     color_acento: color,
     color_fondo: color,
     fuente: Joi.string().valid(...FUENTES_PAGINA).messages({

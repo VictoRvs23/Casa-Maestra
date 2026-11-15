@@ -2,6 +2,7 @@ import { AppDataSource } from "../config/configDb.js";
 import UsuarioEntity from "../entities/usuario.entity.js";
 import bcrypt from "bcrypt";
 import { ILike } from "typeorm";
+import { sincronizarTarjetaConRol, ocultarTarjetaDeUsuario } from "./tarjeta.services.js";
 import { notificarCambioContrasena, notificarCambioCorreo, notificarCambioRol } from "./notificacion.eventos.js";
 
 const usuarioRepository = AppDataSource.getRepository(UsuarioEntity);
@@ -68,7 +69,10 @@ export const updateUsuarioService = async (id_usuario, data) => {
     await usuarioRepository.update(id_usuario, data);
     const actualizado = await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
 
-    if (actualizado.rol !== rolAnterior) await notificarCambioRol(actualizado.id_usuario, actualizado.rol);
+    if (actualizado.rol !== rolAnterior) {
+        await notificarCambioRol(actualizado.id_usuario, actualizado.rol);
+        await sincronizarTarjetaConRol(actualizado, rolAnterior);
+    }
     if (actualizado.email !== emailAnterior) await notificarCambioCorreo(actualizado.id_usuario);
 
     return actualizado;
@@ -95,6 +99,7 @@ export const deleteUsuarioService = async (id_usuario) => {
     const usuario = await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
 
     if (!usuario) throw { status: 404, message: "Usuario no encontrado" };
+    await ocultarTarjetaDeUsuario(usuario.id_usuario);
     await usuarioRepository.delete(id_usuario);
     return true;
 };

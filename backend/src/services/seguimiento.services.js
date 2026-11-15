@@ -2,6 +2,7 @@ import { AppDataSource } from "../config/configDb.js";
 import SeguimientoEntity from "../entities/seguimiento.entity.js";
 import ResidenteEntity from "../entities/residente.entity.js";
 import { notificarNuevoSeguidor } from "./notificacion.eventos.js";
+import { buscarPorSlug, esVisible } from "./tarjeta.services.js";
 
 const seguimientoRepository = AppDataSource.getRepository(SeguimientoEntity);
 const residenteRepository = AppDataSource.getRepository(ResidenteEntity);
@@ -15,8 +16,10 @@ const buscarSeguimiento = (id_usuario, id_residente) =>
     });
 
 export const getResumenSeguidoresService = async (slug) => {
-    const residente = await residenteRepository.findOneBy({ slug });
-    if (!residente) throw { status: 404, message: "No encontramos a este residente." };
+    const residente = await buscarPorSlug(slug);
+    if (!residente || !(await esVisible(residente))) {
+        throw { status: 404, message: "No encontramos a este residente." };
+    }
 
     return {
         id_residente: residente.id_residente,
@@ -26,7 +29,9 @@ export const getResumenSeguidoresService = async (slug) => {
 
 export const seguirResidenteService = async (id_usuario, id_residente) => {
     const residente = await residenteRepository.findOneBy({ id_residente });
-    if (!residente) throw { status: 404, message: "No encontramos a este residente." };
+    if (!residente || !(await esVisible(residente))) {
+        throw { status: 404, message: "No encontramos a este residente." };
+    }
 
     if (residente.id_usuario === id_usuario) {
         throw { status: 400, message: "No puedes seguir tu propia página." };
@@ -68,7 +73,12 @@ export const getMisSeguidosService = async (id_usuario) => {
         order: { created_at: "DESC" },
     });
 
-    return seguimientos.map((s) => ({
+    const visibles = [];
+    for (const s of seguimientos) {
+        if (await esVisible(s.residente)) visibles.push(s);
+    }
+
+    return visibles.map((s) => ({
         id_seguimiento: s.id_seguimiento,
         desde: s.created_at,
         residente: {

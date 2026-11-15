@@ -89,6 +89,15 @@ export const notificarBienvenida = (id_usuario, nombre) =>
         clave: "bienvenida",
     });
 
+export const notificarTarjetaCreada = (id_usuario) =>
+    crearNotificacionService(id_usuario, {
+        tipo: "tarjeta_creada",
+        titulo: "Ya tienes tu página de residente",
+        mensaje: "Elige tu nombre artístico, escribe una descripción y publícala para aparecer en Residentes.",
+        enlace: "/mi-pagina",
+        clave: "tarjeta_creada",
+    });
+
 export const recordatorioReserva = (id_usuario, reserva) =>
     crearNotificacionService(id_usuario, {
         tipo: "reserva_recordatorio",
