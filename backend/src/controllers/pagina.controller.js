@@ -15,8 +15,8 @@ export const getMiPagina = async (req, res) => {
 
 export const updateMiPagina = async (req, res) => {
     try {
-        const pagina = await paginaService.updateMiPaginaService(req.usuario.id_usuario, req.body);
-        res.status(200).json({ message: "Página actualizada", pagina });
+        const { pagina, residente } = await paginaService.updateMiPaginaService(req.usuario.id_usuario, req.body);
+        res.status(200).json({ message: "Página actualizada", pagina, residente });
     } catch (error) {
         if (error.status) return res.status(error.status).json({ message: error.message });
         console.error("Error en updateMiPagina:", error);
