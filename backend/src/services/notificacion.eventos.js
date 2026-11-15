@@ -84,7 +84,7 @@ export const notificarBienvenida = (id_usuario, nombre) =>
     crearNotificacionService(id_usuario, {
         tipo: "bienvenida",
         titulo: `¡Bienvenido/a a Casa Maestra, ${nombre}!`,
-        mensaje: "Conoce a nuestros residentes, reserva el Estudio 0 o escríbenos desde Soporte si necesitas ayuda.",
+        mensaje: "Conoce a nuestros residentes, reserva el Taller 0 o escríbenos desde Soporte si necesitas ayuda.",
         enlace: "/residentes",
         clave: "bienvenida",
     });
@@ -102,7 +102,7 @@ export const recordatorioReserva = (id_usuario, reserva) =>
     crearNotificacionService(id_usuario, {
         tipo: "reserva_recordatorio",
         titulo: "Tu reserva es mañana",
-        mensaje: `Te recordamos tu reserva en el Estudio 0: ${detalleReserva(reserva)}.`,
+        mensaje: `Te recordamos tu reserva en el Taller 0: ${detalleReserva(reserva)}.`,
         enlace: "/perfil?tab=reservas",
         clave: `recordatorio:${reserva.id_reserva}`,
     });
@@ -111,9 +111,9 @@ export const notificarStaffReservaNueva = async (id_actor, reserva) => {
     const quien = await nombreDe(id_actor);
     await crearNotificacionParaVariosService(await alStaff(id_actor), {
         tipo: "staff_reserva_nueva",
-        titulo: "Nueva reserva en el Estudio 0",
+        titulo: "Nueva reserva en el Taller 0",
         mensaje: `${quien} reservó: ${detalleReserva(reserva)}.`,
-        enlace: "/estudio0",
+        enlace: "/taller0",
     });
 };
 
@@ -121,9 +121,9 @@ export const notificarStaffReservaCancelada = async (id_actor, id_duenio, reserv
     const quien = await nombreDe(id_duenio);
     await crearNotificacionParaVariosService(await alStaff(id_actor), {
         tipo: "staff_reserva_cancelada",
-        titulo: "Reserva cancelada en el Estudio 0",
+        titulo: "Reserva cancelada en el Taller 0",
         mensaje: `Se canceló la reserva de ${quien}: ${detalleReserva(reserva)}.`,
-        enlace: "/estudio0",
+        enlace: "/taller0",
     });
 };
 
@@ -131,9 +131,9 @@ export const notificarNuevosHorarios = async () => {
     const clientes = await idsPorRol(["Cliente"]);
     await crearOActualizarParaVariosService(clientes, {
         tipo: "nuevos_horarios",
-        titulo: "Hay nuevos horarios en el Estudio 0",
+        titulo: "Hay nuevos horarios en el Taller 0",
         mensaje: "Se habilitaron nuevas horas para reservar. ¡Revisa la disponibilidad!",
-        enlace: "/estudio0",
+        enlace: "/taller0",
     });
 };
 
