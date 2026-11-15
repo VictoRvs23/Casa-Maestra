@@ -35,7 +35,7 @@ export default function Estudio0() {
       .then(setEstudio)
       .catch((err) => {
         console.error(err);
-        setError(err.response?.data?.message || "No se pudo cargar el Estudio 0.");
+        setError(err.response?.data?.message || "No se pudo cargar el Taller 0.");
       })
       .finally(() => setLoading(false));
   }, []);
@@ -69,7 +69,7 @@ export default function Estudio0() {
       const { estudio: actualizado } = await editarEstudio0(estudio.id_estudio, fd);
       setEstudio(actualizado);
       setForm(null);
-      alerta("El Estudio 0 se actualizó correctamente.", { tipo: "exito" });
+      alerta("El Taller 0 se actualizó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
       alerta(err.response?.data?.message || "No se pudo guardar la información.", { tipo: "error" });
@@ -91,19 +91,19 @@ export default function Estudio0() {
 
   const set = (campo) => (e) => setForm({ ...form, [campo]: e.target.value });
 
-  const irAAgenda = () => navigate("/estudio0/agenda");
+  const irAAgenda = () => navigate("/taller0/agenda");
 
   return (
     <div className="estudios-page">
       <Navbar />
 
       <div className="estudios-hero">
-        <h1>Estudio 0</h1>
+        <h1>Taller 0</h1>
         <p>Reserva el espacio adecuado para tu oficio: una sala equipada, por hora.</p>
       </div>
 
       <div className="estudios-wrap">
-        {loading && <p className="estado-msg">Cargando Estudio 0...</p>}
+        {loading && <p className="estado-msg">Cargando Taller 0...</p>}
         {!loading && error && <p className="estado-msg estado-error">{error}</p>}
 
         {!loading && estudio && (
@@ -113,7 +113,7 @@ export default function Estudio0() {
                 className="estudio-img"
                 style={estudio.imagen ? { backgroundImage: `url(${getImagenUrl(estudio.imagen)})` } : undefined}
               >
-                <span className="estudio-badge">Estudio 0</span>
+                <span className="estudio-badge">Taller 0</span>
                 <span className={`estado-icono ${estudio.disponible ? "libre" : "ocupado"}`}>
                   {estudio.disponible ? <Icono icon={CircleCheck} size={22} /> : <Icono icon={CircleX} size={22} />}
                 </span>
@@ -147,7 +147,7 @@ export default function Estudio0() {
 
                 <div className="admin-actions">
                   {user && (
-                    <button onClick={() => navigate("/estudio0/reservas")}>
+                    <button onClick={() => navigate("/taller0/reservas")}>
                       {esGestor ? "Ver reservas" : "Mis reservas"}
                     </button>
                   )}
@@ -156,7 +156,7 @@ export default function Estudio0() {
                       <button onClick={abrirEdicion}>
                         <Icono icon={Pencil} size={18} /> Editar
                       </button>
-                      <button onClick={() => navigate("/estudio0/horarios")}>Gestionar horarios</button>
+                      <button onClick={() => navigate("/taller0/horarios")}>Gestionar horarios</button>
                     </>
                   )}
                 </div>
@@ -171,7 +171,7 @@ export default function Estudio0() {
       {form && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setForm(null)}>
           <div className="modal-box">
-            <h2>Editar Estudio 0</h2>
+            <h2>Editar Taller 0</h2>
             <form onSubmit={handleGuardar}>
               <div className="form-group">
                 <label>Descripción</label>
