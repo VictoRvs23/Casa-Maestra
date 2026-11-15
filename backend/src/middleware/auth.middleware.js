@@ -29,3 +29,27 @@ export function verifyToken(req, res, next) {
         });
     }
 }
+
+export const authorizeRoles = (...roles_permitidos) => {
+    return (req, res, next) => {
+        if (!req.usuario || !roles_permitidos.includes(req.usuario.rol)) {
+            return res.status(403).json({ 
+                message: `Acceso denegado: Esta acción requiere rol de ${roles_permitidos.join(" o ")}.` 
+            });
+        }
+        return next();
+    };
+};
+
+export function identificarSiHay(req, res, next) {
+    try {
+        const authHeader = req.headers["authorization"];
+        if (authHeader) {
+            const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader;
+            const decoded = jwt.verify(token, JWT_SECRET);
+            req.usuario = { id_usuario: decoded.id_usuario, rol: decoded.rol };
+        }
+    } catch {
+    }
+    next();
+}
