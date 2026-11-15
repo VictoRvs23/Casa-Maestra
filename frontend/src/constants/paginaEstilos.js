@@ -26,6 +26,15 @@ export const COLORES_FONDO = [
   { nombre: "Rosa suave", hex: "#f5dddb" },
 ];
 
+export const PALETAS = [
+  { nombre: "Clásica", acento: "#845736", fondo: "#f6f1e8" },
+  { nombre: "Bosque", acento: "#1d3d2a", fondo: "#dcece3" },
+  { nombre: "Terracota", acento: "#a3523a", fondo: "#ecdfc7" },
+  { nombre: "Mostaza", acento: "#8a6414", fondo: "#fffcf5" },
+  { nombre: "Pizarra", acento: "#3b5565", fondo: "#dbe6ec" },
+  { nombre: "Ciruela", acento: "#6d3b52", fondo: "#f5dddb" },
+];
+
 export const MAX_BLOQUES = 30;
 
 export const CLAVES_REDES = ["instagram", "tiktok", "facebook", "youtube", "whatsapp", "email"];
@@ -43,13 +52,73 @@ export const TIPOS_BLOQUE = [
   { tipo: "galeria", label: "Galería" },
   { tipo: "separador", label: "Separador" },
   { tipo: "redes", label: "Redes" },
+  { tipo: "video", label: "Video" },
 ];
 
-export const ESTADISTICAS_EJEMPLO = [
-  { etiqueta: "Visitas del mes", valor: 130 },
-  { etiqueta: "Agendas generadas", valor: 35 },
-  { etiqueta: "Seguidores", valor: 86 },
+export const TAMANOS_BLOQUE = [
+  { valor: "pequeno", label: "Pequeño" },
+  { valor: "mediano", label: "Mediano" },
+  { valor: "grande", label: "Grande" },
 ];
+
+export const analizarVideo = (texto) => {
+  const enlace = (texto || "").trim();
+  if (!enlace) return { motivo: "vacio" };
+
+  let url;
+  try {
+    url = new URL(/^https?:\/\//i.test(enlace) ? enlace : `https://${enlace}`);
+  } catch {
+    return { motivo: "invalido" };
+  }
+
+  const host = url.hostname.replace(/^(www\.|m\.)/, "");
+  const partes = url.pathname.split("/").filter(Boolean);
+  const idYoutube = /^[\w-]{11}$/;
+  const youtube = (id) =>
+    id && idYoutube.test(id)
+      ? { src: `https://www.youtube-nocookie.com/embed/${id}`, formato: "horizontal" }
+      : { motivo: "invalido" };
+
+  if (host === "youtu.be") return youtube(partes[0]);
+
+  if (host === "youtube.com") {
+    const id = partes[0] === "watch" ? url.searchParams.get("v") : ["shorts", "embed"].includes(partes[0]) ? partes[1] : null;
+    return youtube(id);
+  }
+
+  if (host === "vimeo.com" || host === "player.vimeo.com") {
+    const id = partes.find((p) => /^\d+$/.test(p));
+    return id ? { src: `https://player.vimeo.com/video/${id}`, formato: "horizontal" } : { motivo: "invalido" };
+  }
+
+  if (host === "instagram.com") {
+    const i = partes.findIndex((p) => ["p", "reel", "tv"].includes(p));
+    const codigo = i >= 0 ? partes[i + 1] : null;
+    return codigo && /^[\w-]{5,30}$/.test(codigo)
+      ? { src: `https://www.instagram.com/${partes[i]}/${codigo}/embed`, formato: "instagram" }
+      : { motivo: "invalido" };
+  }
+
+  if (host === "tiktok.com") {
+    if (partes[0] === "t") return { motivo: "tiktok-corto" };
+    const i = partes.indexOf("video");
+    const id = i >= 0 ? partes[i + 1] : null;
+    return id && /^\d{10,25}$/.test(id)
+      ? { src: `https://www.tiktok.com/embed/v2/${id}`, formato: "vertical" }
+      : { motivo: "invalido" };
+  }
+
+  if (host === "vm.tiktok.com" || host === "vt.tiktok.com") return { motivo: "tiktok-corto" };
+
+  return { motivo: "invalido" };
+};
+
+export const MENSAJES_VIDEO = {
+  invalido: "Ese enlace no parece de YouTube, Vimeo, Instagram ni TikTok.",
+  "tiktok-corto":
+    "Ese es un enlace corto de TikTok. Abre el video en el navegador y copia la dirección larga (tiktok.com/@usuario/video/…).",
+};
 
 const luminancia = (hex) => {
   const limpio = (hex || "").replace("#", "");
@@ -81,13 +150,15 @@ export const crearBloque = (tipo) => {
     case "texto":
       return { id, tipo, contenido: "" };
     case "imagen":
-      return { id, tipo, url: null, alt: "" };
+      return { id, tipo, url: null, alt: "", tamano: "grande" };
     case "galeria":
       return { id, tipo, imagenes: [null, null, null] };
     case "separador":
       return { id, tipo };
     case "redes":
       return { id, tipo, ...REDES_VACIAS };
+    case "video":
+      return { id, tipo, url: "", tamano: "grande" };
     default:
       return null;
   }

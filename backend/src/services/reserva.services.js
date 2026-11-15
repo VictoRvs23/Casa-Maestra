@@ -13,6 +13,13 @@ import {
     normalizarHora,
     validarRango,
 } from "../helpers/horarios.helper.js";
+import {
+    detalleReserva,
+    notificarReservaConfirmada,
+    notificarReservaCancelada,
+    notificarStaffReservaNueva,
+    notificarStaffReservaCancelada,
+} from "./notificacion.eventos.js";
 
 const reservaRepository = AppDataSource.getRepository(ReservaEntity);
 const agendaRepository = AppDataSource.getRepository(AgendaEntity);
@@ -73,7 +80,7 @@ export const crearReservaService = async (id_usuario, { fecha, hora_inicio, hora
         throw { status: 400, message: "La fecha no es válida." };
     }
 
-    return await AppDataSource.transaction(async (manager) => {
+    const resultado = await AppDataSource.transaction(async (manager) => {
         await manager.query("SELECT pg_advisory_xact_lock($1)", [estudio.id_estudio]);
 
         const bloques = bloquesSimples(
@@ -113,6 +120,11 @@ export const crearReservaService = async (id_usuario, { fecha, hora_inicio, hora
         const horas = (aMinutos(hora_fin) - aMinutos(hora_inicio)) / 60;
         return { ...guardada, horas, total: horas * estudio.precio };
     });
+
+    await notificarReservaConfirmada(id_usuario, detalleReserva({ fecha, hora_inicio, hora_fin }));
+    await notificarStaffReservaNueva(id_usuario, { fecha, hora_inicio, hora_fin });
+
+    return resultado;
 };
 
 export const cancelarReservaService = async (id_reserva, id_usuario, rolUsuario) => {
@@ -128,7 +140,14 @@ export const cancelarReservaService = async (id_reserva, id_usuario, rolUsuario)
         throw { status: 403, message: "No puedes cancelar una reserva que no es tuya." };
     }
 
+    const yaCancelada = reserva.estado === "cancelada";
     await reservaRepository.update(id_reserva, { estado: "cancelada" });
+
+    if (!yaCancelada) {
+        const detalle = detalleReserva(reserva);
+        await notificarReservaCancelada(reserva.usuario.id_usuario, detalle, !esDueño);
+        await notificarStaffReservaCancelada(id_usuario, reserva.usuario.id_usuario, reserva);
+    }
     return true;
 };
 

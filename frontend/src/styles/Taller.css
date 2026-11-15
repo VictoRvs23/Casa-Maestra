@@ -1,6 +1,8 @@
 .taller-page {
   background-color: var(--papel);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--fuente-texto);
   color: var(--cafe-oscuro);
   position: relative;
@@ -19,6 +21,10 @@
   opacity: 0.13;
   z-index: -1;
   pointer-events: none;
+}
+
+.taller-page > .pie-pagina {
+  margin-top: auto;
 }
 
 .taller-wrap {

@@ -4,11 +4,19 @@ import { AppDataSource } from "../config/configDb.js";
 import PaginaResidenteEntity from "../entities/paginaResidente.entity.js";
 import ResidenteEntity from "../entities/residente.entity.js";
 import UsuarioEntity from "../entities/usuario.entity.js";
+import SeguimientoEntity from "../entities/seguimiento.entity.js";
 import { PREFIJO_URL_PAGINA } from "../config/paginaEstilos.js";
+import { asegurarTarjetaDeUsuario, buscarPorSlug, cambiosPorNombre } from "./tarjeta.services.js";
 
 const paginaRepository = AppDataSource.getRepository(PaginaResidenteEntity);
 const residenteRepository = AppDataSource.getRepository(ResidenteEntity);
 const usuarioRepository = AppDataSource.getRepository(UsuarioEntity);
+const seguimientoRepository = AppDataSource.getRepository(SeguimientoEntity);
+
+const mesActual = () =>
+    new Intl.DateTimeFormat("en-CA", { timeZone: "America/Santiago", year: "numeric", month: "2-digit" }).format(
+        new Date()
+    );
 
 const borrarImagenLocal = (rutaImagen) => {
     if (!rutaImagen || !rutaImagen.startsWith(PREFIJO_URL_PAGINA)) return;
@@ -21,9 +29,10 @@ const borrarImagenLocal = (rutaImagen) => {
     });
 };
 
-const urlsDePagina = ({ portada, bloques }) => {
+const urlsDePagina = ({ portada, foto, bloques }) => {
     const urls = [];
     if (portada) urls.push(portada);
+    if (foto) urls.push(foto);
 
     for (const bloque of bloques || []) {
         if (bloque.tipo === "imagen" && bloque.url) urls.push(bloque.url);
@@ -38,14 +47,15 @@ const urlsDePagina = ({ portada, bloques }) => {
 
 const getResidenteDeUsuario = async (id_usuario) => {
     const residente = await residenteRepository.findOneBy({ id_usuario });
+    if (residente) return residente;
 
-    if (!residente) {
-        throw {
-            status: 404,
-            message: "Tu cuenta aún no está asociada a una tarjeta de residente. Pídele al Fundador/a que la vincule.",
-        };
-    }
-    return residente;
+    const usuario = await usuarioRepository.findOneBy({ id_usuario });
+    if (usuario?.rol === "Residente") return (await asegurarTarjetaDeUsuario(usuario)).residente;
+
+    throw {
+        status: 404,
+        message: "Tu cuenta no tiene una página de residente. Se crea cuando el equipo te asigna el rol Residente.",
+    };
 };
 
 const getOCrearPagina = async (residente) => {
@@ -59,6 +69,14 @@ const getOCrearPagina = async (residente) => {
     return pagina;
 };
 
+const datosDeResidente = (r) => ({
+    id_residente: r.id_residente,
+    nombre: r.nombre,
+    descripcion: r.descripcion,
+    slug: r.slug,
+    activa: r.activa,
+});
+
 export const getMiPaginaService = async (id_usuario) => {
     const residente = await getResidenteDeUsuario(id_usuario);
     const pagina = await getOCrearPagina(residente);
@@ -68,14 +86,23 @@ export const getMiPaginaService = async (id_usuario) => {
         select: { id_usuario: true, nombre: true, apellido: true, nombre_usuario: true, avatar: true },
     });
 
+    const [seguidores, fila] = await Promise.all([
+        seguimientoRepository.count({ where: { residente: { id_residente: residente.id_residente } } }),
+        paginaRepository
+            .createQueryBuilder("p")
+            .select("p.visitas", "visitas")
+            .where("p.id_residente = :id", { id: residente.id_residente })
+            .getRawOne(),
+    ]);
+
     return {
         pagina,
-        residente: {
-            id_residente: residente.id_residente,
-            nombre: residente.nombre,
-            descripcion: residente.descripcion,
-            slug: residente.slug,
+        estadisticas: {
+            visitas_mes: Number(fila?.visitas?.[mesActual()] || 0),
+            seguidores,
+            agendas: null,
         },
+        residente: datosDeResidente(residente),
         usuario,
     };
 };
@@ -84,7 +111,9 @@ export const updateMiPaginaService = async (id_usuario, data) => {
     const residente = await getResidenteDeUsuario(id_usuario);
     const pagina = await getOCrearPagina(residente);
 
-    const resultado = { ...pagina, ...data };
+    const { nombre, descripcion, ...cambiosPagina } = data;
+
+    const resultado = { ...pagina, ...cambiosPagina };
     const despues = urlsDePagina(resultado);
 
     const prefijoPropio = `${PREFIJO_URL_PAGINA}pagina-${id_usuario}-`;
@@ -92,14 +121,33 @@ export const updateMiPaginaService = async (id_usuario, data) => {
         throw { status: 400, message: "Una de las imágenes no pertenece a tu cuenta." };
     }
 
+    const cambiosTarjeta = {};
+    if (nombre !== undefined) Object.assign(cambiosTarjeta, await cambiosPorNombre(residente, nombre));
+    if (descripcion !== undefined) cambiosTarjeta.descripcion = String(descripcion).trim() || null;
+
+    if (resultado.publicada) {
+        const descripcionFinal = "descripcion" in cambiosTarjeta ? cambiosTarjeta.descripcion : residente.descripcion;
+        if (!descripcionFinal) {
+            throw {
+                status: 400,
+                message: "Para publicar, escribe una descripción corta de tu trabajo (aparece en tu tarjeta).",
+            };
+        }
+    }
+
     const antes = urlsDePagina(pagina);
 
-    Object.assign(pagina, data);
+    if (Object.keys(cambiosTarjeta).length > 0) {
+        await residenteRepository.update(residente.id_residente, cambiosTarjeta);
+    }
+
+    Object.assign(pagina, cambiosPagina);
     const guardada = await paginaRepository.save(pagina);
 
     antes.filter((url) => !despues.includes(url)).forEach(borrarImagenLocal);
 
-    return guardada;
+    const residenteActual = await residenteRepository.findOneBy({ id_residente: residente.id_residente });
+    return { pagina: guardada, residente: datosDeResidente(residenteActual) };
 };
 
 export const limpiarImagenesDeResidenteService = async (id_residente) => {
@@ -108,19 +156,20 @@ export const limpiarImagenesDeResidenteService = async (id_residente) => {
     urlsDePagina(pagina).forEach(borrarImagenLocal);
 };
 
-export const getPaginaPublicaService = async (slug) => {
-    const residente = await residenteRepository.findOne({
-        where: { slug },
-        relations: { usuario: true },
-    });
-
+const getVisiblePorSlug = async (slug) => {
+    const residente = await buscarPorSlug(slug);
     if (!residente) throw { status: 404, message: "No encontramos a este residente." };
 
     const pagina = await paginaRepository.findOneBy({ id_residente: residente.id_residente });
 
-    if (!pagina || !pagina.publicada) {
+    if (!residente.activa || !pagina || !pagina.publicada) {
         throw { status: 404, message: "Esta página aún no está disponible." };
     }
+    return { residente, pagina };
+};
+
+export const getPaginaPublicaService = async (slug) => {
+    const { residente, pagina } = await getVisiblePorSlug(slug);
 
     return {
         residente: {
@@ -128,13 +177,31 @@ export const getPaginaPublicaService = async (slug) => {
             descripcion: residente.descripcion,
             slug: residente.slug,
         },
-        avatar: residente.usuario?.avatar || null,
         pagina: {
             color_acento: pagina.color_acento,
             color_fondo: pagina.color_fondo,
             fuente: pagina.fuente,
             portada: pagina.portada,
+            foto: pagina.foto,
             bloques: pagina.bloques,
         },
     };
+};
+
+export const registrarVisitaService = async (slug, id_usuario_visitante) => {
+    const { residente } = await getVisiblePorSlug(slug);
+
+    if (id_usuario_visitante && residente.id_usuario === id_usuario_visitante) return { contada: false };
+
+    await paginaRepository.query(
+        `UPDATE paginas_residente
+        SET visitas = jsonb_set(
+            COALESCE(visitas, '{}'::jsonb),
+            ARRAY[$2::text],
+            to_jsonb(COALESCE((visitas ->> $2::text)::int, 0) + 1)
+        )
+        WHERE id_residente = $1`,
+        [residente.id_residente, mesActual()]
+    );
+    return { contada: true };
 };

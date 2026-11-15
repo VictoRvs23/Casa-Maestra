@@ -10,7 +10,7 @@ import {
   IconoCerrar,
   IconoMas,
 } from "./Iconos.js";
-import { MAX_FOTOS_GALERIA, TIPOS_BLOQUE } from "../../constants/paginaEstilos.js";
+import { MAX_FOTOS_GALERIA, TIPOS_BLOQUE, TAMANOS_BLOQUE, MENSAJES_VIDEO, analizarVideo } from "../../constants/paginaEstilos.js";
 import { getImagenUrl } from "../../services/pagina.services.js";
 import { REDES } from "./Redes.jsx";
 
@@ -42,6 +42,26 @@ function SlotFoto({ url, clave, subiendoClave, onArchivo, onQuitar, className = 
           <Icono icon={IconoCerrar} size={14} />
         </button>
       )}
+    </div>
+  );
+}
+
+function SelectorTamano({ valor = "grande", onCambiar }) {
+  return (
+    <div className="selector-tamano" role="radiogroup" aria-label="Tamaño del bloque">
+      <span>Tamaño</span>
+      {TAMANOS_BLOQUE.map((t) => (
+        <button
+          type="button"
+          key={t.valor}
+          role="radio"
+          aria-checked={valor === t.valor}
+          className={valor === t.valor ? "activo" : ""}
+          onClick={() => onCambiar({ tamano: t.valor })}
+        >
+          {t.label}
+        </button>
+      ))}
     </div>
   );
 }
@@ -87,6 +107,7 @@ export default function BloqueEditor({
       case "imagen":
         return (
           <>
+            <div className={`bloque-tam tam-${bloque.tamano || "grande"}`}>
             <SlotFoto
               url={bloque.url}
               clave={`${bloque.id}:imagen`}
@@ -95,11 +116,13 @@ export default function BloqueEditor({
               onArchivo={(archivo) => subirYGuardar(archivo, `${bloque.id}:imagen`, (_, url) => ({ url }))}
               onQuitar={bloque.url ? () => onCambiar({ url: null }) : undefined}
             />
+            </div>
+            <SelectorTamano valor={bloque.tamano} onCambiar={onCambiar} />
             <input
               type="text"
               className="bloque-alt"
               aria-label="Descripción de la imagen"
-              placeholder="Describe la imagen (ayuda a quienes usan lector de pantalla)"
+              placeholder="Descripción de la imagen (opcional). Ej: Rosa en línea fina, antebrazo"
               maxLength={120}
               value={bloque.alt}
               onChange={(e) => onCambiar({ alt: e.target.value })}
@@ -168,6 +191,40 @@ export default function BloqueEditor({
             ))}
           </div>
         );
+
+      case "video": {
+        const analisis = analizarVideo(bloque.url);
+        const hayTexto = bloque.url?.trim();
+        return (
+          <>
+            <input
+              type="url"
+              className="bloque-alt"
+              aria-label="Enlace del video"
+              placeholder="Pega aquí el enlace de YouTube, Vimeo, Instagram o TikTok"
+              maxLength={300}
+              value={bloque.url || ""}
+              onChange={(e) => onCambiar({ url: e.target.value })}
+            />
+            {analisis.src ? (
+              <div className={`bloque-tam ${analisis.formato === "horizontal" ? `tam-${bloque.tamano || "grande"}` : "tam-grande"}`}>
+                <div className={`bloque-video formato-${analisis.formato}`}>
+                  <iframe src={analisis.src} title="Vista previa del video" loading="lazy" allowFullScreen />
+                </div>
+              </div>
+            ) : (
+              <p className={`bloque-video-ayuda ${hayTexto ? "error" : ""}`}>
+                {hayTexto
+                  ? MENSAJES_VIDEO[analisis.motivo] || MENSAJES_VIDEO.invalido
+                  : "Pega el enlace de tu video. Instagram y TikTok deben ser públicos."}
+              </p>
+            )}
+            {(!analisis.src || analisis.formato === "horizontal") && (
+              <SelectorTamano valor={bloque.tamano} onCambiar={onCambiar} />
+            )}
+          </>
+        );
+      }
 
       default:
         return null;

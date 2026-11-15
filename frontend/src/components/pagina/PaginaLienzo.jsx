@@ -14,6 +14,8 @@ export default function PaginaLienzo({
   accionAvatar = null,
   onAgendar,
   onSeguir,
+  siguiendo = false,
+  seguidores = null,
   children,
 }) {
   const fuente = FUENTES[estilo.fuente] || FUENTES[FUENTE_POR_DEFECTO];
@@ -51,14 +53,25 @@ export default function PaginaLienzo({
           <div className="pagina-identidad">
             <Titulo className="pagina-nombre">{nombre}</Titulo>
             {descripcion && <p className="pagina-categoria">{descripcion}</p>}
+            {seguidores !== null && (
+              <p className="pagina-seguidores">
+                {seguidores} {seguidores === 1 ? "seguidor" : "seguidores"}
+              </p>
+            )}
           </div>
 
           <div className="pagina-acciones">
             <button type="button" className="pagina-btn pagina-btn-lleno" onClick={onAgendar} disabled={!onAgendar}>
               Agendar
             </button>
-            <button type="button" className="pagina-btn pagina-btn-borde" onClick={onSeguir} disabled={!onSeguir}>
-              Seguir
+            <button
+              type="button"
+              className={`pagina-btn pagina-btn-borde ${siguiendo ? "siguiendo" : ""}`}
+              onClick={onSeguir}
+              disabled={!onSeguir}
+              aria-pressed={siguiendo}
+            >
+              {siguiendo ? "✓ Siguiendo" : "Seguir"}
             </button>
           </div>
         </div>

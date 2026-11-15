@@ -2,6 +2,8 @@
   --barra-alto: 68px;
   background-color: var(--papel);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--fuente-texto);
   color: var(--cafe-oscuro);
   position: relative;
@@ -35,7 +37,12 @@
   min-height: var(--barra-alto);
   padding: 0.6rem 2rem;
   background-color: var(--papel);
-  border-bottom: 2px dashed var(--linea);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--papel) 87%, transparent), color-mix(in srgb, var(--papel) 87%, transparent)),
+    url("../../assets/hojaArrugada.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .mipagina-barra-titulo {
@@ -121,14 +128,36 @@
   outline-offset: 3px;
 }
 
+.mipagina-page > .estado-msg {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  min-height: 50vh;
+  font-size: 1.05rem;
+}
+
 .mipagina-editor {
+  flex: 1;
   display: grid;
   grid-template-columns: 310px minmax(0, 1fr);
 }
 
 .mipagina-lateral {
-  background-color: transparent;
-  border-right: 2px dashed var(--linea);
+  position: relative;
+  background: transparent;
+}
+
+.mipagina-lateral::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--cafe) calc(100% - 220px), transparent calc(100% - 50px));
+  pointer-events: none;
 }
 
 .mipagina-lateral-contenido {
@@ -147,12 +176,12 @@
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - var(--barra-alto));
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 96px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 96px), transparent);
 }
 
 .mipagina-lienzo-wrap > .pagina-lienzo {
   flex: 1;
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 64px), transparent);
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 64px), transparent);
 }
 
 .mipagina-vacio {
@@ -462,6 +491,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+}
+
+.pagina-avatar-edit input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.pagina-avatar-edit:focus-within {
+  outline: 3px solid var(--detalle);
+  outline-offset: 2px;
+}
+
+.pagina-avatar-quitar {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 2px solid var(--fondo-pagina);
+  border-radius: 50%;
+  background-color: #2b1f15;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .bloque-editor {
@@ -764,6 +825,8 @@
 
   .mipagina-lienzo-wrap {
     min-height: 0;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 
   .mipagina-lateral {
@@ -775,8 +838,8 @@
     z-index: 30;
     max-height: 70vh;
     overflow-y: auto;
-    background-color: var(--papel-claro);
     padding: 0 1.2rem 1.5rem;
+    background: var(--papel-claro);
     border-right: none;
     border-top: 2px solid var(--cafe);
     box-shadow: 0 -4px 0 rgba(132, 87, 54, 0.25);
@@ -786,6 +849,10 @@
 
   .mipagina-lateral.abierto {
     transform: none;
+  }
+
+  .mipagina-lateral::after {
+    display: none;
   }
 
   .mipagina-lateral-toggle {
@@ -839,9 +906,169 @@
   }
 }
 
-@media (min-width: 901px) {
-  .mipagina-lateral {
-    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 64px), transparent);
-    mask-image: linear-gradient(to bottom, #000 calc(100% - 64px), transparent);
-  }
+.mipagina-deshacer {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+  transform: translateX(-50%);
+  font-weight: 700;
+  color: #fffcf5;
+  background: #2b1f15;
+  border: 2px solid #845736;
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 #845736;
+}
+
+.mipagina-deshacer button {
+  padding: 0.3rem 0.8rem;
+  font-family: inherit;
+  font-weight: 700;
+  color: #2b1f15;
+  background: #f6f1e8;
+  border: 2px solid #f6f1e8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.mipagina-deshacer button:hover {
+  background: #ecdfc7;
+}
+
+.selector-tamano {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--detalle);
+}
+
+.selector-tamano button {
+  padding: 0.25rem 0.7rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--detalle);
+  background: transparent;
+  border: 2px solid var(--detalle);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.selector-tamano button.activo {
+  color: var(--fondo-pagina);
+  background: var(--detalle);
+}
+
+.mipagina-copiar {
+  padding: 0.3rem 0.9rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #845736;
+  background: transparent;
+  border: 2px solid #845736;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.mipagina-copiar:hover,
+.mipagina-copiar:focus-visible {
+  color: #ffffff;
+  background-color: #845736;
+}
+
+.mipagina-aviso-publicacion {
+  flex: 1 1 260px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 0.88rem;
+  line-height: 1.3;
+  color: #5c4a3a;
+}
+
+.mipagina-paletas {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+.paleta {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.6rem;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #2b1f15;
+  background: transparent;
+  border: 2px solid rgba(132, 87, 54, 0.45);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.paleta:hover {
+  border-color: #845736;
+}
+
+.paleta.activa {
+  border-color: #845736;
+  background-color: rgba(132, 87, 54, 0.14);
+  box-shadow: 2px 2px 0 #845736;
+}
+
+.paleta-muestra {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #2b1f15;
+  border-radius: 50%;
+}
+
+.tarjeta-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.tarjeta-campo label {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.tarjeta-campo input {
+  padding: 0.6rem 0.75rem;
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 2px solid #845736;
+  border-radius: 8px;
+}
+
+.tarjeta-campo input:focus-visible {
+  outline: 3px solid #3b2a1a;
+  outline-offset: 2px;
+}
+
+.tarjeta-campo small,
+.tarjeta-requisitos {
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.tarjeta-requisitos {
+  margin: 0;
+  padding: 0.6rem 0.75rem;
+  border: 2px dashed #845736;
+  border-radius: 8px;
 }

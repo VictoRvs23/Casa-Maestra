@@ -1,6 +1,8 @@
 .e0-page {
   background-color: var(--papel);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--fuente-texto);
   color: var(--cafe-oscuro);
   position: relative;
@@ -20,6 +22,16 @@
   opacity: 0.13;
   z-index: -1;
   pointer-events: none;
+}
+
+.e0-page > .pie-pagina {
+  margin-top: auto;
+}
+
+.e0-page > .e0-wrap,
+.e0-page > .e0-agenda,
+.e0-page > .e0-reservas {
+  width: 100%;
 }
 
 .e0-hero {

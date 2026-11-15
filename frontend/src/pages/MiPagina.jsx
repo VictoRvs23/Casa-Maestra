@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
@@ -11,6 +11,7 @@ import {
   IconoGaleria,
   IconoSeparador,
   IconoWeb,
+  IconoVideo,
   IconoCamara,
   IconoCerrar,
   IconoMas,
@@ -18,18 +19,16 @@ import {
 } from "../components/pagina/Iconos.js";
 import { Pencil } from "@sketchicon/lucide";
 import { useAlerta } from "../context/AlertaContext.jsx";
-import { getMiPagina, updateMiPagina, subirImagenPagina } from "../services/pagina.services.js";
-import { getAvatarUrl } from "../services/usuario.services.js";
+import { getMiPagina, updateMiPagina, subirImagenPagina, getImagenUrl } from "../services/pagina.services.js";
 import {
   FUENTES,
   COLORES_ACENTO,
   COLORES_FONDO,
+  PALETAS,
   MAX_BLOQUES,
   TIPOS_BLOQUE,
-  ESTADISTICAS_EJEMPLO,
   crearBloque,
   normalizarBloque,
-  CLAVES_REDES,
 } from "../constants/paginaEstilos.js";
 import "../styles/pagina/MiPagina.css";
 
@@ -39,6 +38,7 @@ const ICONOS_BLOQUE = {
   galeria: IconoGaleria,
   separador: IconoSeparador,
   redes: IconoWeb,
+  video: IconoVideo,
 };
 
 const AYUDA_BLOQUE = {
@@ -47,9 +47,11 @@ const AYUDA_BLOQUE = {
   galeria: "Hasta 6 fotos pequeñas",
   separador: "Una línea con una hoja",
   redes: "Instagram, TikTok, WhatsApp y más",
+  video: "YouTube, Vimeo, Instagram o TikTok",
 };
 
 const PESTANAS = [
+  { id: "tarjeta", label: "Tarjeta" },
   { id: "bloques", label: "Bloques" },
   { id: "estilo", label: "Estilo" },
   { id: "resumen", label: "Resumen" },
@@ -58,22 +60,49 @@ const PESTANAS = [
 const TIPOS_IMAGEN = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 5 * 1024 * 1024;
 
-const aFormulario = (pagina) => ({
+const slugDe = (texto = "") =>
+  String(texto)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "residente";
+
+const aFormulario = (pagina, residente) => ({
+  nombre: residente.nombre,
+  descripcion: residente.descripcion || "",
   publicada: pagina.publicada,
   color_acento: pagina.color_acento,
   color_fondo: pagina.color_fondo,
   fuente: pagina.fuente,
   portada: pagina.portada,
+  foto: pagina.foto,
   bloques: pagina.bloques.map(normalizarBloque),
 });
 
-const bloqueTieneContenido = (b) => {
-  switch (b.tipo) {
-    case "texto": return b.contenido.trim() !== "";
-    case "imagen": return Boolean(b.url);
-    case "galeria": return b.imagenes.some(Boolean);
-    case "redes": return CLAVES_REDES.some((c) => b[c]);
-    default: return false;
+const claveBorrador = (slug) => `mipagina-borrador-${slug}`;
+
+const leerBorrador = (slug) => {
+  try {
+    return JSON.parse(localStorage.getItem(claveBorrador(slug)));
+  } catch {
+    return null;
+  }
+};
+
+const guardarBorrador = (slug, form) => {
+  try {
+    localStorage.setItem(claveBorrador(slug), JSON.stringify({ form, fecha: Date.now() }));
+  } catch {
+  }
+};
+
+const borrarBorrador = (slug) => {
+  try {
+    localStorage.removeItem(claveBorrador(slug));
+  } catch {
   }
 };
 
@@ -83,12 +112,15 @@ export default function MiPagina() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [info, setInfo] = useState(null);
+  const [estadisticas, setEstadisticas] = useState(null);
   const [form, setForm] = useState(null);
   const [guardado, setGuardado] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [subiendoClave, setSubiendoClave] = useState(null);
+  const [eliminado, setEliminado] = useState(null);
+  const temporizadorDeshacer = useRef(null);
 
-  const [pestana, setPestana] = useState("bloques");
+  const [pestana, setPestana] = useState("tarjeta");
   const [panelAbierto, setPanelAbierto] = useState(false);
   const [nuevoId, setNuevoId] = useState(null);
   const [arrastrandoId, setArrastrandoId] = useState(null);
@@ -98,12 +130,27 @@ export default function MiPagina() {
     let cancelado = false;
 
     getMiPagina()
-      .then(({ pagina, residente, usuario }) => {
+      .then(({ pagina, residente, estadisticas }) => {
         if (cancelado) return;
-        const inicial = aFormulario(pagina);
-        setInfo({ residente, usuario });
+        const inicial = aFormulario(pagina, residente);
+        setInfo({ residente });
+        setEstadisticas(estadisticas);
         setForm(inicial);
         setGuardado(inicial);
+
+        const borrador = leerBorrador(residente.slug);
+        if (borrador?.form && JSON.stringify(borrador.form) !== JSON.stringify(inicial)) {
+          const cuando = new Date(borrador.fecha).toLocaleString("es-CL", { dateStyle: "short", timeStyle: "short" });
+          confirmar(`Encontramos cambios sin guardar de tu última sesión (${cuando}). ¿Quieres recuperarlos?`, {
+            textoConfirmar: "Recuperar",
+          }).then((ok) => {
+            if (cancelado) return;
+            if (ok) setForm({ ...inicial, ...borrador.form, bloques: (borrador.form.bloques || []).map(normalizarBloque) });
+            else borrarBorrador(residente.slug);
+          });
+        } else {
+          borrarBorrador(residente.slug);
+        }
       })
       .catch((err) => {
         if (cancelado) return;
@@ -128,6 +175,15 @@ export default function MiPagina() {
     window.addEventListener("beforeunload", avisar);
     return () => window.removeEventListener("beforeunload", avisar);
   }, [hayCambios]);
+
+  const slug = info?.residente?.slug;
+  useEffect(() => {
+    if (!slug || !form || !hayCambios) return;
+    const t = setTimeout(() => guardarBorrador(slug, form), 600);
+    return () => clearTimeout(t);
+  }, [slug, form, hayCambios]);
+
+  useEffect(() => () => clearTimeout(temporizadorDeshacer.current), []);
 
   useEffect(() => {
     if (!nuevoId) return;
@@ -186,14 +242,28 @@ export default function MiPagina() {
     setSobreId(null);
   };
 
-  const eliminarBloque = async (bloque) => {
-    if (bloqueTieneContenido(bloque)) {
-      const ok = await confirmar("¿Eliminar este bloque? Perderás lo que escribiste o subiste en él.", {
-        textoConfirmar: "Eliminar",
-      });
-      if (!ok) return;
-    }
+  const eliminarBloque = (bloque) => {
+    const indice = form.bloques.findIndex((b) => b.id === bloque.id);
+    if (indice < 0) return;
+
     setForm((f) => ({ ...f, bloques: f.bloques.filter((b) => b.id !== bloque.id) }));
+    setEliminado({ bloque, indice });
+
+    clearTimeout(temporizadorDeshacer.current);
+    temporizadorDeshacer.current = setTimeout(() => setEliminado(null), 8000);
+  };
+
+  const deshacerEliminar = () => {
+    if (!eliminado) return;
+    const { bloque, indice } = eliminado;
+    clearTimeout(temporizadorDeshacer.current);
+    setForm((f) => {
+      const bloques = [...f.bloques];
+      bloques.splice(Math.min(indice, bloques.length), 0, bloque);
+      return { ...f, bloques };
+    });
+    setEliminado(null);
+    setNuevoId(bloque.id);
   };
 
   const subirImagen = async (archivo, clave) => {
@@ -227,15 +297,35 @@ export default function MiPagina() {
     if (url) cambiar({ portada: url });
   };
 
+  const handleFoto = async (e) => {
+    const archivo = e.target.files[0];
+    e.target.value = "";
+    if (!archivo) return;
+    const url = await subirImagen(archivo, "foto");
+    if (url) cambiar({ foto: url });
+  };
+
   const handleGuardar = async () => {
+    if (form.publicada && !form.descripcion.trim()) {
+      setPestana("tarjeta");
+      alerta("Para publicar, escribe una descripción corta de tu trabajo. Aparece en tu tarjeta de Residentes.", {
+        tipo: "error",
+      });
+      return;
+    }
+
     setGuardando(true);
     try {
-      const { pagina } = await updateMiPagina(form);
-      const nuevo = aFormulario(pagina);
+      const { pagina, residente: residenteGuardado } = await updateMiPagina(form);
+      const nuevo = aFormulario(pagina, residenteGuardado);
       setForm(nuevo);
       setGuardado(nuevo);
+      borrarBorrador(info.residente.slug);
+      setInfo({ residente: residenteGuardado });
       alerta(
-        nuevo.publicada ? "Tu página se guardó y está publicada." : "Tu página se guardó como borrador.",
+        nuevo.publicada
+          ? "Tu página se guardó y está publicada. Ya puedes copiar el enlace para compartirla."
+          : "Tu página se guardó como borrador. Solo tú puedes verla.",
         { tipo: "exito" }
       );
     } catch (err) {
@@ -243,6 +333,16 @@ export default function MiPagina() {
       alerta(err.response?.data?.message || "No se pudo guardar tu página.", { tipo: "error" });
     } finally {
       setGuardando(false);
+    }
+  };
+
+  const copiarEnlace = async () => {
+    const enlace = `${window.location.origin}/residentes/${info.residente.slug}`;
+    try {
+      await navigator.clipboard.writeText(enlace);
+      alerta("Enlace copiado. Ya puedes compartirlo.", { tipo: "exito" });
+    } catch {
+      window.prompt("Copia el enlace de tu página:", enlace);
     }
   };
 
@@ -275,8 +375,8 @@ export default function MiPagina() {
     );
   }
 
-  const { residente, usuario } = info;
-  const iniciales = residente.nombre
+  const { residente } = info;
+  const iniciales = (form.nombre || residente.nombre)
     .split(" ")
     .filter(Boolean)
     .slice(0, 2)
@@ -297,11 +397,24 @@ export default function MiPagina() {
           </span>
         </div>
 
+        <p className="mipagina-aviso-publicacion" role="note">
+          {form.publicada && guardado.publicada && "Tu página está publicada: cualquier persona con el enlace puede verla."}
+          {form.publicada && !guardado.publicada && "Activaste «Publicada», pero falta guardar para que el público la vea."}
+          {!form.publicada && !guardado.publicada && "Tu página está en borrador: solo tú puedes verla. Activa «Publicada» y guarda para mostrarla."}
+          {!form.publicada && guardado.publicada && "Al guardar, tu página dejará de verse para el público."}
+          {!residente.activa && " El equipo ocultó tu tarjeta temporalmente: no aparece en Residentes."}
+        </p>
+
         <div className="mipagina-prev-acciones">
           {guardado.publicada && (
             <Link to={`/residentes/${residente.slug}`} className="mipagina-ver-link">
               Ver mi página
             </Link>
+          )}
+          {guardado.publicada && (
+            <button type="button" className="mipagina-copiar" onClick={copiarEnlace}>
+              Copiar enlace
+            </button>
           )}
 
           <div className="mipagina-publicar">
@@ -357,6 +470,52 @@ export default function MiPagina() {
               ))}
             </div>
 
+            {/* Tarjeta */}
+            {pestana === "tarjeta" && (
+              <div role="tabpanel" id="mp-panel-tarjeta" aria-labelledby="mp-tab-tarjeta">
+                <p className="lateral-ayuda">
+                  Así te verá la gente en Residentes. Tu página se publica junto con tu tarjeta, así que ambas deben
+                  estar completas.
+                </p>
+
+                <div className="tarjeta-campo">
+                  <label htmlFor="tarjeta-nombre">Nombre artístico</label>
+                  <input
+                    id="tarjeta-nombre"
+                    type="text"
+                    value={form.nombre}
+                    maxLength={80}
+                    onChange={(e) => cambiar({ nombre: e.target.value })}
+                  />
+                  <small>
+                    Tu enlace será <strong>/residentes/{slugDe(form.nombre)}</strong>.
+                    {slugDe(form.nombre) !== residente.slug && " Si lo cambias, los enlaces anteriores seguirán funcionando."}
+                  </small>
+                </div>
+
+                <div className="tarjeta-campo">
+                  <label htmlFor="tarjeta-descripcion">Descripción corta</label>
+                  <input
+                    id="tarjeta-descripcion"
+                    type="text"
+                    value={form.descripcion}
+                    maxLength={150}
+                    placeholder="Ej: Piercings y Tatuajes"
+                    onChange={(e) => cambiar({ descripcion: e.target.value })}
+                  />
+                  <small>
+                    {form.descripcion.length}/150 · Obligatoria para publicar. Tu foto de perfil se usa como imagen de la
+                    tarjeta.
+                  </small>
+                </div>
+
+                <p className="tarjeta-requisitos" role="note">
+                  Para publicar necesitas: nombre artístico {form.nombre.trim() ? "✓" : "✗"} · descripción{" "}
+                  {form.descripcion.trim() ? "✓" : "✗"}
+                </p>
+              </div>
+            )}
+
             {/* Bloques */}
             {pestana === "bloques" && (
               <div role="tabpanel" id="mp-panel-bloques" aria-labelledby="mp-tab-bloques">
@@ -384,6 +543,29 @@ export default function MiPagina() {
             {/* Estilo */}
             {pestana === "estilo" && (
               <div role="tabpanel" id="mp-panel-estilo" aria-labelledby="mp-tab-estilo">
+                <h2 className="lateral-subtitulo">Paletas listas</h2>
+                <div className="mipagina-paletas">
+                  {PALETAS.map((pal) => {
+                    const activa = form.color_acento === pal.acento && form.color_fondo === pal.fondo;
+                    return (
+                      <button
+                        type="button"
+                        key={pal.nombre}
+                        className={`paleta ${activa ? "activa" : ""}`}
+                        aria-pressed={activa}
+                        onClick={() => cambiar({ color_acento: pal.acento, color_fondo: pal.fondo })}
+                      >
+                        <span
+                          className="paleta-muestra"
+                          style={{ background: `linear-gradient(135deg, ${pal.fondo} 50%, ${pal.acento} 50%)` }}
+                        />
+                        <span>{pal.nombre}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                <p className="mipagina-nota">También puedes personalizar cada color aquí abajo.</p>
+
                 <h2 className="lateral-subtitulo">Color de detalles</h2>
                 <div className="mipagina-swatches">
                   {COLORES_ACENTO.map((c) => (
@@ -455,18 +637,25 @@ export default function MiPagina() {
             {pestana === "resumen" && (
               <div role="tabpanel" id="mp-panel-resumen" aria-labelledby="mp-tab-resumen">
                 <div className="mipagina-stats-grid">
-                  {ESTADISTICAS_EJEMPLO.map((e, i) => (
+                  {[
+                    { etiqueta: "Visitas del mes", valor: estadisticas?.visitas_mes },
+                    { etiqueta: "Agendas generadas", valor: estadisticas?.agendas },
+                    { etiqueta: "Seguidores", valor: estadisticas?.seguidores },
+                  ].map((e, i) => (
                     <article
                       className="estadistica-card"
                       key={e.etiqueta}
                       style={{ "--giro": ["-1deg", "0.8deg", "-0.6deg"][i] }}
                     >
                       <p className="estadistica-etiqueta">{e.etiqueta}</p>
-                      <p className="estadistica-valor">{e.valor}</p>
+                      <p className="estadistica-valor">{e.valor ?? "—"}</p>
                     </article>
                   ))}
                 </div>
-                <p className="mipagina-nota">Valores de ejemplo: se conectarán a datos reales más adelante.</p>
+                <p className="mipagina-nota">
+                  Las visitas se cuentan una vez por persona y por sesión, sin sumar las tuyas. Las agendas se
+                  activarán junto con el sistema de reservas.
+                </p>
               </div>
             )}
           </div>
@@ -477,9 +666,9 @@ export default function MiPagina() {
           <PaginaLienzo
             editor
             estilo={form}
-            nombre={residente.nombre}
-            descripcion={residente.descripcion}
-            avatarUrl={usuario?.avatar ? getAvatarUrl(usuario.avatar) : null}
+            nombre={form.nombre}
+            descripcion={form.descripcion}
+            avatarUrl={form.foto ? getImagenUrl(form.foto) : null}
             iniciales={iniciales}
             accionPortada={
               <div className="pagina-portada-acciones">
@@ -501,14 +690,32 @@ export default function MiPagina() {
               </div>
             }
             accionAvatar={
-              <Link
-                to="/perfil?tab=datos-personales"
-                className="pagina-avatar-edit"
-                aria-label="Cambiar foto de perfil"
-                title="La foto se cambia desde tu perfil"
-              >
-                <Icono icon={Pencil} size={14} />
-              </Link>
+              <>
+                <label
+                  className="pagina-avatar-edit"
+                  title="Cambiar la foto de tu página"
+                  aria-label="Cambiar la foto de tu página"
+                >
+                  <Icono icon={Pencil} size={14} />
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    disabled={subiendoClave === "foto"}
+                    onChange={handleFoto}
+                  />
+                </label>
+                {form.foto && (
+                  <button
+                    type="button"
+                    className="pagina-avatar-quitar"
+                    title="Quitar la foto"
+                    aria-label="Quitar la foto de la página"
+                    onClick={() => cambiar({ foto: null })}
+                  >
+                    <Icono icon={IconoCerrar} size={14} />
+                  </button>
+                )}
+              </>
             }
           >
             {form.bloques.length === 0 && (
@@ -548,6 +755,15 @@ export default function MiPagina() {
           </PaginaLienzo>
         </main>
       </div>
+
+      {eliminado && (
+        <div className="mipagina-deshacer" role="status">
+          <span>Bloque eliminado</span>
+          <button type="button" onClick={deshacerEliminar}>
+            Deshacer
+          </button>
+        </div>
+      )}
 
       <Footer />
     </div>

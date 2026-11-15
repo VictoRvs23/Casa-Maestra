@@ -1,5 +1,10 @@
 import { AppDataSource } from "../config/configDb.js";
 import TicketEntity from "../entities/ticket.entity.js";
+import {
+    notificarNuevoTicket,
+    notificarTicketRespondido,
+    notificarTicketCambioEstado,
+} from "./notificacion.eventos.js";
 
 const ticketRepository = AppDataSource.getRepository(TicketEntity);
 
@@ -20,7 +25,11 @@ export const createTicketService = async (id_usuario, data) => {
         estado: "Abierto",
         usuario: { id_usuario },
     });
-    return await ticketRepository.save(nuevoTicket);
+    const guardado = await ticketRepository.save(nuevoTicket);
+
+    await notificarNuevoTicket(id_usuario, guardado);
+
+    return guardado;
 };
 
 export const getMisTicketsService = async (id_usuario) => {
@@ -65,10 +74,13 @@ export const getTicketsService = async (query = {}) => {
     };
 };
 
-export const updateTicketService = async (id_ticket, data) => {
+export const updateTicketService = async (id_ticket, data, id_actor = null) => {
     const ticket = await ticketRepository.findOneBy({ id_ticket: parseInt(id_ticket) });
 
     if (!ticket) throw { status: 404, message: "Ticket no encontrado" };
+
+    const estadoAnterior = ticket.estado;
+    const respuestaAnterior = ticket.respuesta;
 
     if (data.estado !== undefined) ticket.estado = data.estado;
 
@@ -77,5 +89,20 @@ export const updateTicketService = async (id_ticket, data) => {
         ticket.respondido_at = data.respuesta === "" ? null : new Date();
     }
 
-    return await ticketRepository.save(ticket);
+    const guardado = await ticketRepository.save(ticket);
+
+    const conDuenio = await ticketRepository.findOne({
+        where: { id_ticket: guardado.id_ticket },
+        relations: { usuario: true },
+        select: { id_ticket: true, usuario: { id_usuario: true } },
+    });
+    const id_duenio = conDuenio?.usuario?.id_usuario;
+
+    if (id_duenio && String(id_duenio) !== String(id_actor)) {
+        const respuestaNueva = guardado.respuesta && guardado.respuesta !== respuestaAnterior;
+        if (respuestaNueva) await notificarTicketRespondido(id_duenio, guardado);
+        else if (guardado.estado !== estadoAnterior) await notificarTicketCambioEstado(id_duenio, guardado);
+    }
+
+    return guardado;
 };

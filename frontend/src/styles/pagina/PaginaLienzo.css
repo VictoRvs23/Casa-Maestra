@@ -21,21 +21,21 @@
   position: relative;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 1.4rem;
-  margin-top: -56px;
+  margin-top: -84px;
 }
 
 .pagina-avatar-wrap {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 168px;
+  height: 168px;
   flex-shrink: 0;
 }
 
 .pagina-avatar {
-  width: 120px;
-  height: 120px;
+  width: 168px;
+  height: 168px;
   box-sizing: border-box;
   border: 4px solid var(--fondo-pagina);
   border-radius: 50%;
@@ -44,7 +44,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.2rem;
+  font-size: 3rem;
   font-weight: 700;
 }
 
@@ -55,7 +55,7 @@
 .pagina-identidad {
   flex: 1 1 260px;
   min-width: 0;
-  padding-bottom: 0.4rem;
+  padding-top: 96px;
 }
 
 .pagina-nombre {
@@ -74,10 +74,18 @@
   color: var(--detalle);
 }
 
+.pagina-seguidores {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2b1f15;
+  opacity: 0.75;
+}
+
 .pagina-acciones {
   display: flex;
   gap: 0.8rem;
-  padding-bottom: 0.5rem;
+  padding-top: 100px;
 }
 
 .pagina-btn {
@@ -101,6 +109,10 @@
   border-radius: 20px 24px 18px 22px / 24px 18px 22px 20px;
   background-color: transparent;
   color: var(--detalle);
+}
+
+.pagina-btn-borde.siguiendo {
+  background-color: color-mix(in srgb, var(--detalle) 18%, transparent);
 }
 
 .pagina-btn:not(:disabled):hover {
@@ -154,6 +166,20 @@
 
 .bloque-imagen {
   padding: 12px 12px 30px;
+}
+
+.bloque-imagen.con-descripcion {
+  padding-bottom: 14px;
+}
+
+.bloque-descripcion {
+  margin: 12px 8px 0;
+  text-align: center;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: #2b1f15;
+  overflow-wrap: anywhere;
 }
 
 .bloque-imagen img {
@@ -231,10 +257,90 @@
   }
 
   .pagina-cabecera {
-    margin-top: -48px;
+    margin-top: -66px;
+  }
+
+  .pagina-avatar-wrap,
+  .pagina-avatar {
+    width: 132px;
+    height: 132px;
+  }
+
+  .pagina-identidad {
+    padding-top: 78px;
+  }
+
+  .pagina-acciones {
+    padding-top: 82px;
   }
 
   .pagina-nombre {
     font-size: 1.7rem;
   }
+}
+
+@media (max-width: 460px) {
+  .pagina-identidad,
+  .pagina-acciones {
+    padding-top: 0.6rem;
+  }
+}
+
+.bloque-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #2b1f15;
+  border: 2px solid var(--cafe);
+  border-radius: var(--radio-papel);
+  box-shadow: 5px 5px 0 var(--cafe);
+  overflow: hidden;
+}
+
+.bloque-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.bloque-video-ayuda {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.bloque-video-ayuda.error {
+  color: #a3321f;
+  opacity: 1;
+}
+
+.bloque-video.formato-vertical {
+  width: 325px;
+  max-width: 100%;
+  aspect-ratio: 325 / 580;
+  margin: 0 auto;
+}
+
+.bloque-video.formato-instagram {
+  aspect-ratio: 9 / 18;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.bloque-tam,
+.bloque-imagen.tam-pequeno,
+.bloque-imagen.tam-mediano {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tam-grande { width: 100%; }
+.tam-mediano { width: 75%; }
+.tam-pequeno { width: 50%; }
+
+@media (max-width: 720px) {
+  .tam-mediano { width: 88%; }
+  .tam-pequeno { width: 70%; }
 }

@@ -39,6 +39,16 @@ const PaginaResidenteEntity = new EntitySchema({
             length: 255,
             nullable: true,
         },
+        foto: {
+            type: "varchar",
+            length: 255,
+            nullable: true,
+        },
+        visitas: {
+            type: "jsonb",
+            default: () => "'{}'::jsonb",
+            select: false,
+        },
         bloques: {
             type: "jsonb",
             default: () => "'[]'::jsonb",

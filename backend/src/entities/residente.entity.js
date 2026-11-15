@@ -22,6 +22,10 @@ const ResidenteEntity = new EntitySchema({
             nullable: false,
             unique: true,
         },
+        slugs_anteriores: {
+            type: "jsonb",
+            default: () => "'[]'::jsonb",
+        },
         descripcion: {
             type: "varchar",
             length: 150,
@@ -31,6 +35,10 @@ const ResidenteEntity = new EntitySchema({
             type: "varchar",
             length: 255,
             nullable: true,
+        },
+        activa: {
+            type: "boolean",
+            default: true,
         },
         id_usuario: {
             type: "int",
