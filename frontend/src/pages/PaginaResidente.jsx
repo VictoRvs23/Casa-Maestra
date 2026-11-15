@@ -36,7 +36,14 @@ export default function PaginaResidente() {
     setError(null);
 
     getPaginaPublica(slug)
-      .then((data) => !cancelado && setDatos(data))
+      .then((data) => {
+        if (cancelado) return;
+        if (data.residente?.slug && data.residente.slug !== slug) {
+          navigate(`/residentes/${data.residente.slug}`, { replace: true });
+          return;
+        }
+        setDatos(data);
+      })
       .catch((err) => {
         if (cancelado) return;
         console.error(err);

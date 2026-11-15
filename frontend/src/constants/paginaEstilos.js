@@ -26,6 +26,15 @@ export const COLORES_FONDO = [
   { nombre: "Rosa suave", hex: "#f5dddb" },
 ];
 
+export const PALETAS = [
+  { nombre: "Clásica", acento: "#845736", fondo: "#f6f1e8" },
+  { nombre: "Bosque", acento: "#1d3d2a", fondo: "#dcece3" },
+  { nombre: "Terracota", acento: "#a3523a", fondo: "#ecdfc7" },
+  { nombre: "Mostaza", acento: "#8a6414", fondo: "#fffcf5" },
+  { nombre: "Pizarra", acento: "#3b5565", fondo: "#dbe6ec" },
+  { nombre: "Ciruela", acento: "#6d3b52", fondo: "#f5dddb" },
+];
+
 export const MAX_BLOQUES = 30;
 
 export const CLAVES_REDES = ["instagram", "tiktok", "facebook", "youtube", "whatsapp", "email"];

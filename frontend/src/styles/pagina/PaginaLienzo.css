@@ -317,8 +317,9 @@
 }
 
 .bloque-video.formato-vertical {
-  aspect-ratio: 9 / 17;
-  max-width: 360px;
+  width: 325px;
+  max-width: 100%;
+  aspect-ratio: 325 / 580;
   margin: 0 auto;
 }
 

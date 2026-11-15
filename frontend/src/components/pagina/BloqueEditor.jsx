@@ -207,7 +207,7 @@ export default function BloqueEditor({
               onChange={(e) => onCambiar({ url: e.target.value })}
             />
             {analisis.src ? (
-              <div className={`bloque-tam tam-${bloque.tamano || "grande"}`}>
+              <div className={`bloque-tam ${analisis.formato === "horizontal" ? `tam-${bloque.tamano || "grande"}` : "tam-grande"}`}>
                 <div className={`bloque-video formato-${analisis.formato}`}>
                   <iframe src={analisis.src} title="Vista previa del video" loading="lazy" allowFullScreen />
                 </div>
@@ -219,7 +219,9 @@ export default function BloqueEditor({
                   : "Pega el enlace de tu video. Instagram y TikTok deben ser públicos."}
               </p>
             )}
-            <SelectorTamano valor={bloque.tamano} onCambiar={onCambiar} />
+            {(!analisis.src || analisis.formato === "horizontal") && (
+              <SelectorTamano valor={bloque.tamano} onCambiar={onCambiar} />
+            )}
           </>
         );
       }

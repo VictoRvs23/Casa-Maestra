@@ -4,19 +4,19 @@ import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
-import {
-  getResidentes,
-  createResidente,
-  updateResidente,
-  deleteResidente,
-  getCuentasDisponibles,
-  getImagenUrl,
-} from "../services/residente.services.js";
-import { Pencil, Trash2 } from "@sketchicon/lucide";
+import api from "../services/api";
+import { getImagenUrl } from "../services/residente.services.js";
+import { Pencil, Eye, EyeOff } from "@sketchicon/lucide";
 import Icono from "../components/Icono.jsx";
 import "../styles/Residente.css";
 
-const FORM_INICIAL = { nombre: "", descripcion: "", id_usuario: "" };
+const FORM_INICIAL = { nombre: "", descripcion: "" };
+
+const estadoDe = (r) => {
+  if (!r.activa) return { texto: "Oculta", clase: "oculta" };
+  if (!r.publicada) return { texto: "Sin publicar", clase: "borrador" };
+  return null;
+};
 
 export default function Residente() {
   const { user } = useAuth();
@@ -30,15 +30,15 @@ export default function Residente() {
   const [modalAbierto, setModalAbierto] = useState(false);
   const [editandoId, setEditandoId] = useState(null);
   const [form, setForm] = useState(FORM_INICIAL);
-  const [imagenArchivo, setImagenArchivo] = useState(null);
   const [guardando, setGuardando] = useState(false);
-  const [cuentas, setCuentas] = useState([]);
 
   const fetchResidentes = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getResidentes({ limit: 50 });
+      const { data } = await api.get("/residentes", {
+        params: { limit: 50, ...(puedeGestionar ? { todas: 1 } : {}) },
+      });
       setResidentes(data.residentes);
     } catch (err) {
       console.error(err);
@@ -46,82 +46,36 @@ export default function Residente() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [puedeGestionar]);
 
   useEffect(() => {
     fetchResidentes();
   }, [fetchResidentes]);
 
-  const cargarCuentas = async (id_residente) => {
-    try {
-      const data = await getCuentasDisponibles(id_residente);
-      setCuentas(data.cuentas || []);
-    } catch (err) {
-      console.error(err);
-      setCuentas([]);
-    }
-  };
-
-  const abrirCrear = () => {
-    setEditandoId(null);
-    setForm(FORM_INICIAL);
-    setImagenArchivo(null);
-    setModalAbierto(true);
-    cargarCuentas();
-  };
-
   const abrirEditar = (residente) => {
     setEditandoId(residente.id_residente);
-    setForm({
-      nombre: residente.nombre,
-      descripcion: residente.descripcion || "",
-      id_usuario: residente.id_usuario ? String(residente.id_usuario) : "",
-    });
-    setImagenArchivo(null);
+    setForm({ nombre: residente.nombre, descripcion: residente.descripcion || "" });
     setModalAbierto(true);
-    cargarCuentas(residente.id_residente);
   };
 
   const cerrarModal = () => {
     setModalAbierto(false);
     setEditandoId(null);
     setForm(FORM_INICIAL);
-    setImagenArchivo(null);
   };
 
   const handleFormChange = (e) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) setImagenArchivo(file);
-  };
-
   const handleGuardar = async (e) => {
     e.preventDefault();
     setGuardando(true);
-
-    const formData = new FormData();
-    formData.append("nombre", form.nombre);
-    formData.append("descripcion", form.descripcion);
-    formData.append("id_usuario", form.id_usuario);
-    if (imagenArchivo) {
-      formData.append("imagen", imagenArchivo);
-    }
-
     try {
-      if (editandoId) {
-        await updateResidente(editandoId, formData);
-      } else {
-        await createResidente(formData);
-      }
+      await api.put(`/residentes/${editandoId}`, form);
       cerrarModal();
       fetchResidentes();
-      alerta(
-        editandoId ? "El residente se actualizó correctamente." : "El residente se creó correctamente.",
-        { tipo: "exito" }
-      );
+      alerta("El residente se actualizó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
       alerta(err.response?.data?.message || "No se pudo guardar el residente.", { tipo: "error" });
@@ -130,18 +84,22 @@ export default function Residente() {
     }
   };
 
-  const handleEliminar = async (residente) => {
-    const ok = await confirmar(`¿Eliminar a "${residente.nombre}"? Esta acción no se puede deshacer.`, {
-      textoConfirmar: "Eliminar",
-    });
+  const handleAlternarVisibilidad = async (residente) => {
+    const ocultar = residente.activa;
+    const ok = await confirmar(
+      ocultar
+        ? `¿Ocultar a "${residente.nombre}"? Dejará de aparecer en Residentes, pero su página y sus datos se conservan.`
+        : `¿Volver a mostrar a "${residente.nombre}"? Aparecerá en Residentes si su página está publicada.`,
+      { textoConfirmar: ocultar ? "Ocultar" : "Mostrar" }
+    );
     if (!ok) return;
     try {
-      await deleteResidente(residente.id_residente);
+      await api.put(`/residentes/${residente.id_residente}`, { activa: !residente.activa });
       fetchResidentes();
-      alerta("El residente se eliminó correctamente.", { tipo: "exito" });
+      alerta(ocultar ? "La tarjeta quedó oculta." : "La tarjeta vuelve a mostrarse.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alerta(err.response?.data?.message || "No se pudo eliminar el residente.", { tipo: "error" });
+      alerta(err.response?.data?.message || "No se pudo cambiar la visibilidad.", { tipo: "error" });
     }
   };
 
@@ -156,11 +114,10 @@ export default function Residente() {
 
       <div className="residentes-wrap">
         {puedeGestionar && (
-          <div className="residentes-toolbar">
-            <button className="residentes-create-btn" onClick={abrirCrear}>
-              + Crear residente
-            </button>
-          </div>
+          <p className="residentes-nota-staff" role="note">
+            Las tarjetas se crean solas cuando una cuenta recibe el rol Residente. Cada artista elige su nombre y su
+            descripción desde «Mi página» y la publica. Aquí puedes corregirlas u ocultarlas.
+          </p>
         )}
 
         {loading && <p className="estado-msg">Cargando residentes...</p>}
@@ -168,45 +125,51 @@ export default function Residente() {
         {!loading && !error && residentes.length === 0 && (
           <p className="estado-msg">
             {puedeGestionar
-              ? "Todavía no hay residentes. Crea el primero con el botón de arriba."
+              ? "Todavía no hay residentes. Aparecerán cuando una cuenta tenga el rol Residente."
               : "Pronto conocerás a nuestros residentes."}
           </p>
         )}
 
         <div className="residentes-grid">
-          {!loading && !error && residentes.map((residente) => (
-            <div className="residente-card" key={residente.id_residente}>
-              <div
-                className="residente-img"
-                style={residente.imagen ? { backgroundImage: `url(${getImagenUrl(residente.imagen)})` } : undefined}
-              />
-
-              <div className="residente-info">
-                <div className="residente-info-fila">
-                  <div>
-                    <h3 className="residente-nombre">{residente.nombre}</h3>
-                    {residente.descripcion && (
-                      <p className="residente-descripcion">{residente.descripcion}</p>
-                    )}
-                  </div>
-                  <Link to={`/residentes/${residente.slug}`} className="residente-ver-btn">
-                    Ver
-                  </Link>
+          {!loading && !error && residentes.map((residente) => {
+            const estado = puedeGestionar ? estadoDe(residente) : null;
+            return (
+              <div className={`residente-card ${estado ? "no-visible" : ""}`} key={residente.id_residente}>
+                <div
+                  className="residente-img"
+                  style={residente.imagen ? { backgroundImage: `url(${getImagenUrl(residente.imagen)})` } : undefined}
+                >
+                  {estado && <span className={`residente-estado ${estado.clase}`}>{estado.texto}</span>}
                 </div>
 
-                {puedeGestionar && (
-                  <div className="residente-admin-actions">
-                    <button onClick={() => abrirEditar(residente)}>
-                      <Icono icon={Pencil} size={18} /> Editar
-                    </button>
-                    <button className="danger" onClick={() => handleEliminar(residente)}>
-                      <Icono icon={Trash2} size={18} /> Eliminar
-                    </button>
+                <div className="residente-info">
+                  <div className="residente-info-fila">
+                    <div>
+                      <h3 className="residente-nombre">{residente.nombre}</h3>
+                      {residente.descripcion && <p className="residente-descripcion">{residente.descripcion}</p>}
+                    </div>
+                    {!estado && (
+                      <Link to={`/residentes/${residente.slug}`} className="residente-ver-btn">
+                        Ver
+                      </Link>
+                    )}
                   </div>
-                )}
+
+                  {puedeGestionar && (
+                    <div className="residente-admin-actions">
+                      <button onClick={() => abrirEditar(residente)}>
+                        <Icono icon={Pencil} size={18} /> Editar
+                      </button>
+                      <button onClick={() => handleAlternarVisibilidad(residente)}>
+                        <Icono icon={residente.activa ? EyeOff : Eye} size={18} />
+                        {residente.activa ? " Ocultar" : " Mostrar"}
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -215,17 +178,12 @@ export default function Residente() {
       {modalAbierto && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && cerrarModal()}>
           <div className="modal-box">
-            <h2>{editandoId ? "Editar residente" : "Crear residente"}</h2>
+            <h2>Editar residente</h2>
             <form onSubmit={handleGuardar}>
               <div className="form-group">
-                <label>Nombre</label>
-                <input
-                  name="nombre"
-                  value={form.nombre}
-                  onChange={handleFormChange}
-                  maxLength={80}
-                  required
-                />
+                <label>Nombre artístico</label>
+                <input name="nombre" value={form.nombre} onChange={handleFormChange} maxLength={80} required />
+                <small className="form-ayuda">Si lo cambias, el enlace de su página también cambia.</small>
               </div>
 
               <div className="form-group">
@@ -237,43 +195,6 @@ export default function Residente() {
                   maxLength={150}
                   placeholder="Ej: Piercings y Tatuajes"
                 />
-              </div>
-
-              <div className="form-group">
-                <label>Cuenta asociada (opcional)</label>
-                <select name="id_usuario" value={form.id_usuario} onChange={handleFormChange}>
-                  <option value="">Sin cuenta asociada</option>
-                  {cuentas.map((c) => (
-                    <option key={c.id_usuario} value={c.id_usuario}>
-                      {c.nombre} {c.apellido} (@{c.nombre_usuario})
-                    </option>
-                  ))}
-                </select>
-                <small className="form-ayuda">
-                  La persona con esta cuenta podrá diseñar su página desde "Mi página".
-                </small>
-              </div>
-
-              <div className="form-group">
-                <label>Imagen de portada (opcional)</label>
-                <div className="file-upload-container">
-                  <label className="custom-file-upload">
-                    Subir Imagen
-                    <input
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp"
-                      onChange={handleFileChange}
-                      style={{ display: "none" }}
-                    />
-                  </label>
-                  <span className="file-upload-name">
-                    {imagenArchivo
-                      ? imagenArchivo.name
-                      : editandoId
-                        ? "Se mantiene la imagen actual"
-                        : "Ningún archivo seleccionado"}
-                  </span>
-                </div>
               </div>
 
               <div className="modal-actions">

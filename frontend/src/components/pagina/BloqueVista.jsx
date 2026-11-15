@@ -73,7 +73,7 @@ export default function BloqueVista({ bloque }) {
       const { src, formato } = analizarVideo(bloque.url);
       if (!src) return null;
       return (
-        <div className={`bloque-tam tam-${bloque.tamano || "grande"}`}>
+        <div className={`bloque-tam ${formato === "horizontal" ? `tam-${bloque.tamano || "grande"}` : "tam-grande"}`}>
           <div className={`bloque-video formato-${formato}`}>
             <iframe
               src={src}
