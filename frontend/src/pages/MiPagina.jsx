@@ -342,7 +342,6 @@ export default function MiPagina() {
       await navigator.clipboard.writeText(enlace);
       alerta("Enlace copiado. Ya puedes compartirlo.", { tipo: "exito" });
     } catch {
-      // Sin permiso para el portapapeles: se muestra el enlace para copiarlo a mano.
       window.prompt("Copia el enlace de tu página:", enlace);
     }
   };
@@ -398,6 +397,14 @@ export default function MiPagina() {
           </span>
         </div>
 
+        <p className="mipagina-aviso-publicacion" role="note">
+          {form.publicada && guardado.publicada && "Tu página está publicada: cualquier persona con el enlace puede verla."}
+          {form.publicada && !guardado.publicada && "Activaste «Publicada», pero falta guardar para que el público la vea."}
+          {!form.publicada && !guardado.publicada && "Tu página está en borrador: solo tú puedes verla. Activa «Publicada» y guarda para mostrarla."}
+          {!form.publicada && guardado.publicada && "Al guardar, tu página dejará de verse para el público."}
+          {!residente.activa && " El equipo ocultó tu tarjeta temporalmente: no aparece en Residentes."}
+        </p>
+
         <div className="mipagina-prev-acciones">
           {guardado.publicada && (
             <Link to={`/residentes/${residente.slug}`} className="mipagina-ver-link">
@@ -429,14 +436,6 @@ export default function MiPagina() {
           </button>
         </div>
       </div>
-
-      <p className="mipagina-aviso-publicacion" role="note">
-        {form.publicada && guardado.publicada && "Tu página está publicada: cualquier persona con el enlace puede verla."}
-        {form.publicada && !guardado.publicada && "Activaste «Publicada», pero falta guardar para que el público la vea."}
-        {!form.publicada && !guardado.publicada && "Tu página está en borrador: solo tú puedes verla. Activa «Publicada» y guarda para mostrarla."}
-        {!form.publicada && guardado.publicada && "Al guardar, tu página dejará de verse para el público."}
-        {!residente.activa && " El equipo ocultó tu tarjeta temporalmente: no aparece en Residentes."}
-      </p>
 
       <div className="mipagina-editor">
         {/* SideBar Tools */}
