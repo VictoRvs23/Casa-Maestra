@@ -1,8 +1,6 @@
 .residentes-page {
   background-color: var(--papel);
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   font-family: var(--fuente-texto);
   color: var(--cafe-oscuro);
   position: relative;
@@ -22,14 +20,6 @@
   opacity: 0.13;
   z-index: -1;
   pointer-events: none;
-}
-
-.residentes-page > .pie-pagina {
-  margin-top: auto;
-}
-
-.residentes-page > .residentes-wrap {
-  width: 100%;
 }
 
 .residentes-hero {
@@ -126,4 +116,43 @@
   margin-top: 0.4rem;
   font-size: 0.78rem;
   color: var(--cafe);
+}
+
+.residentes-nota-staff {
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  border: 2px dashed #845736;
+  border-radius: 8px;
+  background: #fbf5ec;
+}
+
+.residente-card.no-visible {
+  opacity: 0.85;
+}
+
+.residente-img {
+  position: relative;
+}
+
+.residente-estado {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  border: 2px solid #3b2a1a;
+  border-radius: 999px;
+  box-shadow: 2px 2px 0 #3b2a1a;
+}
+
+.residente-estado.oculta {
+  background: #7a2e2e;
+}
+
+.residente-estado.borrador {
+  background: #8a6d1d;
 }
