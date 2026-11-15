@@ -2,11 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
-import Icono from "../components/Icono.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getEstudio0, getAgenda, updateAgenda } from "../services/estudio0.services.js";
-import { ArrowLeft } from "@sketchicon/lucide";
 import "../styles/Estudio0.css";
 
 const GESTORES = ["Admin", "Fundador/a"];
@@ -136,7 +134,7 @@ export default function Estudio0Horarios() {
         <Navbar />
         <div className="e0-hero">
           <h1>Horarios</h1>
-          <p>Solo los Fundadores/as pueden cambiar el horario del Estudio 0.</p>
+          <p>Solo los Fundadores/as pueden cambiar el horario del Taller 0.</p>
         </div>
         <Footer />
       </div>
@@ -148,14 +146,8 @@ export default function Estudio0Horarios() {
       <Navbar />
 
       <div className="e0-hero">
-        <button
-          type="button"
-          className="e0-volver"
-          aria-label="Volver al Estudio 0"
-          title="Volver al Estudio 0"
-          onClick={() => navigate("/estudio0")}
-        >
-          <Icono icon={ArrowLeft} size={18} />
+        <button type="button" className="e0-volver" onClick={() => navigate("/taller0")}>
+          ← Volver al Taller 0
         </button>
         <h1>Horarios</h1>
         <p>Define qué días y entre qué horas se puede reservar. Cada bloque se reparte en horas de una hora.</p>
@@ -225,7 +217,7 @@ export default function Estudio0Horarios() {
               <div className="e0-panel e0-resumen">
                 <h2>Resumen</h2>
                 <p>
-                  El Estudio 0 queda abierto <b>{horasSemana} {horasSemana === 1 ? "hora" : "horas"}</b> por semana.
+                  El Taller 0 queda abierto <b>{horasSemana} {horasSemana === 1 ? "hora" : "horas"}</b> por semana.
                 </p>
                 <p className="e0-ayuda">
                   Los días cerrados aparecen así en la agenda. Las reservas ya confirmadas se mantienen aunque
