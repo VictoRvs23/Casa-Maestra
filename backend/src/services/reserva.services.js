@@ -37,7 +37,7 @@ const bloquesSimples = (bloques) =>
 
 export const getEstudio0Service = async () => {
     const estudio = await estudioRepository.findOneBy({ tipo_arriendo: "por_hora" });
-    if (!estudio) throw { status: 404, message: "El Estudio 0 aún no está creado." };
+    if (!estudio) throw { status: 404, message: "El Taller 0 aún no está creado." };
     return estudio;
 };
 
@@ -74,7 +74,7 @@ export const crearReservaService = async (id_usuario, { fecha, hora_inicio, hora
     const estudio = await getEstudio0Service();
 
     if (!estudio.disponible) {
-        throw { status: 409, message: "El Estudio 0 no está disponible por ahora." };
+        throw { status: 409, message: "El Taller 0 no está disponible por ahora." };
     }
     if (!esFechaValida(fecha)) {
         throw { status: 400, message: "La fecha no es válida." };
