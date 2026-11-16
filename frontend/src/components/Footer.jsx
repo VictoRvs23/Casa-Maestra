@@ -1,17 +1,28 @@
 import React from "react";
-import { FaInstagram } from "react-icons/fa";
-import { FaPhone } from "react-icons/fa6";
-import { SiGmail } from "react-icons/si";
+import { REDES_SOCIALES } from "../constants/redesSociales.js";
 import "../styles/Tema.css";
+import "../styles/Footer.css";
+
+const esExterno = (url) => /^https?:\/\//i.test(url);
 
 const Footer = () => (
   <footer className="pie-pagina">
     <div className="divisor-hojas" role="presentation" aria-hidden="true" />
-    <div className="pie-pagina-contenido">
-      <span className="pie-pagina-item"><FaInstagram size={20} /> casamaestra_cl</span>
-      <span className="pie-pagina-item"><FaPhone size={18} /> 9 11111111</span>
-      <span className="pie-pagina-item"><SiGmail size={20} /> casamaestra@gmail.com</span>
-    </div>
+    <nav className="pie-pagina-contenido" aria-label="Contacto y redes sociales">
+      {REDES_SOCIALES.filter((r) => r.url).map(({ id, etiqueta, texto, icono: Icono, url }) => (
+        <a
+          key={id}
+          href={url}
+          className="pie-pagina-item pie-pagina-enlace"
+          aria-label={texto ? `${etiqueta}: ${texto}` : etiqueta}
+          title={etiqueta}
+          {...(esExterno(url) ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          <Icono size={20} aria-hidden="true" />
+          {texto && <span>{texto}</span>}
+        </a>
+      ))}
+    </nav>
   </footer>
 );
 
