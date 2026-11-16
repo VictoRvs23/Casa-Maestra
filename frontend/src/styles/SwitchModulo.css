@@ -61,3 +61,16 @@
   border: 2px dashed #1a1a1a;
   border-radius: 12px;
 }
+
+.estudios-admin-barra {
+  display: flex;
+  justify-content: center;   
+  margin-top: -1rem;       
+  margin-bottom: 1.2rem;
+}
+
+@media (max-width: 700px) {
+  .estudios-admin-barra {
+    justify-content: center;
+  }
+}
