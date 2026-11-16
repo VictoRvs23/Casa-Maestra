@@ -33,6 +33,6 @@ router.use("/estudio0", estudio0Routes);
 router.use("/arriendos", bloquearNuevosArriendos, arriendoRoutes);
 router.use("/seguidos", seguimientoRoutes);
 router.use("/notificaciones", notificacionRoutes);
-router.use("/switch-modulo", switchModuloRoutes);
+router.use("/switch-modulos", switchModuloRoutes);
 
 export default router;
