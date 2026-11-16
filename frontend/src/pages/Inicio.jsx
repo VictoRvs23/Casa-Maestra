@@ -282,7 +282,7 @@ const Inicio = () => {
               </div>
 
               <div className="form-group">
-                <label>Artistas que trabajan aquí</label>
+                <label>Residentes que trabajan aquí</label>
                 {artistasDisponibles.length === 0 ? (
                   <p className="artistas-vacio">No hay residentes registrados todavía.</p>
                 ) : (
