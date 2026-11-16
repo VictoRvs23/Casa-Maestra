@@ -13,6 +13,7 @@ import ReservasEntity from "../entities/reserva.entity.js";
 import ArriendoEntity from "../entities/arriendo.entity.js";
 import SeguimientoEntity from "../entities/seguimiento.entity.js";
 import NotificacionEntity from "../entities/notificacion.entity.js";
+import SwitchModuloEntity from "../entities/switchModulo.entity.js";
 import { createUsuarios, createEstudios} from "./InitDb.js";
 import { createEstudio0 } from "./InitEstudio0.js";
 
@@ -36,7 +37,8 @@ export const AppDataSource = new DataSource({
     AgendaEntity,
     ArriendoEntity,
     SeguimientoEntity,
-    NotificacionEntity
+    NotificacionEntity,
+    SwitchModuloEntity
   ],
   synchronize: true,
   logging: false,
