@@ -9,7 +9,7 @@ import CampoContrasena from "../components/CampoContrasena.jsx";
 
 import "../styles/Usuario.css";
 
-const ROLES = ["Admin", "Fundador/a", "Residente", "Artista", "Cliente"];
+const ROLES = ["Admin", "Fundador/a", "Residente", "Tallerista", "Cliente"];
 
 const FORM_NUEVO = {
   nombre_usuario: "",
@@ -25,7 +25,7 @@ const ROL_DISPLAY = {
   Admin: { label: "Admin", cls: "rol-admin" },
   "Fundador/a": { label: "Fundador/a", cls: "rol-fundador" },
   Residente: { label: "Residente", cls: "rol-residente" },
-  Artista: { label: "Artista", cls: "rol-artista" },
+  Tallerista: { label: "Tallerista", cls: "rol-artista" },
   Cliente: { label: "Cliente", cls: "rol-cliente" },
 };
 

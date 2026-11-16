@@ -55,7 +55,7 @@ export const RegistroValidation = Joi.object({
     }),
     rol: Joi.string()
     .valid(
-        "Fundador/a", "Cliente", "Admin", "Residente", "Artista"
+        "Fundador/a", "Cliente", "Admin", "Residente", "Tallerista"
     )
     .optional()
 }).unknown(false);
@@ -72,7 +72,7 @@ export const CrearUsuarioValidation = RegistroValidation.keys({
         "any.required": "La contraseña es obligatoria."
     }),
     rol: Joi.string()
-    .valid("Fundador/a", "Cliente", "Admin", "Residente", "Artista")
+    .valid("Fundador/a", "Cliente", "Admin", "Residente", "Tallerista")
     .required()
     .messages({
         "any.only": "El rol elegido no es válido.",
