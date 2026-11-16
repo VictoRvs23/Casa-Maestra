@@ -14,6 +14,8 @@ import {
 import { getDisponibilidadArriendos, crearArriendo } from "../services/arriendo.services.js";
 import { Search, User, Pencil, Trash2, Ruler, CircleCheck, CircleX } from "@sketchicon/lucide";
 import Icono from "../components/Icono.jsx";
+import SwitchModulo from "../components/SwitchModulo.jsx";
+import useSwitchModulo from "../hooks/useSwitchModulo.js";
 import "../styles/Estudio.css";
 
 const ESTADO_INICIAL_FORM = {
@@ -48,6 +50,7 @@ export default function Estudios() {
   const navigate = useNavigate();
   const { alerta, confirmar } = useAlerta();
   const puedeGestionar = user?.rol === "Fundador/a" || user?.rol === "Admin";
+  const { cargado: switchesCargados, talleresHabilitado } = useSwitchModulo();
 
   const [estudios, setEstudios] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -264,6 +267,19 @@ export default function Estudios() {
     };
   }, [arrendando, arriendoForm, maxMesesDesde]);
 
+  if (switchesCargados && !talleresHabilitado && !puedeGestionar) {
+    return (
+      <div className="estudios-page">
+        <Navbar />
+        <div className="modulo-deshabilitado" role="status">
+          <h1>Talleres</h1>
+          <p>Este módulo no está disponible por ahora. ¡Vuelve pronto!</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="estudios-page">
       <Navbar />
@@ -274,6 +290,12 @@ export default function Estudios() {
       </div>
 
       <div className="estudios-wrap">
+        {puedeGestionar && (
+          <div className="estudios-admin-barra">
+            <SwitchModulo />
+          </div>
+        )}
+
         <div className="estudios-filters">
           <div className="filter-field">
             <label>Capacidad mínima</label>
