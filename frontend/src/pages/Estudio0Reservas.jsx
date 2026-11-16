@@ -2,12 +2,10 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
-import Icono from "../components/Icono.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getReservas, getMisReservas, cancelarReserva, hoyEnChile } from "../services/estudio0.services.js";
 
-import { ArrowLeft } from "@sketchicon/lucide";
 import "../styles/Estudio0.css";
 
 const GESTORES = ["Admin", "Fundador/a"];
@@ -148,22 +146,16 @@ export default function Estudio0Reservas() {
 
   const titulo = esGestor ? "Reservas" : "Mis reservas";
   const subtitulo = esGestor
-    ? "Todas las reservas del Estudio 0, con la persona que reservó."
-    : "Las horas que has reservado en el Estudio 0.";
+    ? "Todas las reservas del Taller 0, con la persona que reservó."
+    : "Las horas que has reservado en el Taller 0.";
 
   return (
     <div className="e0-page">
       <Navbar />
 
       <div className="e0-hero">
-        <button
-          type="button"
-          className="e0-volver"
-          aria-label="Volver al Estudio 0"
-          title="Volver al Estudio 0"
-          onClick={() => navigate("/estudio0")}
-        >
-          <Icono icon={ArrowLeft} size={18} />
+        <button type="button" className="e0-volver" onClick={() => navigate("/taller0")}>
+          ← Volver al Taller 0
         </button>
         <h1>{titulo}</h1>
         <p>{subtitulo}</p>
@@ -204,7 +196,7 @@ export default function Estudio0Reservas() {
               <div className="e0-panel e0-aviso">
                 <p>No hay reservas en esta pestaña.</p>
                 {!esGestor && (
-                  <button type="button" className="btn-primary" onClick={() => navigate("/estudio0/agenda")}>
+                  <button type="button" className="btn-primary" onClick={() => navigate("/taller0/agenda")}>
                     Reservar una hora
                   </button>
                 )}
@@ -219,6 +211,7 @@ export default function Estudio0Reservas() {
                   const puedeCancelar = r.estado === "confirmada" && esFutura(r, hoy, ahora);
                   return (
                     <li className="e0-reserva" key={r.id_reserva}>
+                      <span className="e0-cinta" aria-hidden="true" />
                       <div className="e0-reserva-fecha">
                         <b>{f.dia}</b>
                         <small>{f.mes}</small>

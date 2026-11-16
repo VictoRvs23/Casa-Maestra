@@ -1,0 +1,23 @@
+.pie-pagina-enlace {
+  color: #1a1a1a;
+  text-decoration: none;
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: color 0.2s;
+}
+
+.pie-pagina-enlace:hover,
+.pie-pagina-enlace:focus-visible {
+  color: #1a1a1a;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.pie-pagina-enlace:focus-visible {
+  outline: 3px solid #1a1a1a;
+  outline-offset: 4px;
+  border-radius: 4px;
+}

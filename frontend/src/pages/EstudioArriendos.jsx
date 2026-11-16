@@ -102,7 +102,7 @@ export default function EstudiosArriendos() {
 
   const cancelar = async (a) => {
     const ok = await confirmar(
-      `¿Cancelar el arriendo de ${a.estudio?.nombre || "este estudio"} desde ${nombreMes(a.fecha_inicio)}? Los meses quedarán libres.`,
+      `¿Cancelar el arriendo de ${a.estudio?.nombre || "este taller"} desde ${nombreMes(a.fecha_inicio)}? Los meses quedarán libres.`,
       { textoConfirmar: "Cancelar arriendo" }
     );
     if (!ok) return;
@@ -121,8 +121,8 @@ export default function EstudiosArriendos() {
 
   const titulo = esGestor ? "Arriendos" : "Mis arriendos";
   const subtitulo = esGestor
-    ? "Todos los arriendos mensuales de los estudios, con la persona que arrendó."
-    : "Los estudios que has arrendado por mes.";
+    ? "Todos los arriendos mensuales de los talleres, con la persona que arrendó."
+    : "Los talleres que has arrendado por mes.";
 
   return (
     <div className="e0-page">
@@ -132,9 +132,9 @@ export default function EstudiosArriendos() {
         <button
           type="button"
           className="e0-volver"
-          aria-label="Volver a Estudios"
-          title="Volver a Estudios"
-          onClick={() => navigate("/estudios")}
+          aria-label="Volver a Talleres"
+          title="Volver a Talleres"
+          onClick={() => navigate("/talleres")}
         >
           <Icono icon={ArrowLeft} size={18} />
         </button>
@@ -177,8 +177,8 @@ export default function EstudiosArriendos() {
               <div className="e0-panel e0-aviso">
                 <p>No hay arriendos en esta pestaña.</p>
                 {!esGestor && (
-                  <button type="button" className="btn-primary" onClick={() => navigate("/estudios")}>
-                    Ver estudios
+                  <button type="button" className="btn-primary" onClick={() => navigate("/talleres")}>
+                    Ver talleres
                   </button>
                 )}
               </div>
