@@ -42,18 +42,23 @@ function App() {
         {/* Ruta de Mi Página */}
         <Route path="/mi-pagina" element={<MiPagina />} />
 
-        {/* Ruta de Estudios */}
-        <Route path="/estudios" element={<Estudio />} />
-        <Route path="/estudios/arriendos" element={<EstudiosArriendos />} />
+        {/* Rutas de Talleres (antes Estudios) */}
+        <Route path="/talleres" element={<Estudio />} />
+        <Route path="/talleres/arriendos" element={<EstudiosArriendos />} />
 
-        {/* Rutas de Estudio 0 */}
-        <Route path="/estudio0" element={<Estudio0 />} />
-        <Route path="/estudio0/agenda" element={<Estudio0Agenda />} />
-        <Route path="/estudio0/horarios" element={<Estudio0Horarios />} />
-        <Route path="/estudio0/reservas" element={<Estudio0Reservas />} />
+        {/* Rutas de Taller 0 (antes Estudio 0) */}
+        <Route path="/taller0" element={<Estudio0 />} />
+        <Route path="/taller0/agenda" element={<Estudio0Agenda />} />
+        <Route path="/taller0/horarios" element={<Estudio0Horarios />} />
+        <Route path="/taller0/reservas" element={<Estudio0Reservas />} />
 
-        {/* Compatibilidad con la URL anterior */}
-        <Route path="/estudios/0" element={<Navigate to="/estudio0" replace />} />
+        <Route path="/estudios" element={<Navigate to="/talleres" replace />} />
+        <Route path="/estudios/arriendos" element={<Navigate to="/talleres/arriendos" replace />} />
+        <Route path="/estudios/0" element={<Navigate to="/taller0" replace />} />
+        <Route path="/estudio0" element={<Navigate to="/taller0" replace />} />
+        <Route path="/estudio0/agenda" element={<Navigate to="/taller0/agenda" replace />} />
+        <Route path="/estudio0/horarios" element={<Navigate to="/taller0/horarios" replace />} />
+        <Route path="/estudio0/reservas" element={<Navigate to="/taller0/reservas" replace />} />
 
         {/* Ruta de Soporte */}
         <Route path="/soporte" element={<Soporte />} />
