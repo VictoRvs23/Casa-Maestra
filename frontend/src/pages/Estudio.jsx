@@ -287,10 +287,15 @@ export default function Estudios() {
       <div className="estudios-hero">
         <h1>Talleres</h1>
         <p>Reserva el espacio adecuado para tu oficio: salas equipadas por hora, día o espacio completo.</p>
-        {puedeGestionar && <SwitchModulo />}
       </div>
 
       <div className="estudios-wrap">
+        {puedeGestionar && (
+          <div className="estudios-admin-barra">
+            <SwitchModulo />
+          </div>
+        )}
+
         <div className="estudios-filters">
           <div className="filter-field">
             <label>Capacidad mínima</label>
