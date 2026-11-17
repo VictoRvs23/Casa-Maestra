@@ -2,8 +2,10 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import Icono from "../components/Icono.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
+import { ArrowLeft } from "@sketchicon/lucide";
 import { getDisponibilidad, reservarEstudio0, hoyEnChile } from "../services/estudio0.services.js";
 
 import "../styles/Estudio0.css";
@@ -189,8 +191,14 @@ export default function Estudio0Agenda() {
       <Navbar />
 
       <div className="e0-hero">
-        <button type="button" className="e0-volver" onClick={() => navigate("/taller0")}>
-          ← Volver al Taller 0
+        <button
+          type="button"
+          className="e0-volver"
+          aria-label="Volver al Taller 0"
+          title="Volver al Taller 0"
+          onClick={() => navigate("/taller0")}
+        >
+          <Icono icon={ArrowLeft} size={18} />
         </button>
         <h1>Agenda</h1>
         <p>
