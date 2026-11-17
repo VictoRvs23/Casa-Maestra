@@ -2,7 +2,7 @@ import Joi from "joi";
 
 const HORA_PATTERN = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
-export const CrearReservaValidation = Joi.object({
+const ReservaItem = Joi.object({
     fecha: Joi.string()
         .pattern(/^\d{4}-\d{2}-\d{2}$/)
         .required()
@@ -26,6 +26,21 @@ export const CrearReservaValidation = Joi.object({
         }),
 }).unknown(false);
 
+export const CrearReservaValidation = ReservaItem;
+
+export const CrearReservasValidation = Joi.object({
+    reservas: Joi.array()
+        .items(ReservaItem)
+        .min(1)
+        .max(8)
+        .required()
+        .messages({
+            "array.min": "Debes elegir al menos una hora.",
+            "array.max": "Puedes reservar hasta 8 horas por confirmación.",
+            "any.required": "Debes indicar las reservas.",
+        }),
+}).unknown(false);
+
 export const DisponibilidadQueryValidation = Joi.object({
     mes: Joi.string()
         .pattern(/^\d{4}-(0[1-9]|1[0-2])$/)
@@ -43,4 +58,4 @@ export const ListadoReservasQueryValidation = Joi.object({
         .messages({ "any.only": "El período debe ser proximas, pasadas, canceladas o todas." }),
     page: Joi.number().integer().min(1).default(1),
     limit: Joi.number().integer().min(1).max(50).default(10),
-}).unknown(false);  
+}).unknown(false);

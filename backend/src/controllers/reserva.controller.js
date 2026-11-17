@@ -2,6 +2,7 @@
 import * as reservaService from "../services/reserva.services.js";
 import {
     CrearReservaValidation,
+    CrearReservasValidation,
     DisponibilidadQueryValidation,
     ListadoReservasQueryValidation,
 } from "../validations/reserva.validation.js";
@@ -33,6 +34,15 @@ export const getDisponibilidad = async (req, res) => {
 
 export const crearReserva = async (req, res) => {
     try {
+        if (Array.isArray(req.body?.reservas)) {
+            const { error, value } = CrearReservasValidation.validate(req.body);
+            if (error) return res.status(400).json({ message: error.details[0].message });
+
+            const reservas = await reservaService.crearReservasService(req.usuario.id_usuario, value.reservas);
+            const mensaje = reservas.length === 1 ? "Reserva confirmada" : "Reservas confirmadas";
+            return res.status(201).json({ message: mensaje, reservas });
+        }
+
         const { error, value } = CrearReservaValidation.validate(req.body);
         if (error) return res.status(400).json({ message: error.details[0].message });
 
