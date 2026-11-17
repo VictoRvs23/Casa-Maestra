@@ -2,8 +2,10 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import Icono from "../components/Icono.jsx";
 import { useAuth } from "../context/AuthContext";
 import { useAlerta } from "../context/AlertaContext.jsx";
+import { ArrowLeft } from "@sketchicon/lucide";
 import { getDisponibilidad, reservarEstudio0, hoyEnChile } from "../services/estudio0.services.js";
 
 import "../styles/Estudio0.css";
@@ -18,6 +20,8 @@ const NOMBRES_MES = [
 ];
 const DIAS_LARGOS = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 const DIAS_CORTOS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+const DIAS_ABREV = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+const MESES_ABREV = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 
 const pad = (n) => String(n).padStart(2, "0");
 const mesDe = (anio, mes) => `${anio}-${pad(mes + 1)}`;
@@ -29,6 +33,26 @@ const diaSemana = (fecha) => {
 const sumarHora = (hora) => `${pad(Math.floor((minutos(hora) + 60) / 60))}:${pad((minutos(hora) + 60) % 60)}`;
 const etiquetaDia = (fecha) =>
   `${DIAS_LARGOS[diaSemana(fecha)]} ${Number(fecha.slice(8))} de ${NOMBRES_MES[Number(fecha.slice(5, 7)) - 1].toLowerCase()}`;
+
+const etiquetaCorta = (fecha) =>
+  `${DIAS_ABREV[diaSemana(fecha)]} ${Number(fecha.slice(8))} ${MESES_ABREV[Number(fecha.slice(5, 7)) - 1]}`;
+
+const armarDias = (seleccion) => {
+  const porDia = {};
+  for (const { fecha, hora } of seleccion) (porDia[fecha] = porDia[fecha] || []).push(hora);
+  return Object.keys(porDia)
+    .sort()
+    .map((fecha) => {
+      const horas = porDia[fecha].sort((a, b) => minutos(a) - minutos(b));
+      const tramos = [];
+      for (const h of horas) {
+        const ultimo = tramos[tramos.length - 1];
+        if (ultimo && ultimo.fin === h) ultimo.fin = sumarHora(h);
+        else tramos.push({ ini: h, fin: sumarHora(h) });
+      }
+      return { fecha, tramos };
+    });
+};
 
 const armarRangos = (seleccion) => {
   const ordenadas = [...seleccion].sort((a, b) =>
@@ -121,15 +145,13 @@ export default function Estudio0Agenda() {
     setSeleccion([...seleccion, { fecha, hora }]);
   };
 
-  const quitarRango = (rango) =>
-    setSeleccion(
-      seleccion.filter(
-        (s) => !(s.fecha === rango.fecha && minutos(s.hora) >= minutos(rango.hora_inicio) && minutos(s.hora) < minutos(rango.hora_fin))
-      )
-    );
+  const quitarDia = (fecha) => setSeleccion(seleccion.filter((s) => s.fecha !== fecha));
 
   const rangos = useMemo(() => armarRangos(seleccion), [seleccion]);
+  const diasElegidos = useMemo(() => armarDias(seleccion), [seleccion]);
   const horasElegidas = seleccion.length;
+  const restantes = MAX_HORAS - horasElegidas;
+  const precioHora = datos?.precio || 0;
 
   const textoRango = (r) => `${etiquetaDia(r.fecha)}, ${r.hora_inicio} a ${r.hora_fin}`;
   const resumen = horasElegidas
@@ -169,8 +191,14 @@ export default function Estudio0Agenda() {
       <Navbar />
 
       <div className="e0-hero">
-        <button type="button" className="e0-volver" onClick={() => navigate("/taller0")}>
-          ← Volver al Taller 0
+        <button
+          type="button"
+          className="e0-volver"
+          aria-label="Volver al Taller 0"
+          title="Volver al Taller 0"
+          onClick={() => navigate("/taller0")}
+        >
+          <Icono icon={ArrowLeft} size={18} />
         </button>
         <h1>Agenda</h1>
         <p>
@@ -179,7 +207,7 @@ export default function Estudio0Agenda() {
         </p>
       </div>
 
-      <main className="e0-agenda">
+      <main className="e0-agenda e0-agenda-doble">
         {error && <p className="e0-estado e0-estado-error">{error}</p>}
 
         {/* Calendario */}
@@ -208,12 +236,13 @@ export default function Estudio0Agenda() {
               const pasado = dia.fecha < hoy;
               const deshabilitado = !dia.abierto || n === 0;
               const sub = !dia.abierto ? "cerrado" : pasado ? "" : n === 0 ? "completo" : `${n} ${n === 1 ? "libre" : "libres"}`;
+              const claseExtra = pasado && dia.abierto ? "pasado" : "";
               return (
                 <button
                   key={dia.fecha}
                   type="button"
                   disabled={deshabilitado}
-                  className={`e0-dia ${fechaSel === dia.fecha ? "elegido" : ""} ${!dia.abierto ? "cerrado" : ""} ${cuantasEnDia(dia.fecha) ? "con-seleccion" : ""}`}
+                  className={`e0-dia ${fechaSel === dia.fecha ? "elegido" : ""} ${!dia.abierto ? "cerrado" : ""} ${claseExtra} ${cuantasEnDia(dia.fecha) ? "con-seleccion" : ""}`}
                   onClick={() => elegirDia(dia)}
                   aria-label={`${DIAS_LARGOS[diaSemana(dia.fecha)]} ${Number(dia.fecha.slice(8))}${sub ? `, ${sub}` : ""}`}
                 >
@@ -227,7 +256,9 @@ export default function Estudio0Agenda() {
           <div className="e0-leyenda">
             <span><i className="libre" /> Con horas libres</span>
             <span><i className="elegido" /> Día elegido</span>
+            <span><i className="seleccion" /> Con tu selección</span>
             <span><i className="cerrado" /> Cerrado</span>
+            <span><i className="pasado" /> Ya pasó</span>
           </div>
         </section>
 
@@ -241,23 +272,33 @@ export default function Estudio0Agenda() {
                 <h2>{etiquetaDia(fechaSel)}</h2>
                 <p className="e0-ayuda">Toca todas las horas que quieras (hasta {MAX_HORAS} en total).</p>
 
-                <div className="e0-horas">
-                  {diaElegido.horas.map((h) => {
-                    const elegida = estaElegida(fechaSel, h.hora_inicio);
-                    return (
-                      <button
-                        key={h.hora_inicio}
-                        type="button"
-                        disabled={h.estado !== "libre"}
-                        className={`e0-hora ${h.estado} ${elegida ? "elegida" : ""}`}
-                        aria-pressed={elegida}
-                        onClick={() => alternarHora(fechaSel, h.hora_inicio)}
-                      >
-                        {h.hora_inicio} – {h.hora_fin}
-                      </button>
-                    );
-                  })}
-                </div>
+                {[
+                  { titulo: "Mañana", horas: diaElegido.horas.filter((h) => h.hora_inicio < "13:00") },
+                  { titulo: "Tarde", horas: diaElegido.horas.filter((h) => h.hora_inicio >= "13:00") },
+                ]
+                  .filter((g) => g.horas.length > 0)
+                  .map((g) => (
+                    <div key={g.titulo}>
+                      <h3 className="e0-grupo-titulo">{g.titulo}</h3>
+                      <div className="e0-horas">
+                        {g.horas.map((h) => {
+                          const elegida = estaElegida(fechaSel, h.hora_inicio);
+                          return (
+                            <button
+                              key={h.hora_inicio}
+                              type="button"
+                              disabled={h.estado !== "libre"}
+                              className={`e0-hora ${h.estado} ${elegida ? "elegida" : ""}`}
+                              aria-pressed={elegida}
+                              onClick={() => alternarHora(fechaSel, h.hora_inicio)}
+                            >
+                              {h.hora_inicio} – {h.hora_fin}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
 
                 <div className="e0-leyenda">
                   <span><i className="libre" /> Libre</span>
@@ -270,29 +311,52 @@ export default function Estudio0Agenda() {
 
           <div className="e0-panel e0-resumen">
             <div className="e0-resumen-fila">
-              <strong>{resumen}</strong>
-              <span className="e0-total">{plata(horasElegidas * (datos?.precio || 0))}</span>
+              <div>
+                <strong>{resumen}</strong>
+                {horasElegidas > 0 && (
+                  <small className="e0-resumen-sub">
+                    {horasElegidas} h × {plata(precioHora)}
+                  </small>
+                )}
+              </div>
+              <span className="e0-total">{plata(horasElegidas * precioHora)}</span>
             </div>
-            {rangos.length > 0 && (
+
+            <div className="e0-progreso" aria-hidden="true">
+              <b style={{ width: `${(horasElegidas / MAX_HORAS) * 100}%` }} />
+            </div>
+            <div className="e0-progreso-texto">
+              <span>{horasElegidas} de {MAX_HORAS} horas</span>
+              <span>
+                {restantes === 0 ? "Llegaste al máximo" : `${restantes} ${restantes === 1 ? "hora disponible" : "horas disponibles"}`}
+              </span>
+            </div>
+
+            {diasElegidos.length > 0 && (
               <ul className="e0-seleccion-lista">
-                {rangos.map((r) => (
-                  <li key={`${r.fecha}-${r.hora_inicio}`}>
-                    <span>{textoRango(r)}</span>
-                    <button type="button" onClick={() => quitarRango(r)} aria-label={`Quitar ${textoRango(r)}`}>
+                {diasElegidos.map((d) => (
+                  <li key={d.fecha}>
+                    <span>
+                      <b>{etiquetaCorta(d.fecha)}</b> · {d.tramos.map((t) => `${t.ini} – ${t.fin}`).join(", ")}
+                    </span>
+                    <button type="button" onClick={() => quitarDia(d.fecha)} aria-label={`Quitar ${etiquetaCorta(d.fecha)}`}>
                       ×
                     </button>
                   </li>
                 ))}
               </ul>
             )}
-            <button
-              type="button"
-              className="btn-primary"
-              disabled={horasElegidas === 0 || reservando || (datos && !datos.disponible)}
-              onClick={confirmar}
-            >
-              {!user ? "Inicia sesión para reservar" : reservando ? "Reservando..." : "Confirmar reserva"}
-            </button>
+
+            <div className="e0-resumen-acciones">
+              <button
+                type="button"
+                className="btn-primary"
+                disabled={horasElegidas === 0 || reservando || (datos && !datos.disponible)}
+                onClick={confirmar}
+              >
+                {!user ? "Inicia sesión para reservar" : reservando ? "Reservando..." : "Confirmar reserva"}
+              </button>
+            </div>
             {datos && !datos.disponible && <small className="e0-ayuda">El Taller 0 no acepta reservas por ahora.</small>}
           </div>
         </section>
