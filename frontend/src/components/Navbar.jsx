@@ -4,11 +4,14 @@ import logoCasaMaestra from "../assets/logoCasaMaestra.png";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { useAuth } from "../context/AuthContext.jsx";
 import Notificaciones from "./Notificaciones.jsx";
+import useSwitchModulo from "../hooks/useSwitchModulo.js";
 import "../styles/Tema.css";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
     const { user, logout } = useAuth();
+    const { talleresHabilitado } = useSwitchModulo();
+    const esStaff = user?.rol === "Admin" || user?.rol === "Fundador/a";
     const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef(null);
@@ -43,8 +46,10 @@ const Navbar = () => {
                 </Link>
                 <ul className="navbar-links">
                     <li><NavLink to="/residentes" className={({ isActive }) => (isActive ? "activo" : "")}>Residentes</NavLink></li>
-                    <li><NavLink to="/estudios" className={({ isActive }) => (isActive ? "activo" : "")}>Estudios</NavLink></li>
-                    <li><NavLink to="/estudio0" className={({ isActive }) => (isActive ? "activo" : "")}>Estudio 0</NavLink></li>
+                    {(talleresHabilitado || esStaff) && (
+                        <li><NavLink to="/talleres" className={({ isActive }) => (isActive ? "activo" : "")}>Talleres{!talleresHabilitado && " (oculto)"}</NavLink></li>
+                    )}
+                    <li><NavLink to="/taller0" className={({ isActive }) => (isActive ? "activo" : "")}>Taller 0</NavLink></li>
                     <li><NavLink to="/soporte" className={({ isActive }) => (isActive ? "activo" : "")}>Soporte</NavLink></li>
                     {user?.rol === "Residente" && (
                         <li><NavLink to="/mi-pagina" className={({ isActive }) => (isActive ? "activo" : "")}>Mi página</NavLink></li>

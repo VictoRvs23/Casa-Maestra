@@ -43,13 +43,13 @@ export async function createUsuarios() {
         rol: "Residente"
       },
       {
-        nombre_usuario: "ArtistaDemo",
-        nombre: "Artista",
+        nombre_usuario: "TalleristaDemo",
+        nombre: "Tallerista",
         apellido:"Casa Maestra",
-        email: "artista@casamaestra.cl",
-        contraseña: await bcrypt.hash("artista123", 10),
-        telefono: "900000003",
-        rol: "Artista"
+        email: "tallerista@casamaestra.cl",
+        contraseña: await bcrypt.hash("tallerista123", 10),
+        telefono: "900000005",
+        rol: "Tallerista"
       },
       {
         nombre_usuario: "ClienteDemo",

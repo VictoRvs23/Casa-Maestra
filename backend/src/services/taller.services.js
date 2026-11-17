@@ -8,10 +8,8 @@ import path from "path";
 const tallerRepository = AppDataSource.getRepository(TallerEntity);
 const usuarioRepository = AppDataSource.getRepository(UsuarioEntity);
 
-// Roles que pueden aparecer como artistas de un taller.
-const ROLES_ARTISTA = ["Artista", "Residente"];
+const ROLES_ARTISTA = ["Residente"];
 
-// Solo estos campos del usuario salen en la API pública (nunca contraseña ni email).
 const CAMPOS_ARTISTA = [
     "artista.id_usuario",
     "artista.nombre",
@@ -20,7 +18,6 @@ const CAMPOS_ARTISTA = [
     "artista.avatar",
 ];
 
-// Solo borra archivos que subimos nosotros (por ruta), nunca una URL externa.
 const borrarImagenLocal = (rutaImagen) => {
     if (!rutaImagen || !rutaImagen.startsWith("/uploads/talleres/")) return;
 
@@ -32,7 +29,6 @@ const borrarImagenLocal = (rutaImagen) => {
     });
 };
 
-// Convierte una lista de ids en usuarios reales con rol Artista/Residente.
 const resolverArtistas = async (ids) => {
     if (!ids || ids.length === 0) return [];
 
@@ -43,7 +39,7 @@ const resolverArtistas = async (ids) => {
     if (artistas.length !== ids.length) {
         throw {
             status: 400,
-            message: "Alguno de los artistas seleccionados no existe o no tiene rol de Artista o Residente.",
+            message: "Alguno de los artistas seleccionados no existe o no tiene rol de Residente.",
         };
     }
     return artistas;
@@ -66,7 +62,6 @@ export const getTallerService = async (id_taller) => {
     return taller;
 };
 
-// Lista para el selector del formulario (solo Fundador/a y Admin).
 export const getArtistasDisponiblesService = async () => {
     return await usuarioRepository.find({
         where: { rol: In(ROLES_ARTISTA) },
@@ -115,6 +110,6 @@ export const deleteTallerService = async (id_taller) => {
     if (!taller) throw { status: 404, message: "Taller no encontrado" };
 
     borrarImagenLocal(taller.imagen);
-    await tallerRepository.delete(id_taller); // la tabla intermedia se limpia sola (ON DELETE CASCADE)
+    await tallerRepository.delete(id_taller);
     return true;
 };

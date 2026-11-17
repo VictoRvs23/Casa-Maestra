@@ -163,11 +163,19 @@
 
 .pagina-publica-pie .divisor-hojas {
   background: var(--acento, var(--verde));
-  -webkit-mask: url("../../assets/enredadera.png") repeat-x center / auto 44px;
-  mask: url("../../assets/enredadera.png") repeat-x center / auto 44px;
+  -webkit-mask: url("../../assets/separador.png") repeat-x center / auto 100%;
+  mask: url("../../assets/separador.png") repeat-x center / auto 100%;
 }
 
 .pagina-publica-pie .pie-pagina {
   color: inherit;
   padding-top: 0.6rem;
+}
+
+.pagina-publica-page.cabecera-clara .navbar-container {
+  background-color: transparent;
+}
+
+.pagina-publica-page.cabecera-clara .navbar-container::before {
+  display: none;
 }

@@ -1,12 +1,28 @@
 .navbar-container {
+  --nav-negro: #1a1a1a;
+  --nav-negro-hover: #3a3a3a;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 4rem;
-  background-color: transparent;
+  background-color: var(--papel);
   font-family: var(--fuente-texto);
   position: relative;
   z-index: 20;
+}
+
+.navbar-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hojaArrugada.jpg");
+  background-color: var(--papel);
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat;
+  opacity: 0.13;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .navbar-left {
@@ -25,7 +41,7 @@
   mask-repeat: no-repeat;
   -webkit-mask-position: center;
   mask-position: center;
-  background-color: var(--cafe);
+  background-color: var(--nav-negro);
   cursor: pointer;
 }
 
@@ -43,19 +59,22 @@
   padding: 0.45rem 0.9rem;
   border-radius: 18px;
   text-decoration: none;
-  color: var(--cafe-oscuro);
-  font-weight: 600;
-  font-size: 0.95rem;
+  color: var(--nav-negro);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
   transition: color 0.3s, background-color 0.3s;
 }
 
 .navbar-links a:hover {
-  color: var(--verde);
+  color: var(--nav-negro);
+  background-color: rgba(26, 26, 26, 0.08);
 }
 
 .navbar-links a.activo {
-  background-color: var(--beige);
-  color: var(--verde);
+  background-color: var(--nav-negro);
+  color: #ffffff;
 }
 
 .navbar-right {
@@ -65,7 +84,7 @@
 }
 
 .campana-btn {
-  background-color: var(--cafe);
+  background-color: var(--nav-negro);
   color: white;
   border: none;
   border-radius: 50%;
@@ -80,11 +99,11 @@
 }
 
 .campana-btn:hover {
-  background-color: var(--cafe-hover);
+  background-color: var(--nav-negro-hover);
 }
 
 .nav-login-btn {
-  background-color: var(--cafe);
+  background-color: var(--nav-negro);
   color: white;
   text-decoration: none;
   height: 42px;
@@ -99,7 +118,7 @@
 }
 
 .nav-login-btn:hover {
-  background-color: var(--cafe-hover);
+  background-color: var(--nav-negro-hover);
 }
 
 .account-menu {
@@ -107,7 +126,7 @@
 }
 
 .nav-account-btn {
-  background-color: var(--cafe);
+  background-color: var(--nav-negro);
   color: white;
   border: none;
   height: 42px;
@@ -125,19 +144,20 @@
 }
 
 .nav-account-btn:hover {
-  background-color: var(--cafe-hover);
+  background-color: var(--nav-negro-hover);
 }
 
 .account-dropdown {
+  --nav-negro: #1a1a1a;
   position: absolute;
   top: calc(100% + 12px);
   right: 0;
   background-color: var(--papel-claro);
-  border: 2px solid var(--cafe);
+  border: 2px solid var(--nav-negro);
   border-radius: 8px 10px 7px 9px;
   min-width: 210px;
   padding: 0.9rem 0;
-  box-shadow: 5px 5px 0 var(--cafe);
+  box-shadow: 5px 5px 0 var(--nav-negro);
   z-index: 50;
 }
 
@@ -145,7 +165,7 @@
   text-align: center;
   font-family: var(--fuente-titulo);
   font-weight: 700;
-  color: var(--cafe);
+  color: var(--nav-negro);
   font-size: 1.05rem;
   padding: 0 1.2rem 0.7rem;
 }
@@ -162,7 +182,7 @@
   padding: 0.65rem 1.2rem;
   background: none;
   border: none;
-  color: var(--cafe-oscuro);
+  color: var(--nav-negro);
   font-family: var(--fuente-texto);
   font-size: 0.9rem;
   text-decoration: none;

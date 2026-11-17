@@ -136,7 +136,7 @@ export default function Estudio0Horarios() {
         <Navbar />
         <div className="e0-hero">
           <h1>Horarios</h1>
-          <p>Solo los Fundadores/as pueden cambiar el horario del Estudio 0.</p>
+          <p>Solo los Fundadores/as pueden cambiar el horario del Taller 0.</p>
         </div>
         <Footer />
       </div>
@@ -151,9 +151,9 @@ export default function Estudio0Horarios() {
         <button
           type="button"
           className="e0-volver"
-          aria-label="Volver al Estudio 0"
-          title="Volver al Estudio 0"
-          onClick={() => navigate("/estudio0")}
+          aria-label="Volver al Taller 0"
+          title="Volver al Taller 0"
+          onClick={() => navigate("/taller0")}
         >
           <Icono icon={ArrowLeft} size={18} />
         </button>
@@ -225,7 +225,7 @@ export default function Estudio0Horarios() {
               <div className="e0-panel e0-resumen">
                 <h2>Resumen</h2>
                 <p>
-                  El Estudio 0 queda abierto <b>{horasSemana} {horasSemana === 1 ? "hora" : "horas"}</b> por semana.
+                  El Taller 0 queda abierto <b>{horasSemana} {horasSemana === 1 ? "hora" : "horas"}</b> por semana.
                 </p>
                 <p className="e0-ayuda">
                   Los días cerrados aparecen así en la agenda. Las reservas ya confirmadas se mantienen aunque

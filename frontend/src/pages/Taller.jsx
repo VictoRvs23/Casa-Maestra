@@ -73,9 +73,9 @@ export default function Taller() {
             </section>
 
             <section className="taller-seccion">
-              <h2>Artistas</h2>
+              <h2>Residentes</h2>
               {taller.artistas.length === 0 ? (
-                <p className="taller-descripcion">Aún no hay artistas asignados a este taller.</p>
+                <p className="taller-descripcion">Aún no hay residentes asignados a este taller.</p>
               ) : (
                 <div className="artistas-grid">
                   {taller.artistas.map((a) => (

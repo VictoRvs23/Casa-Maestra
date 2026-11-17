@@ -14,6 +14,8 @@ import {
 import { getDisponibilidadArriendos, crearArriendo } from "../services/arriendo.services.js";
 import { Search, User, Pencil, Trash2, Ruler, CircleCheck, CircleX } from "@sketchicon/lucide";
 import Icono from "../components/Icono.jsx";
+import SwitchModulo from "../components/SwitchModulo.jsx";
+import useSwitchModulo from "../hooks/useSwitchModulo.js";
 import "../styles/Estudio.css";
 
 const ESTADO_INICIAL_FORM = {
@@ -48,6 +50,7 @@ export default function Estudios() {
   const navigate = useNavigate();
   const { alerta, confirmar } = useAlerta();
   const puedeGestionar = user?.rol === "Fundador/a" || user?.rol === "Admin";
+  const { cargado: switchesCargados, talleresHabilitado } = useSwitchModulo();
 
   const [estudios, setEstudios] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,9 +66,8 @@ export default function Estudios() {
   const [form, setForm] = useState(ESTADO_INICIAL_FORM);
   const [imagenArchivo, setImagenArchivo] = useState(null);
 
-  // Arriendo mensual
-  const [disp, setDisp] = useState(null); // { meses: [...], ocupados: { id: [...] } }
-  const [arrendando, setArrendando] = useState(null); // estudio que se está arrendando
+  const [disp, setDisp] = useState(null);
+  const [arrendando, setArrendando] = useState(null);
   const [arriendoForm, setArriendoForm] = useState({ mes_inicio: "", meses: 1 });
   const [enviandoArriendo, setEnviandoArriendo] = useState(false);
 
@@ -82,7 +84,7 @@ export default function Estudios() {
       setEstudios(data.estudios);
     } catch (err) {
       console.error(err);
-      setError("No se pudieron cargar los estudios.");
+      setError("No se pudieron cargar los talleres.");
     } finally {
       setLoading(false);
     }
@@ -186,12 +188,12 @@ export default function Estudios() {
       setModalAbierto(false);
       fetchEstudios();
       alerta(
-        editandoId ? "El estudio se actualizó correctamente." : "El estudio se creó correctamente.",
+        editandoId ? "El taller se actualizó correctamente." : "El taller se creó correctamente.",
         { tipo: "exito" }
       );
     } catch (err) {
       console.error(err);
-      alerta(err.response?.data?.message || "No se pudo guardar el estudio.", { tipo: "error" });
+      alerta(err.response?.data?.message || "No se pudo guardar el taller.", { tipo: "error" });
     }
   };
 
@@ -203,10 +205,10 @@ export default function Estudios() {
     try {
       await deleteEstudio(estudio.id_estudio);
       fetchEstudios();
-      alerta("El estudio se eliminó correctamente.", { tipo: "exito" });
+      alerta("El taller se eliminó correctamente.", { tipo: "exito" });
     } catch (err) {
       console.error(err);
-      alerta("No se pudo eliminar el estudio.", { tipo: "error" });
+      alerta("No se pudo eliminar el taller.", { tipo: "error" });
     }
   };
 
@@ -217,7 +219,7 @@ export default function Estudios() {
     }
     const libres = mesesLibres(estudio.id_estudio);
     if (libres.length === 0) {
-      alerta("Este estudio no tiene meses libres por ahora.", { tipo: "info", titulo: "Sin disponibilidad" });
+      alerta("Este taller no tiene meses libres por ahora.", { tipo: "info", titulo: "Sin disponibilidad" });
       return;
     }
     setArriendoForm({ mes_inicio: libres[0], meses: 1 });
@@ -265,16 +267,35 @@ export default function Estudios() {
     };
   }, [arrendando, arriendoForm, maxMesesDesde]);
 
+  if (switchesCargados && !talleresHabilitado && !puedeGestionar) {
+    return (
+      <div className="estudios-page">
+        <Navbar />
+        <div className="modulo-deshabilitado" role="status">
+          <h1>Talleres</h1>
+          <p>Este módulo no está disponible por ahora. ¡Vuelve pronto!</p>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="estudios-page">
       <Navbar />
 
       <div className="estudios-hero">
-        <h1>Estudios</h1>
-        <p>Reserva el espacio adecuado para tu oficio: salas equipadas por hora, día o taller completo.</p>
+        <h1>Talleres</h1>
+        <p>Reserva el espacio adecuado para tu oficio: salas equipadas por hora, día o espacio completo.</p>
       </div>
 
       <div className="estudios-wrap">
+        {puedeGestionar && (
+          <div className="estudios-admin-barra">
+            <SwitchModulo />
+          </div>
+        )}
+
         <div className="estudios-filters">
           <div className="filter-field">
             <label>Capacidad mínima</label>
@@ -290,7 +311,7 @@ export default function Estudios() {
             <label>Buscar por nombre</label>
             <input
               type="text"
-              placeholder="Ej: Estudio 2"
+              placeholder="Ej: Taller 2"
               value={busquedaInput}
               onChange={(e) => setBusquedaInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && aplicarBusqueda()}
@@ -302,22 +323,22 @@ export default function Estudios() {
           </button>
 
           {user && (
-            <button className="arriendos-link" onClick={() => navigate("/estudios/arriendos")}>
+            <button className="arriendos-link" onClick={() => navigate("/talleres/arriendos")}>
               {puedeGestionar ? "Ver arriendos" : "Mis arriendos"}
             </button>
           )}
 
           {puedeGestionar && (
             <button className="create-btn" onClick={abrirCrear}>
-              + Crear estudio
+              + Crear taller
             </button>
           )}
         </div>
 
-        {loading && <p className="estado-msg">Cargando estudios...</p>}
+        {loading && <p className="estado-msg">Cargando talleres...</p>}
         {!loading && error && <p className="estado-msg estado-error">{error}</p>}
         {!loading && !error && estudios.length === 0 && (
-          <p className="estado-msg">No hay estudios que coincidan con tu búsqueda.</p>
+          <p className="estado-msg">No hay talleres que coincidan con tu búsqueda.</p>
         )}
 
         <div className="estudios-lista">
@@ -418,7 +439,7 @@ export default function Estudios() {
       {modalAbierto && (
         <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && setModalAbierto(false)}>
           <div className="modal-box">
-            <h2>{editandoId ? "Editar estudio" : "Crear estudio"}</h2>
+            <h2>{editandoId ? "Editar taller" : "Crear taller"}</h2>
             <form onSubmit={handleGuardar}>
               <div className="form-group">
                 <label>Nombre</label>
@@ -453,7 +474,7 @@ export default function Estudios() {
               </div>
 
               <div className="form-group">
-                <label>Imagen del estudio (opcional)</label>
+                <label>Imagen del taller (opcional)</label>
                 <div className="file-upload-container">
                   <label className="custom-file-upload">
                     Subir Imagen
