@@ -8,7 +8,8 @@ import { getDisponibilidad, reservarEstudio0, hoyEnChile } from "../services/est
 
 import "../styles/Estudio0.css";
 
-const MAX_HORAS = 4;
+const MAX_HORAS = 8;
+const MAX_SEGUIDAS = 4;
 const MESES_ADELANTE = 6;
 
 const NOMBRES_MES = [
@@ -24,6 +25,24 @@ const minutos = (hora) => Number(hora.slice(0, 2)) * 60 + Number(hora.slice(3, 5
 const diaSemana = (fecha) => {
   const [y, m, d] = fecha.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1, d)).getUTCDay();
+};
+const sumarHora = (hora) => `${pad(Math.floor((minutos(hora) + 60) / 60))}:${pad((minutos(hora) + 60) % 60)}`;
+const etiquetaDia = (fecha) =>
+  `${DIAS_LARGOS[diaSemana(fecha)]} ${Number(fecha.slice(8))} de ${NOMBRES_MES[Number(fecha.slice(5, 7)) - 1].toLowerCase()}`;
+
+const armarRangos = (seleccion) => {
+  const ordenadas = [...seleccion].sort((a, b) =>
+    a.fecha === b.fecha ? minutos(a.hora) - minutos(b.hora) : a.fecha < b.fecha ? -1 : 1
+  );
+  const rangos = [];
+  for (const { fecha, hora } of ordenadas) {
+    const ultimo = rangos[rangos.length - 1];
+    const seguida = ultimo && ultimo.fecha === fecha && ultimo.hora_fin === hora;
+    const cabe = ultimo && minutos(ultimo.hora_fin) - minutos(ultimo.hora_inicio) < MAX_SEGUIDAS * 60;
+    if (seguida && cabe) ultimo.hora_fin = sumarHora(hora);
+    else rangos.push({ fecha, hora_inicio: hora, hora_fin: sumarHora(hora) });
+  }
+  return rangos;
 };
 const plata = (n) => `$${Number(n).toLocaleString("es-CL")}`;
 
@@ -71,7 +90,6 @@ export default function Estudio0Agenda() {
     setAnio(Math.floor(nuevo / 12));
     setMes(nuevo % 12);
     setFechaSel(null);
-    setSeleccion([]);
   };
 
   const diaDe = (fecha) => datos?.dias.find((d) => d.fecha === fecha);
@@ -86,36 +104,36 @@ export default function Estudio0Agenda() {
 
   const diaElegido = fechaSel ? diaDe(fechaSel) : null;
 
-  const elegirDia = (dia) => {
-    setFechaSel(dia.fecha);
-    setSeleccion([]);
-  };
+  const elegirDia = (dia) => setFechaSel(dia.fecha);
 
-  const alternarHora = (inicio) => {
-    const quita = seleccion.includes(inicio);
-    const nueva = quita
-      ? seleccion.filter((h) => h !== inicio)
-      : [...seleccion, inicio].sort((a, b) => minutos(a) - minutos(b));
+  const estaElegida = (fecha, hora) => seleccion.some((s) => s.fecha === fecha && s.hora === hora);
+  const cuantasEnDia = (fecha) => seleccion.filter((s) => s.fecha === fecha).length;
 
-    const seguidas = nueva.every((h, i) => i === 0 || minutos(h) === minutos(nueva[i - 1]) + 60);
-    if (!seguidas) {
-      setSeleccion([inicio]);
+  const alternarHora = (fecha, hora) => {
+    if (estaElegida(fecha, hora)) {
+      setSeleccion(seleccion.filter((s) => !(s.fecha === fecha && s.hora === hora)));
       return;
     }
-    if (nueva.length > MAX_HORAS) {
-      alerta(`Puedes reservar hasta ${MAX_HORAS} horas seguidas.`, { tipo: "advertencia" });
+    if (seleccion.length >= MAX_HORAS) {
+      alerta(`Puedes reservar hasta ${MAX_HORAS} horas por confirmación.`, { tipo: "advertencia" });
       return;
     }
-    setSeleccion(nueva);
+    setSeleccion([...seleccion, { fecha, hora }]);
   };
 
+  const quitarRango = (rango) =>
+    setSeleccion(
+      seleccion.filter(
+        (s) => !(s.fecha === rango.fecha && minutos(s.hora) >= minutos(rango.hora_inicio) && minutos(s.hora) < minutos(rango.hora_fin))
+      )
+    );
+
+  const rangos = useMemo(() => armarRangos(seleccion), [seleccion]);
   const horasElegidas = seleccion.length;
-  const horaFin = horasElegidas
-    ? `${pad(Math.floor((minutos(seleccion[horasElegidas - 1]) + 60) / 60))}:${pad((minutos(seleccion[horasElegidas - 1]) + 60) % 60)}`
-    : null;
 
+  const textoRango = (r) => `${etiquetaDia(r.fecha)}, ${r.hora_inicio} a ${r.hora_fin}`;
   const resumen = horasElegidas
-    ? `${DIAS_LARGOS[diaSemana(fechaSel)]} ${Number(fechaSel.slice(8))} de ${NOMBRES_MES[mes].toLowerCase()}, ${seleccion[0]} a ${horaFin} (${horasElegidas} ${horasElegidas === 1 ? "hora" : "horas"})`
+    ? `${horasElegidas} ${horasElegidas === 1 ? "hora elegida" : "horas elegidas"}`
     : "Aún no eliges horas";
 
   const confirmar = async () => {
@@ -125,8 +143,13 @@ export default function Estudio0Agenda() {
     }
     setReservando(true);
     try {
-      await reservarEstudio0({ fecha: fechaSel, hora_inicio: seleccion[0], hora_fin: horaFin });
-      alerta(`Tu reserva quedó confirmada: ${resumen}.`, { tipo: "exito", titulo: "Reserva confirmada" });
+      await reservarEstudio0(rangos.length === 1 ? rangos[0] : { reservas: rangos });
+      alerta(
+        rangos.length === 1
+          ? `Tu reserva quedó confirmada: ${textoRango(rangos[0])}.`
+          : `Quedaron confirmadas ${horasElegidas} horas en ${rangos.length} reservas.`,
+        { tipo: "exito", titulo: rangos.length === 1 ? "Reserva confirmada" : "Reservas confirmadas" }
+      );
       setSeleccion([]);
       cargar();
     } catch (err) {
@@ -151,7 +174,7 @@ export default function Estudio0Agenda() {
         </button>
         <h1>Agenda</h1>
         <p>
-          Elige un día y las horas que necesitas.
+          Elige las horas que necesitas; puedes sumar horas de distintos días.
           {datos ? ` Cada hora cuesta ${plata(datos.precio)}.` : ""}
         </p>
       </div>
@@ -190,12 +213,12 @@ export default function Estudio0Agenda() {
                   key={dia.fecha}
                   type="button"
                   disabled={deshabilitado}
-                  className={`e0-dia ${fechaSel === dia.fecha ? "elegido" : ""} ${!dia.abierto ? "cerrado" : ""}`}
+                  className={`e0-dia ${fechaSel === dia.fecha ? "elegido" : ""} ${!dia.abierto ? "cerrado" : ""} ${cuantasEnDia(dia.fecha) ? "con-seleccion" : ""}`}
                   onClick={() => elegirDia(dia)}
                   aria-label={`${DIAS_LARGOS[diaSemana(dia.fecha)]} ${Number(dia.fecha.slice(8))}${sub ? `, ${sub}` : ""}`}
                 >
                   <b>{Number(dia.fecha.slice(8))}</b>
-                  <small>{sub}</small>
+                  <small>{cuantasEnDia(dia.fecha) ? `${cuantasEnDia(dia.fecha)} elegida${cuantasEnDia(dia.fecha) === 1 ? "" : "s"}` : sub}</small>
                 </button>
               );
             })}
@@ -215,14 +238,12 @@ export default function Estudio0Agenda() {
               <p className="e0-vacio">Elige un día del calendario para ver sus horas.</p>
             ) : (
               <>
-                <h2>
-                  {DIAS_LARGOS[diaSemana(fechaSel)]} {Number(fechaSel.slice(8))} de {NOMBRES_MES[mes].toLowerCase()}
-                </h2>
-                <p className="e0-ayuda">Toca una o varias horas seguidas (hasta {MAX_HORAS}).</p>
+                <h2>{etiquetaDia(fechaSel)}</h2>
+                <p className="e0-ayuda">Toca todas las horas que quieras (hasta {MAX_HORAS} en total).</p>
 
                 <div className="e0-horas">
                   {diaElegido.horas.map((h) => {
-                    const elegida = seleccion.includes(h.hora_inicio);
+                    const elegida = estaElegida(fechaSel, h.hora_inicio);
                     return (
                       <button
                         key={h.hora_inicio}
@@ -230,7 +251,7 @@ export default function Estudio0Agenda() {
                         disabled={h.estado !== "libre"}
                         className={`e0-hora ${h.estado} ${elegida ? "elegida" : ""}`}
                         aria-pressed={elegida}
-                        onClick={() => alternarHora(h.hora_inicio)}
+                        onClick={() => alternarHora(fechaSel, h.hora_inicio)}
                       >
                         {h.hora_inicio} – {h.hora_fin}
                       </button>
@@ -252,6 +273,18 @@ export default function Estudio0Agenda() {
               <strong>{resumen}</strong>
               <span className="e0-total">{plata(horasElegidas * (datos?.precio || 0))}</span>
             </div>
+            {rangos.length > 0 && (
+              <ul className="e0-seleccion-lista">
+                {rangos.map((r) => (
+                  <li key={`${r.fecha}-${r.hora_inicio}`}>
+                    <span>{textoRango(r)}</span>
+                    <button type="button" onClick={() => quitarRango(r)} aria-label={`Quitar ${textoRango(r)}`}>
+                      ×
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
             <button
               type="button"
               className="btn-primary"
