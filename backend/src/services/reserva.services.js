@@ -70,61 +70,92 @@ export const getDisponibilidadService = async (mes) => {
     return { id_estudio: estudio.id_estudio, precio: estudio.precio, disponible: estudio.disponible, mes, dias };
 };
 
-export const crearReservaService = async (id_usuario, { fecha, hora_inicio, hora_fin }) => {
+export const MAX_HORAS_POR_CONFIRMACION = 8;
+
+export const crearReservasService = async (id_usuario, items) => {
     const estudio = await getEstudio0Service();
 
     if (!estudio.disponible) {
         throw { status: 409, message: "El Taller 0 no está disponible por ahora." };
     }
-    if (!esFechaValida(fecha)) {
-        throw { status: 400, message: "La fecha no es válida." };
+    if (!items || items.length === 0) {
+        throw { status: 400, message: "Debes elegir al menos una hora." };
+    }
+    for (const it of items) {
+        if (!esFechaValida(it.fecha)) throw { status: 400, message: "La fecha no es válida." };
     }
 
-    const resultado = await AppDataSource.transaction(async (manager) => {
+    const totalHoras = items.reduce((suma, it) => suma + (aMinutos(it.hora_fin) - aMinutos(it.hora_inicio)) / 60, 0);
+    if (totalHoras > MAX_HORAS_POR_CONFIRMACION) {
+        throw {
+            status: 400,
+            message: `Puedes reservar hasta ${MAX_HORAS_POR_CONFIRMACION} horas por confirmación.`,
+        };
+    }
+
+    const guardadas = await AppDataSource.transaction(async (manager) => {
         await manager.query("SELECT pg_advisory_xact_lock($1)", [estudio.id_estudio]);
 
-        const bloques = bloquesSimples(
-            await manager.getRepository(AgendaEntity).find({
-                where: { estudio: { id_estudio: estudio.id_estudio }, dia_semana: diaSemanaDe(fecha), activo: true },
-            })
-        );
-
-        const reservas = simplificar(
-            await manager.getRepository(ReservaEntity).find({
-                where: { estudio: { id_estudio: estudio.id_estudio }, fecha, estado: "confirmada" },
-            })
-        );
-
-        const problema = validarRango({
-            fecha,
-            hora_inicio,
-            hora_fin,
-            bloques,
-            reservas,
-            ahora: ahoraEnChile(),
-        });
-        if (problema) throw problema;
-
         const repo = manager.getRepository(ReservaEntity);
-        const guardada = await repo.save(
-            repo.create({
+        const bloquesPorFecha = {};
+        const reservasPorFecha = {};
+        const ahora = ahoraEnChile();
+        const resultado = [];
+
+        for (const { fecha, hora_inicio, hora_fin } of items) {
+            if (!bloquesPorFecha[fecha]) {
+                bloquesPorFecha[fecha] = bloquesSimples(
+                    await manager.getRepository(AgendaEntity).find({
+                        where: { estudio: { id_estudio: estudio.id_estudio }, dia_semana: diaSemanaDe(fecha), activo: true },
+                    })
+                );
+                reservasPorFecha[fecha] = simplificar(
+                    await repo.find({
+                        where: { estudio: { id_estudio: estudio.id_estudio }, fecha, estado: "confirmada" },
+                    })
+                );
+            }
+
+            const problema = validarRango({
                 fecha,
                 hora_inicio,
                 hora_fin,
-                estado: "confirmada",
-                estudio: { id_estudio: estudio.id_estudio },
-                usuario: { id_usuario: parseInt(id_usuario) },
-            })
-        );
+                bloques: bloquesPorFecha[fecha],
+                reservas: reservasPorFecha[fecha],
+                ahora,
+            });
+            if (problema) {
+                throw { ...problema, message: `${detalleReserva({ fecha, hora_inicio, hora_fin })}: ${problema.message}` };
+            }
 
-        const horas = (aMinutos(hora_fin) - aMinutos(hora_inicio)) / 60;
-        return { ...guardada, horas, total: horas * estudio.precio };
+            const guardada = await repo.save(
+                repo.create({
+                    fecha,
+                    hora_inicio,
+                    hora_fin,
+                    estado: "confirmada",
+                    estudio: { id_estudio: estudio.id_estudio },
+                    usuario: { id_usuario: parseInt(id_usuario) },
+                })
+            );
+
+            reservasPorFecha[fecha].push({ hora_inicio, hora_fin });
+
+            const horas = (aMinutos(hora_fin) - aMinutos(hora_inicio)) / 60;
+            resultado.push({ ...guardada, horas, total: horas * estudio.precio });
+        }
+        return resultado;
     });
 
-    await notificarReservaConfirmada(id_usuario, detalleReserva({ fecha, hora_inicio, hora_fin }));
-    await notificarStaffReservaNueva(id_usuario, { fecha, hora_inicio, hora_fin });
+    await notificarReservaConfirmada(id_usuario, guardadas.map((r) => detalleReserva(r)).join("; "));
+    for (const r of guardadas) await notificarStaffReservaNueva(id_usuario, r);
 
-    return resultado;
+    return guardadas;
+};
+
+export const crearReservaService = async (id_usuario, datos) => {
+    const [reserva] = await crearReservasService(id_usuario, [datos]);
+    return reserva;
 };
 
 export const cancelarReservaService = async (id_reserva, id_usuario, rolUsuario) => {
