@@ -348,11 +348,6 @@ export default function Estudio0Agenda() {
               >
                 {!user ? "Inicia sesión para reservar" : reservando ? "Reservando..." : "Confirmar reserva"}
               </button>
-              {horasElegidas > 0 && (
-                <button type="button" className="e0-limpiar" onClick={() => setSeleccion([])}>
-                  Limpiar
-                </button>
-              )}
             </div>
             {datos && !datos.disponible && <small className="e0-ayuda">El Taller 0 no acepta reservas por ahora.</small>}
           </div>
