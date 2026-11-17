@@ -62,14 +62,20 @@ export default function PaginaResidente() {
 
   useEffect(() => {
     if (!datos) return;
-    const clave = `visita-${slug}`;
+    const clave = `visita-${slug}-${user?.id_usuario ?? "anonimo"}`;
     try {
       if (sessionStorage.getItem(clave)) return;
-      sessionStorage.setItem(clave, "1");
     } catch {
     }
-    registrarVisitaPagina(slug).catch(() => {});
-  }, [datos, slug]);
+    registrarVisitaPagina(slug)
+      .then(() => {
+        try {
+          sessionStorage.setItem(clave, "1");
+        } catch {
+        }
+      })
+      .catch(() => {});
+  }, [datos, slug, user?.id_usuario]);
 
   useEffect(() => {
     if (!datos) return;
