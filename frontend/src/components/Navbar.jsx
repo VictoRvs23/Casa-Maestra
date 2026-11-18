@@ -54,6 +54,9 @@ const Navbar = () => {
                     {user?.rol === "Residente" && (
                         <li><NavLink to="/mi-pagina" className={({ isActive }) => (isActive ? "activo" : "")}>Mi página</NavLink></li>
                     )}
+                    {user?.rol === "Residente" && (
+                        <li><NavLink to="/mi-agenda" className={({ isActive }) => (isActive ? "activo" : "")}>Mi agenda</NavLink></li>
+                    )}
                     {(user?.rol === "Admin" || user?.rol === "Fundador/a") && (
                         <li><NavLink to="/usuarios" className={({ isActive }) => (isActive ? "activo" : "")}>Usuarios</NavLink></li>
                     )}
