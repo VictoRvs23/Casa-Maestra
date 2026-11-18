@@ -15,6 +15,7 @@ import arriendoRoutes from "./arriendo.routes.js";
 import seguimientoRoutes from "./seguimiento.routes.js";
 import notificacionRoutes from "./notificacion.routes.js";
 import switchModuloRoutes from "./switchModulo.routes.js";
+import agendaResidenteRoutes from "./agendaResidente.routes.js";
 import { bloquearSiTalleresDeshabilitado, bloquearNuevosArriendos } from "../middleware/moduloTalleres.middleware.js";
 
 const router = Router();
@@ -34,5 +35,6 @@ router.use("/arriendos", bloquearNuevosArriendos, arriendoRoutes);
 router.use("/seguidos", seguimientoRoutes);
 router.use("/notificaciones", notificacionRoutes);
 router.use("/switch-modulos", switchModuloRoutes);
+router.use("/agenda-residente", agendaResidenteRoutes);
 
 export default router;
