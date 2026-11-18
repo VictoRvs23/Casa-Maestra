@@ -282,10 +282,7 @@ export default function MiAgenda() {
 
             {servicios.length === 0 ? (
               <div className="ma-panel ma-vacio">
-                <p>Aún no agregas nada. Crea tu primer servicio (por ejemplo «Piercing de oreja») o producto.</p>
-                <button type="button" className="btn-primary" onClick={abrirCrear}>
-                  + Agregar el primero
-                </button>
+                <p>Aún no agregas nada. Usa el botón de arriba para crear tu primer servicio (por ejemplo «Piercing de oreja») o producto.</p>
               </div>
             ) : (
               <ul className="ma-grid">
