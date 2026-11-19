@@ -7,6 +7,7 @@ import UsuarioEntity from "../entities/usuario.entity.js";
 import SeguimientoEntity from "../entities/seguimiento.entity.js";
 import { PREFIJO_URL_PAGINA } from "../config/paginaEstilos.js";
 import { asegurarTarjetaDeUsuario, buscarPorSlug, cambiosPorNombre } from "./tarjeta.services.js";
+import { contarAgendasDelMesService } from "./citaResidente.services.js";
 
 const paginaRepository = AppDataSource.getRepository(PaginaResidenteEntity);
 const residenteRepository = AppDataSource.getRepository(ResidenteEntity);
@@ -100,7 +101,7 @@ export const getMiPaginaService = async (id_usuario) => {
         estadisticas: {
             visitas_mes: Number(fila?.visitas?.[mesActual()] || 0),
             seguidores,
-            agendas: null,
+            agendas: await contarAgendasDelMesService(residente.id_residente),
         },
         residente: datosDeResidente(residente),
         usuario,

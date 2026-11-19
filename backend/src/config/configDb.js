@@ -14,6 +14,9 @@ import ArriendoEntity from "../entities/arriendo.entity.js";
 import SeguimientoEntity from "../entities/seguimiento.entity.js";
 import NotificacionEntity from "../entities/notificacion.entity.js";
 import SwitchModuloEntity from "../entities/switchModulo.entity.js";
+import HorarioResidenteEntity from "../entities/horarioResidente.entity.js";
+import ServicioResidenteEntity from "../entities/servicioResidente.entity.js";
+import CitaResidenteEntity from "../entities/citaResidente.entity.js";
 import { createUsuarios, createEstudios} from "./InitDb.js";
 import { createEstudio0 } from "./InitEstudio0.js";
 
@@ -38,7 +41,10 @@ export const AppDataSource = new DataSource({
     ArriendoEntity,
     SeguimientoEntity,
     NotificacionEntity,
-    SwitchModuloEntity
+    SwitchModuloEntity,
+    HorarioResidenteEntity,
+    ServicioResidenteEntity,
+    CitaResidenteEntity
   ],
   synchronize: true,
   logging: false,

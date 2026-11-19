@@ -16,6 +16,7 @@ import Estudio0Agenda from "./pages/Estudio0Agenda.jsx";
 import Estudio0Horarios from "./pages/Estudio0Horarios.jsx";
 import Estudio0Reservas from "./pages/Estudio0Reservas.jsx";
 import EstudiosArriendos from "./pages/EstudioArriendos.jsx";
+import MiAgenda from "./pages/MiAgenda.jsx";
 
 function App() {
   return (
@@ -41,6 +42,9 @@ function App() {
 
         {/* Ruta de Mi Página */}
         <Route path="/mi-pagina" element={<MiPagina />} />
+
+        {/* Ruta de Mi Agenda */}
+        <Route path="/mi-agenda" element={<MiAgenda />} />
 
         {/* Rutas de Talleres (antes Estudios) */}
         <Route path="/talleres" element={<Estudio />} />
