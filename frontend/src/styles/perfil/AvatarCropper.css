@@ -73,42 +73,6 @@
   gap: 0.8rem;
 }
 
-.btn-ghost {
-  padding: 0.7rem 1.3rem;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background: none;
-  color: #7a7a7a;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.btn-ghost:hover {
-  border-color: #5A4E45;
-  color: #5A4E45;
-}
-
-.btn-primary {
-  padding: 0.7rem 1.4rem;
-  border-radius: 8px;
-  border: none;
-  background-color: #5A4E45;
-  color: #ffffff;
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 600;
-  transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-  background-color: #433932;
-}
-
-.btn-primary:disabled {
-  background-color: #cfccc4;
-  cursor: not-allowed;
-}
-
 @media (max-width: 480px) {
   .cropper-box {
     padding: 1.4rem 1.1rem;
