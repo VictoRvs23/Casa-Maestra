@@ -355,3 +355,13 @@
 .pagina-avatar-img {
   background-color: var(--beige-claro, #eadfc8);
 }
+
+.pagina-avatar-wrap .pagina-avatar-edit {
+  right: 10px;
+  bottom: 10px;
+}
+
+.pagina-avatar-wrap .pagina-avatar-quitar {
+  left: 10px;
+  bottom: 10px;
+}
