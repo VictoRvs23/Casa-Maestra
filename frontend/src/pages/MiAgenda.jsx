@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import CitasLista from "../components/CitasLista.jsx";
 import Icono from "../components/Icono.jsx";
 import { Pencil, Trash2 } from "@sketchicon/lucide";
 import { useAuth } from "../context/AuthContext";
@@ -14,12 +15,16 @@ import {
   eliminarServicio,
   getMisHorarios,
   guardarMisHorarios,
+  getCitasResidente,
+  responderCita,
+  cancelarCita,
 } from "../services/agendaResidente.services.js";
 
 import "../styles/MiAgenda.css";
 
 const PESTANAS = [
   { id: "servicios", label: "Servicios y productos" },
+  { id: "citas", label: "Citas" },
   { id: "horarios", label: "Horarios" },
 ];
 
@@ -59,7 +64,14 @@ export default function MiAgenda() {
   const { user, loading: cargandoSesion } = useAuth();
   const { alerta, confirmar } = useAlerta();
 
-  const [pestana, setPestana] = useState("servicios");
+  const [params] = useSearchParams();
+  const [pestana, setPestana] = useState(() => {
+    const t = params.get("tab");
+    return PESTANAS.some((p) => p.id === t) ? t : "servicios";
+  });
+
+  const [citas, setCitas] = useState([]);
+  const [ocupadaCita, setOcupadaCita] = useState(false);
 
   const [servicios, setServicios] = useState([]);
   const [maximo, setMaximo] = useState(30);
@@ -80,7 +92,8 @@ export default function MiAgenda() {
     setCargando(true);
     setError(null);
     try {
-      const [s, h] = await Promise.all([getMisServicios(), getMisHorarios()]);
+      const [s, h, c] = await Promise.all([getMisServicios(), getMisHorarios(), getCitasResidente()]);
+      setCitas(c.citas);
       setServicios(s.servicios);
       setMaximo(s.maximo);
       setBloques(h.bloques);
@@ -237,6 +250,32 @@ export default function MiAgenda() {
     }
   };
 
+  const recargarCitas = async () => setCitas((await getCitasResidente()).citas);
+
+  const accionCita = async (c, accion) => {
+    const textos = {
+      aceptar: { msg: `¿Aceptar «${c.nombre_servicio}»? Le avisaremos al cliente.`, boton: "Aceptar", ok: "Aceptaste la solicitud." },
+      rechazar: { msg: `¿Rechazar «${c.nombre_servicio}»? Le avisaremos al cliente.`, boton: "Rechazar", ok: "Rechazaste la solicitud." },
+      cancelar: { msg: `¿Cancelar «${c.nombre_servicio}»? Le avisaremos al cliente.`, boton: "Cancelar cita", ok: "Se canceló la cita." },
+    }[accion];
+    const ok = await confirmar(textos.msg, { textoConfirmar: textos.boton });
+    if (!ok) return;
+    setOcupadaCita(true);
+    try {
+      if (accion === "cancelar") await cancelarCita(c.id_cita);
+      else await responderCita(c.id_cita, accion);
+      await recargarCitas();
+      alerta(textos.ok, { tipo: "exito" });
+    } catch (err) {
+      alerta(err.response?.data?.message || "No se pudo completar la acción.", { tipo: "error" });
+      recargarCitas().catch(() => {});
+    } finally {
+      setOcupadaCita(false);
+    }
+  };
+
+  const pendientesCitas = citas.filter((c) => c.estado === "pendiente" && !c.pasada).length;
+
   const imagenActual = editandoId ? servicios.find((s) => s.id_servicio === editandoId)?.imagen : null;
 
   return (
@@ -261,6 +300,7 @@ export default function MiAgenda() {
               onClick={() => setPestana(p.id)}
             >
               {p.label}
+              {p.id === "citas" && pendientesCitas > 0 && <span className="ma-contador">{pendientesCitas}</span>}
             </button>
           ))}
         </div>
@@ -316,6 +356,18 @@ export default function MiAgenda() {
               </ul>
             )}
           </section>
+        )}
+
+        {/* ---------- Citas ---------- */}
+        {!cargando && !error && pestana === "citas" && (
+          <CitasLista
+            citas={citas}
+            vista="residente"
+            ocupada={ocupadaCita}
+            onAceptar={(c) => accionCita(c, "aceptar")}
+            onRechazar={(c) => accionCita(c, "rechazar")}
+            onCancelar={(c) => accionCita(c, "cancelar")}
+          />
         )}
 
         {/* ---------- Horarios ---------- */}
