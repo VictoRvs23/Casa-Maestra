@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import Icono from "../components/Icono.jsx";
+import AgendarModal from "../components/AgendarModal.jsx";
 import PaginaLienzo from "../components/pagina/PaginaLienzo.jsx";
 import BloqueVista from "../components/pagina/BloqueVista.jsx";
 import { ArrowLeft } from "@sketchicon/lucide";
@@ -29,6 +30,7 @@ export default function PaginaResidente() {
   const [error, setError] = useState(null);
   const [seguimiento, setSeguimiento] = useState({ id_residente: null, seguidores: 0, siguiendo: false });
   const [cambiandoSeguir, setCambiandoSeguir] = useState(false);
+  const [agendando, setAgendando] = useState(false);
 
   useEffect(() => {
     let cancelado = false;
@@ -122,8 +124,14 @@ export default function PaginaResidente() {
     }
   };
 
-  const proximamente = (accion) => () =>
-    alerta(`${accion} estará disponible muy pronto.`, { tipo: "info", titulo: "Próximamente" });
+  const handleAgendar = () => {
+    if (!user) {
+      alerta("Inicia sesión para agendar con este residente.", { tipo: "info", titulo: "Inicia sesión" });
+      navigate("/login");
+      return;
+    }
+    setAgendando(true);
+  };
 
   const iniciales = datos
     ? datos.residente.nombre
@@ -191,7 +199,7 @@ export default function PaginaResidente() {
               <Icono icon={ArrowLeft} size={18} />
             </Link>
           }
-          onAgendar={proximamente("Agendar")}
+          onAgendar={handleAgendar}
           onSeguir={handleSeguir}
           siguiendo={seguimiento.siguiendo}
           seguidores={seguimiento.seguidores}
@@ -205,6 +213,8 @@ export default function PaginaResidente() {
       <div className="pagina-publica-pie">
         <Footer />
       </div>
+
+      {agendando && <AgendarModal slug={slug} onCerrar={() => setAgendando(false)} />}
     </div>
   );
 }
