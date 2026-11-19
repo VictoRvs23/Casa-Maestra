@@ -1,11 +1,19 @@
 import React, { useState, useRef, useCallback } from "react";
 import "../../styles/perfil/AvatarCropper.css";
 
-const CONTAINER_SIZE = 260;
-const OUTPUT_SIZE = 400;
-
-export default function AvatarCropper({ imageSrc, onCancel, onConfirm }) {
+export default function AvatarCropper({
+  imageSrc,
+  onCancel,
+  onConfirm,
+  aspect = 1,
+  circular = true,
+  anchoSalida = 400,
+  titulo = "Ajusta tu foto",
+  textoConfirmar = "Confirmar cambio",
+}) {
   const imgRef = useRef(null);
+  const viewportRef = useRef(null);
+  const [caja, setCaja] = useState(null);
   const [naturalSize, setNaturalSize] = useState(null);
   const [baseScale, setBaseScale] = useState(1);
   const [zoom, setZoom] = useState(1);
@@ -13,29 +21,32 @@ export default function AvatarCropper({ imageSrc, onCancel, onConfirm }) {
   const dragState = useRef(null);
 
   const scale = baseScale * zoom;
+  const ancho = aspect > 1 ? 400 : 360;
 
-  const clampOffset = useCallback((off, currentScale) => {
-    if (!naturalSize) return off;
-    const dispW = naturalSize.width * currentScale;
-    const dispH = naturalSize.height * currentScale;
-    const minX = CONTAINER_SIZE - dispW;
-    const minY = CONTAINER_SIZE - dispH;
-    return {
-      x: Math.min(0, Math.max(minX, off.x)),
-      y: Math.min(0, Math.max(minY, off.y)),
-    };
-  }, [naturalSize]);
+  const clampOffset = useCallback(
+    (off, currentScale) => {
+      if (!naturalSize || !caja) return off;
+      const minX = caja.w - naturalSize.width * currentScale;
+      const minY = caja.h - naturalSize.height * currentScale;
+      return {
+        x: Math.min(0, Math.max(minX, off.x)),
+        y: Math.min(0, Math.max(minY, off.y)),
+      };
+    },
+    [naturalSize, caja]
+  );
 
   const handleImgLoad = () => {
     const img = imgRef.current;
+    const vp = viewportRef.current;
     const w = img.naturalWidth;
     const h = img.naturalHeight;
-    const cover = Math.max(CONTAINER_SIZE / w, CONTAINER_SIZE / h);
+    const medida = { w: vp.clientWidth, h: vp.clientHeight };
+    const cover = Math.max(medida.w / w, medida.h / h);
+    setCaja(medida);
     setNaturalSize({ width: w, height: h });
     setBaseScale(cover);
-    const dispW = w * cover;
-    const dispH = h * cover;
-    setOffset({ x: (CONTAINER_SIZE - dispW) / 2, y: (CONTAINER_SIZE - dispH) / 2 });
+    setOffset({ x: (medida.w - w * cover) / 2, y: (medida.h - h * cover) / 2 });
   };
 
   const handleZoomChange = (e) => {
@@ -53,11 +64,7 @@ export default function AvatarCropper({ imageSrc, onCancel, onConfirm }) {
     if (!dragState.current) return;
     const dx = e.clientX - dragState.current.startX;
     const dy = e.clientY - dragState.current.startY;
-    const nuevo = {
-      x: dragState.current.offsetStart.x + dx,
-      y: dragState.current.offsetStart.y + dy,
-    };
-    setOffset(clampOffset(nuevo, scale));
+    setOffset(clampOffset({ x: dragState.current.offsetStart.x + dx, y: dragState.current.offsetStart.y + dy }, scale));
   };
 
   const handlePointerUp = () => {
@@ -66,29 +73,41 @@ export default function AvatarCropper({ imageSrc, onCancel, onConfirm }) {
 
   const handleConfirmar = () => {
     const canvas = document.createElement("canvas");
-    canvas.width = OUTPUT_SIZE;
-    canvas.height = OUTPUT_SIZE;
+    canvas.width = anchoSalida;
+    canvas.height = Math.round(anchoSalida / aspect);
     const ctx = canvas.getContext("2d");
 
-    const sx = -offset.x / scale;
-    const sy = -offset.y / scale;
-    const sSize = CONTAINER_SIZE / scale;
+    ctx.drawImage(
+      imgRef.current,
+      -offset.x / scale,
+      -offset.y / scale,
+      caja.w / scale,
+      caja.h / scale,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
 
-    ctx.drawImage(imgRef.current, sx, sy, sSize, sSize, 0, 0, OUTPUT_SIZE, OUTPUT_SIZE);
-
-    canvas.toBlob((blob) => {
-      if (blob) onConfirm(blob);
-    }, "image/jpeg", 0.92);
+    canvas.toBlob(
+      (blob) => {
+        if (blob) onConfirm(blob);
+      },
+      "image/jpeg",
+      0.92
+    );
   };
 
   return (
     <div className="cropper-overlay">
-      <div className="cropper-box">
-        <h2>Ajusta tu foto</h2>
+      <div className="cropper-box" style={{ maxWidth: ancho }}>
+        <h2>{titulo}</h2>
         <p className="cropper-sub">Arrastra para mover, usa la barra para acercar</p>
 
         <div
-          className="cropper-viewport"
+          ref={viewportRef}
+          className={`cropper-viewport ${circular ? "" : "rectangular"}`}
+          style={{ aspectRatio: aspect, maxWidth: aspect > 1 ? "100%" : 260 }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
@@ -106,11 +125,12 @@ export default function AvatarCropper({ imageSrc, onCancel, onConfirm }) {
               top: offset.y,
               width: naturalSize ? naturalSize.width * scale : "auto",
               height: naturalSize ? naturalSize.height * scale : "auto",
+              maxWidth: "none",
               userSelect: "none",
               pointerEvents: "none",
             }}
           />
-          <div className="cropper-circle-mask" />
+          {circular && <div className="cropper-circle-mask" />}
         </div>
 
         <input
@@ -127,7 +147,7 @@ export default function AvatarCropper({ imageSrc, onCancel, onConfirm }) {
         <div className="cropper-actions">
           <button type="button" className="btn-ghost" onClick={onCancel}>Cancelar</button>
           <button type="button" className="btn-primary" onClick={handleConfirmar} disabled={!naturalSize}>
-            Confirmar cambio
+            {textoConfirmar}
           </button>
         </div>
       </div>
