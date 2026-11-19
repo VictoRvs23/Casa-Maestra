@@ -10,26 +10,29 @@
 }
 
 .cropper-box {
-  background-color: #ffffff;
-  border-radius: 20px;
+  background-color: var(--papel-claro, #fffdf8);
+  border: 2px solid var(--cafe, #845736);
+  border-radius: 6px;
   padding: 2rem;
   width: 100%;
   max-height: calc(100vh - 2.4rem);
   overflow-y: auto;
   box-sizing: border-box;
   text-align: center;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  box-shadow: 7px 7px 0 var(--cafe, #845736);
 }
 
 .cropper-box h2 {
-  font-family: 'Roca Two', serif;
+  font-family: var(--fuente-titulo, serif);
   font-size: 1.4rem;
   margin: 0 0 0.3rem;
-  color: #5A4E45;
+  color: var(--cafe, #845736);
 }
 
 .cropper-sub {
-  color: #8c8c8c;
+  font-family: var(--fuente-texto, inherit);
+  color: var(--cafe-oscuro, #5a4e45);
+  opacity: 0.8;
   font-size: 0.85rem;
   margin: 0 0 1.2rem;
 }
@@ -40,13 +43,13 @@
   margin: 0 auto 1.2rem;
   border-radius: 12px;
   overflow: hidden;
-  background-color: #eee;
+  background-color: var(--beige-claro, #eee);
   cursor: grab;
   touch-action: none;
 }
 
 .cropper-viewport.rectangular {
-  border: 2px solid #5A4E45;
+  border: 2px solid var(--cafe, #845736);
 }
 
 .cropper-viewport:active {
@@ -64,7 +67,7 @@
 .cropper-zoom {
   width: 100%;
   margin-bottom: 1.4rem;
-  accent-color: #5A4E45;
+  accent-color: var(--cafe, #845736);
 }
 
 .cropper-actions {
