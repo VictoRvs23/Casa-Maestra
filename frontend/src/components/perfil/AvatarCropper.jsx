@@ -21,7 +21,7 @@ export default function AvatarCropper({
   const dragState = useRef(null);
 
   const scale = baseScale * zoom;
-  const ancho = aspect > 1 ? 400 : 360;
+  const ancho = aspect > 1 ? 720 : 360;
 
   const clampOffset = useCallback(
     (off, currentScale) => {
@@ -107,7 +107,7 @@ export default function AvatarCropper({
         <div
           ref={viewportRef}
           className={`cropper-viewport ${circular ? "" : "rectangular"}`}
-          style={{ aspectRatio: aspect, maxWidth: aspect > 1 ? "100%" : 260 }}
+          style={{ aspectRatio: aspect, maxWidth: aspect > 1 ? `min(100%, ${Math.round(aspect * 50)}vh)` : 260 }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
