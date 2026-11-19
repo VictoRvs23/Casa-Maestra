@@ -62,3 +62,26 @@ export const HorariosValidation = Joi.object({
             "any.required": "Debes enviar los bloques.",
         }),
 }).unknown(false);
+
+export const CitaValidation = Joi.object({
+    id_servicio: Joi.number().integer().min(1).required().messages({
+        "any.required": "Elige un servicio o producto.",
+        "number.base": "El servicio no es válido.",
+    }),
+    fecha: Joi.string().pattern(/^\d{4}-\d{2}-\d{2}$/).allow("", null).messages({
+        "string.pattern.base": "La fecha no es válida.",
+    }),
+    hora_inicio: Joi.string().pattern(HORA).allow("", null).messages({
+        "string.pattern.base": "La hora no es válida.",
+    }),
+    nota: Joi.string().trim().max(300).allow("", null).messages({
+        "string.max": "La nota puede tener hasta 300 caracteres.",
+    }),
+}).unknown(false);
+
+export const RespuestaCitaValidation = Joi.object({
+    accion: Joi.string().valid("aceptar", "rechazar").required().messages({
+        "any.only": "La acción debe ser aceptar o rechazar.",
+        "any.required": "Indica si aceptas o rechazas.",
+    }),
+}).unknown(false);
