@@ -1,7 +1,7 @@
 .cropper-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(60, 44, 30, 0.5);
+  background-color: rgba(90, 78, 69, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,55 +10,46 @@
 }
 
 .cropper-box {
-  position: relative;
-  width: 100%;
-  max-width: 380px;
+  background-color: var(--papel-claro, #fffdf8);
+  border: 2px solid var(--cafe, #845736);
+  border-radius: 6px;
   padding: 2rem;
-  background-color: var(--papel-claro);
-  border: 2px solid var(--cafe);
-  border-radius: 8px 10px 7px 9px;
-  box-shadow: 6px 6px 0 var(--cafe);
+  width: 100%;
+  max-height: calc(100vh - 2.4rem);
+  overflow-y: auto;
+  box-sizing: border-box;
   text-align: center;
-  color: var(--cafe-oscuro);
-}
-
-.cropper-box::before {
-  content: "";
-  position: absolute;
-  top: -13px;
-  left: 50%;
-  width: 84px;
-  height: 26px;
-  margin-left: -42px;
-  background-color: var(--cinta);
-  transform: rotate(-3deg);
-  pointer-events: none;
+  box-shadow: 7px 7px 0 var(--cafe, #845736);
 }
 
 .cropper-box h2 {
-  font-family: var(--fuente-titulo);
-  font-size: 1.7rem;
+  font-family: var(--fuente-titulo, serif);
+  font-size: 1.4rem;
   margin: 0 0 0.3rem;
-  color: var(--cafe);
+  color: var(--cafe, #845736);
 }
 
 .cropper-sub {
-  color: var(--cafe);
+  font-family: var(--fuente-texto, inherit);
+  color: var(--cafe-oscuro, #5a4e45);
+  opacity: 0.8;
   font-size: 0.85rem;
   margin: 0 0 1.2rem;
 }
 
 .cropper-viewport {
   position: relative;
-  width: 260px;
-  height: 260px;
+  width: 100%;
   margin: 0 auto 1.2rem;
-  border: 2px solid var(--cafe);
-  border-radius: 6px;
+  border-radius: 12px;
   overflow: hidden;
-  background-color: var(--beige-claro);
+  background-color: var(--beige-claro, #eee);
   cursor: grab;
   touch-action: none;
+}
+
+.cropper-viewport.rectangular {
+  border: 2px solid var(--cafe, #845736);
 }
 
 .cropper-viewport:active {
@@ -69,18 +60,24 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  box-shadow: 0 0 0 999px rgba(255, 252, 245, 0.78);
+  box-shadow: 0 0 0 999px rgba(255, 255, 255, 0.75);
   pointer-events: none;
 }
 
 .cropper-zoom {
   width: 100%;
   margin-bottom: 1.4rem;
-  accent-color: var(--cafe);
+  accent-color: var(--cafe, #845736);
 }
 
 .cropper-actions {
   display: flex;
   justify-content: center;
   gap: 0.8rem;
+}
+
+@media (max-width: 480px) {
+  .cropper-box {
+    padding: 1.4rem 1.1rem;
+  }
 }
