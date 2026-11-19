@@ -69,7 +69,6 @@
   color: var(--error-fg);
 }
 
-/* Pestañas */
 .ma-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -122,7 +121,6 @@
   line-height: 1.5;
 }
 
-/* Servicios */
 .ma-barra {
   display: flex;
   flex-wrap: wrap;
@@ -609,4 +607,179 @@
   .ma-segmentos {
     grid-template-columns: 1fr;
   }
+}
+
+.mc-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-bottom: 1.6rem;
+}
+
+.mc-filtro {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1.1rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cafe-oscuro);
+  background: var(--papel-claro);
+  border: 1.5px solid var(--cafe);
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.mc-filtro span {
+  min-width: 1.4rem;
+  padding: 0 0.35rem;
+  text-align: center;
+  font-size: 0.78rem;
+  border-radius: 10px;
+  background: var(--beige-claro);
+}
+
+.mc-filtro.activo {
+  background: var(--cafe);
+  color: #fff;
+}
+
+.mc-filtro.activo span {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.mc-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.2rem;
+}
+
+.mc-cita {
+  display: grid;
+  grid-template-columns: 200px 1fr 190px;
+  gap: 1.4rem;
+  align-items: center;
+  padding: 1.1rem 1.3rem;
+  background: var(--papel-claro);
+  border: 2px solid var(--cafe);
+  box-shadow: 5px 5px 0 var(--cafe);
+}
+
+.mc-cita.rechazada,
+.mc-cita.cancelada {
+  opacity: 0.7;
+}
+
+.mc-cuando {
+  display: grid;
+  gap: 0.2rem;
+  padding-right: 1.2rem;
+  border-right: 2px dashed var(--beige-claro);
+}
+
+.mc-cuando b {
+  font-family: var(--fuente-titulo);
+  color: var(--cafe);
+  text-transform: capitalize;
+}
+
+.mc-detalle h3 {
+  margin: 0 0 0.2rem;
+  font-family: var(--fuente-titulo);
+  color: var(--cafe);
+  overflow-wrap: anywhere;
+}
+
+.mc-detalle p {
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+}
+
+.mc-nota {
+  font-style: italic;
+  overflow-wrap: anywhere;
+}
+
+.mc-contacto {
+  font-weight: 600;
+}
+
+.mc-lado {
+  display: grid;
+  justify-items: stretch;
+  gap: 0.6rem;
+  text-align: center;
+}
+
+.mc-estado {
+  justify-self: center;
+  padding: 0.2rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1.5px solid currentColor;
+  border-radius: 14px;
+  color: var(--cafe);
+}
+
+.mc-estado.pendiente {
+  color: var(--aviso-fg);
+  background: var(--aviso-bg);
+}
+
+.mc-estado.aceptada {
+  color: var(--verde);
+}
+
+.mc-estado.rechazada,
+.mc-estado.cancelada {
+  color: var(--error-fg);
+}
+
+.mc-botones {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.mc-cancelar {
+  padding: 0.4rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--error-fg);
+  background: none;
+  border: 1.5px solid var(--error-fg);
+  cursor: pointer;
+}
+
+.mc-cancelar:hover {
+  background: var(--error-bg);
+}
+
+@media (max-width: 760px) {
+  .mc-cita {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .mc-cuando {
+    padding: 0 0 0.8rem;
+    border-right: none;
+    border-bottom: 2px dashed var(--beige-claro);
+  }
+}
+
+.ma-contador {
+  display: inline-block;
+  min-width: 1.3rem;
+  margin-left: 0.5rem;
+  padding: 0 0.35rem;
+  font-size: 0.75rem;
+  line-height: 1.3rem;
+  text-align: center;
+  color: #fff;
+  background: var(--verde);
+  border-radius: 10px;
 }
