@@ -18,6 +18,7 @@ import {
   IconoSubir,
 } from "../components/pagina/Iconos.js";
 import { Pencil } from "@sketchicon/lucide";
+import AvatarCropper from "../components/perfil/AvatarCropper.jsx";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getMiPagina, updateMiPagina, subirImagenPagina, getImagenUrl } from "../services/pagina.services.js";
 import {
@@ -59,6 +60,13 @@ const PESTANAS = [
 
 const TIPOS_IMAGEN = ["image/jpeg", "image/png", "image/webp"];
 const MAX_BYTES = 5 * 1024 * 1024;
+
+const recorteDe = (clave) => {
+  if (clave === "portada") return { aspect: 4, anchoSalida: 1600, titulo: "Ajusta tu portada", circular: false };
+  if (clave === "foto") return { aspect: 1, anchoSalida: 600, titulo: "Ajusta tu foto", circular: true };
+  if (clave.endsWith(":imagen")) return { aspect: 16 / 9, anchoSalida: 1280, titulo: "Ajusta tu imagen", circular: false };
+  return { aspect: 1, anchoSalida: 800, titulo: "Ajusta tu foto", circular: false };
+};
 
 const slugDe = (texto = "") =>
   String(texto)
@@ -117,6 +125,7 @@ export default function MiPagina() {
   const [guardado, setGuardado] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [subiendoClave, setSubiendoClave] = useState(null);
+  const [recorte, setRecorte] = useState(null);
   const [eliminado, setEliminado] = useState(null);
   const temporizadorDeshacer = useRef(null);
 
@@ -266,6 +275,23 @@ export default function MiPagina() {
     setNuevoId(bloque.id);
   };
 
+  const pedirRecorte = (archivo, clave) =>
+    new Promise((resolver) => {
+      setRecorte({
+        src: URL.createObjectURL(archivo),
+        config: recorteDe(clave),
+        nombre: archivo.name.replace(/\.[^.]+$/, "") || "imagen",
+        resolver,
+      });
+    });
+
+  const cerrarRecorte = (resultado) => {
+    if (!recorte) return;
+    URL.revokeObjectURL(recorte.src);
+    recorte.resolver(resultado);
+    setRecorte(null);
+  };
+
   const subirImagen = async (archivo, clave) => {
     if (!TIPOS_IMAGEN.includes(archivo.type)) {
       alerta("Solo se permiten imágenes JPG, PNG o WEBP.", { tipo: "advertencia" });
@@ -276,9 +302,13 @@ export default function MiPagina() {
       return null;
     }
 
+    // La persona encuadra la imagen antes de subirla; si cancela, no se sube nada.
+    const recortada = await pedirRecorte(archivo, clave);
+    if (!recortada) return null;
+
     setSubiendoClave(clave);
     try {
-      const { url } = await subirImagenPagina(archivo);
+      const { url } = await subirImagenPagina(recortada);
       return url;
     } catch (err) {
       console.error(err);
@@ -388,7 +418,7 @@ export default function MiPagina() {
     <div className="mipagina-page">
       <Navbar />
 
-      {/* Estado y Acciones Principales ---- */}
+      {/* Estado y Acciones Principales */}
       <div className="mipagina-barra">
         <div className="mipagina-barra-titulo">
           <h1>Mi página</h1>
@@ -438,7 +468,6 @@ export default function MiPagina() {
       </div>
 
       <div className="mipagina-editor">
-        {/* SideBar Tools */}
         <aside className={`mipagina-lateral ${panelAbierto ? "abierto" : ""}`} aria-label="Herramientas de la página">
           <button
             type="button"
@@ -653,8 +682,8 @@ export default function MiPagina() {
                   ))}
                 </div>
                 <p className="mipagina-nota">
-                  Las visitas se cuentan una vez por persona y por sesión, sin sumar las tuyas. Las agendas se
-                  activarán junto con el sistema de reservas.
+                  Las visitas se cuentan una vez por persona y por sesión, sin sumar las tuyas. Las agendas son las
+                  citas que aceptaste este mes.
                 </p>
               </div>
             )}
@@ -766,6 +795,19 @@ export default function MiPagina() {
       )}
 
       <Footer />
+
+      {recorte && (
+        <AvatarCropper
+          imageSrc={recorte.src}
+          aspect={recorte.config.aspect}
+          anchoSalida={recorte.config.anchoSalida}
+          titulo={recorte.config.titulo}
+          circular={recorte.config.circular}
+          textoConfirmar="Usar imagen"
+          onCancel={() => cerrarRecorte(null)}
+          onConfirm={(blob) => cerrarRecorte(new File([blob], `${recorte.nombre}.jpg`, { type: "image/jpeg" }))}
+        />
+      )}
     </div>
   );
 }
