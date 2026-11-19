@@ -344,3 +344,14 @@
   .tam-mediano { width: 88%; }
   .tam-pequeno { width: 70%; }
 }
+
+.pagina-avatar {
+  background-color: var(--beige-claro, #eadfc8);
+  color: #2b1f15;
+  border: 3px solid var(--acento, var(--cafe, #845736));
+  box-shadow: 0 0 0 4px var(--fondo-pagina);
+}
+
+.pagina-avatar-img {
+  background-color: var(--beige-claro, #eadfc8);
+}
