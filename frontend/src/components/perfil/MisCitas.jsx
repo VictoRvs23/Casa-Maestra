@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAlerta } from "../../context/AlertaContext.jsx";
 import { getMisCitas, cancelarCita } from "../../services/agendaResidente.services.js";
-import "../../styles/perfil/MisReservas.css";
+import "../../styles/perfil/MisCitas.css";
 
 const fechaLarga = (fecha) =>
   new Date(`${fecha}T12:00:00`)
@@ -24,6 +24,7 @@ const vigente = (c) => (c.estado === "pendiente" || c.estado === "aceptada") && 
 
 export default function MisCitas() {
   const { alerta, confirmar } = useAlerta();
+  const navigate = useNavigate();
   const [citas, setCitas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -79,10 +80,14 @@ export default function MisCitas() {
       {!cargando && error && <p className="perfil-sub">{error}</p>}
 
       {!cargando && !error && ordenadas.length === 0 && (
-        <p className="perfil-sub">
-          Aún no has agendado nada. Entra a la página de un <Link to="/residentes">residente</Link> y usa el botón
-          «Agendar».
-        </p>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.2rem", padding: "2.5rem 1rem", textAlign: "center" }}>
+          <p className="perfil-sub" style={{ margin: 0 }}>
+            Aún no has agendado nada. Busca a un residente y pide tu primera hora o producto.
+          </p>
+          <button type="button" className="btn-primary" onClick={() => navigate("/residentes")}>
+            Ver residentes
+          </button>
+        </div>
       )}
 
       {!cargando && !error && ordenadas.length > 0 && (
