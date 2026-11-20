@@ -412,3 +412,53 @@
 .previa-movil .pagina-nombre { font-size: 1.7rem; }
 .previa-movil .tam-mediano { width: 88%; }
 .previa-movil .tam-pequeno { width: 70%; }
+
+@media (max-width: 720px) {
+  .bloque-galeria {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.1rem 0.9rem;
+  }
+
+  .bloque-foto {
+    padding: 6px 6px 18px;
+    border-width: 1.5px;
+    box-shadow: 3px 3px 0 var(--cafe);
+  }
+
+  .bloque-foto::before {
+    top: -9px;
+    width: 46px;
+    height: 16px;
+    margin-left: -23px;
+  }
+
+  .bloque-galeria .bloque-foto:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    width: calc(50% - 0.45rem);
+    justify-self: center;
+  }
+}
+
+.previa-movil .bloque-galeria {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem 0.9rem;
+}
+
+.previa-movil .bloque-foto {
+  padding: 6px 6px 18px;
+  border-width: 1.5px;
+  box-shadow: 3px 3px 0 var(--cafe);
+}
+
+.previa-movil .bloque-foto::before {
+  top: -9px;
+  width: 46px;
+  height: 16px;
+  margin-left: -23px;
+}
+
+.previa-movil .bloque-galeria .bloque-foto:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  width: calc(50% - 0.45rem);
+  justify-self: center;
+}
