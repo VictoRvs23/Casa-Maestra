@@ -23,7 +23,7 @@ export const notificarCitaRespondida = (id_cliente, cita, nombreResidente, acept
         mensaje: aceptada
             ? `${nombreResidente} aceptó: ${detalleCita(cita)}.`
             : `${nombreResidente} no pudo aceptar: ${detalleCita(cita)}. Puedes pedir otro horario.`,
-        enlace: "/mis-citas",
+        enlace: "/perfil?tab=citas",
     });
 
 export const notificarCitaCancelada = (id_destino, cita, quienCancela, haciaResidente) =>
@@ -31,5 +31,5 @@ export const notificarCitaCancelada = (id_destino, cita, quienCancela, haciaResi
         tipo: "cita_cancelada",
         titulo: "Se canceló una cita",
         mensaje: `${quienCancela} canceló: ${detalleCita(cita)}.`,
-        enlace: haciaResidente ? "/mi-agenda?tab=citas" : "/mis-citas",
+        enlace: haciaResidente ? "/mi-agenda?tab=citas" : "/perfil?tab=citas",
     });
