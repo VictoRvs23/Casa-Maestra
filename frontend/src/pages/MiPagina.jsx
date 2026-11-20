@@ -573,7 +573,7 @@ export default function MiPagina() {
           </div>
 
           <button type="button" className="btn-primary" disabled={!hayCambios || guardando} onClick={handleGuardar}>
-            {guardando ? "Guardando..." : hayCambios ? "Guardar cambios" : "Guardado ✓"}
+            {guardando ? "Guardando..." : hayCambios ? "Guardar cambios" : "Guardado"}
           </button>
         </div>
       </div>
