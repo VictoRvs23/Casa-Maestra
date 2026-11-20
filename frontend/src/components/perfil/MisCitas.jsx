@@ -81,11 +81,27 @@ export default function MisCitas() {
 
       {!cargando && !error && ordenadas.length === 0 && (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.2rem", padding: "2.5rem 1rem", textAlign: "center" }}>
-          <p className="perfil-sub" style={{ margin: 0 }}>
+          <p style={{ margin: 0, fontSize: "1rem", color: "var(--cafe-oscuro, #3b2a1d)" }}>
             Aún no has agendado nada. Busca a un residente y pide tu primera hora o producto.
           </p>
-          <button type="button" className="btn-primary" onClick={() => navigate("/residentes")}>
-            Ver residentes
+          <button
+            type="button"
+            onClick={() => navigate("/residentes")}
+            style={{
+              padding: "0.5rem 1.2rem",
+              font: "inherit",
+              fontSize: "0.81rem",
+              lineHeight: 1.25,
+              fontWeight: 700,
+              color: "#fff",
+              background: "var(--cafe, #845736)",
+              border: 0,
+              borderRadius: 999,
+              boxShadow: "none",
+              cursor: "pointer",
+            }}
+          >
+            Conocer residentes
           </button>
         </div>
       )}
