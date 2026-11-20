@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import Icono from "../components/Icono.jsx";
 import AgendarModal from "../components/AgendarModal.jsx";
+import { getOfertaPublica } from "../services/agendaResidente.services.js";
 import PaginaLienzo from "../components/pagina/PaginaLienzo.jsx";
 import BloqueVista from "../components/pagina/BloqueVista.jsx";
 import { ArrowLeft } from "@sketchicon/lucide";
@@ -15,7 +16,7 @@ import {
   seguirResidente,
   dejarDeSeguirResidente,
 } from "../services/seguidos.services.js";
-import { getPaginaPublica, registrarVisitaPagina, getImagenUrl } from "../services/pagina.services.js";
+import { getPaginaPublica, registrarVisitaPagina, getImagenUrl, getMiPagina } from "../services/pagina.services.js";
 import { textoSobre, detalleLegible } from "../constants/paginaEstilos.js";
 import "../styles/pagina/PaginaResidente.css";
 
@@ -31,6 +32,8 @@ export default function PaginaResidente() {
   const [seguimiento, setSeguimiento] = useState({ id_residente: null, seguidores: 0, siguiendo: false });
   const [cambiandoSeguir, setCambiandoSeguir] = useState(false);
   const [agendando, setAgendando] = useState(false);
+  const [agendaAbierta, setAgendaAbierta] = useState(false);
+  const [miSlug, setMiSlug] = useState(null);
 
   useEffect(() => {
     let cancelado = false;
@@ -103,6 +106,33 @@ export default function PaginaResidente() {
     };
   }, [datos, slug, user]);
 
+  useEffect(() => {
+    if (user?.rol !== "Residente") {
+      setMiSlug(null);
+      return;
+    }
+    let cancelado = false;
+    getMiPagina()
+      .then(({ residente }) => !cancelado && setMiSlug(residente?.slug || null))
+      .catch(() => !cancelado && setMiSlug(null));
+    return () => {
+      cancelado = true;
+    };
+  }, [user?.rol, user?.id_usuario]);
+
+  const esPropia = Boolean(miSlug && datos?.residente?.slug === miSlug);
+
+  useEffect(() => {
+    if (!datos) return;
+    let cancelado = false;
+    getOfertaPublica(slug)
+      .then((oferta) => !cancelado && setAgendaAbierta(Boolean(oferta.agenda_abierta)))
+      .catch(() => !cancelado && setAgendaAbierta(false));
+    return () => {
+      cancelado = true;
+    };
+  }, [datos, slug]);
+
   const handleSeguir = async () => {
     if (!user) {
       alerta("Inicia sesión para seguir a este residente.", { tipo: "info", titulo: "Inicia sesión" });
@@ -128,6 +158,10 @@ export default function PaginaResidente() {
     if (!user) {
       alerta("Inicia sesión para agendar con este residente.", { tipo: "info", titulo: "Inicia sesión" });
       navigate("/login");
+      return;
+    }
+    if (esPropia) {
+      navigate("/mi-agenda");
       return;
     }
     setAgendando(true);
@@ -200,6 +234,7 @@ export default function PaginaResidente() {
             </Link>
           }
           onAgendar={handleAgendar}
+          mostrarAgendar={agendaAbierta || esPropia}
           onSeguir={handleSeguir}
           siguiendo={seguimiento.siguiendo}
           seguidores={seguimiento.seguidores}

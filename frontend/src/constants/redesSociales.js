@@ -9,5 +9,5 @@ export const REDES_SOCIALES = [
   { id: "youtube", etiqueta: "YouTube", texto: "", icono: FaYoutube, url: "" },
   { id: "whatsapp", etiqueta: "WhatsApp", texto: "Casa Maestra", icono: FaWhatsapp, url: "https://wa.me/56995713061" },
   { id: "telefono", etiqueta: "Teléfono", texto: "", icono: FaPhone, url: "" },
-  { id: "correo", etiqueta: "Correo", texto: "casamaestra@gmail.com", icono: SiGmail, url: "mailto:casamaestra@gmail.com" },
+  { id: "correo", etiqueta: "Correo", texto: "casamaestra.ccp1@gmail.com", icono: SiGmail, url: "mailto:casamaestra.ccp1@gmail.com" },
 ];

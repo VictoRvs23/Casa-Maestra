@@ -13,6 +13,9 @@ export default function PaginaLienzo({
   accionPortada = null,
   accionAvatar = null,
   onAgendar,
+  mostrarAgendar = true,
+  onCambiarNombre,
+  onCambiarDescripcion,
   onSeguir,
   siguiendo = false,
   seguidores = null,
@@ -51,8 +54,32 @@ export default function PaginaLienzo({
           </div>
 
           <div className="pagina-identidad">
-            <Titulo className="pagina-nombre">{nombre}</Titulo>
-            {descripcion && <p className="pagina-categoria">{descripcion}</p>}
+            {onCambiarNombre ? (
+              <input
+                type="text"
+                className="pagina-nombre pagina-nombre-input"
+                aria-label="Nombre artístico"
+                placeholder="Tu nombre artístico"
+                maxLength={80}
+                value={nombre}
+                onChange={(e) => onCambiarNombre(e.target.value)}
+              />
+            ) : (
+              <Titulo className="pagina-nombre">{nombre}</Titulo>
+            )}
+            {onCambiarDescripcion ? (
+              <input
+                type="text"
+                className="pagina-categoria pagina-categoria-input"
+                aria-label="Descripción corta"
+                placeholder="Descripción corta (ej: Piercings y Tatuajes)"
+                maxLength={150}
+                value={descripcion}
+                onChange={(e) => onCambiarDescripcion(e.target.value)}
+              />
+            ) : (
+              descripcion && <p className="pagina-categoria">{descripcion}</p>
+            )}
             {seguidores !== null && (
               <p className="pagina-seguidores">
                 {seguidores} {seguidores === 1 ? "seguidor" : "seguidores"}
@@ -60,19 +87,23 @@ export default function PaginaLienzo({
             )}
           </div>
 
-          <div className="pagina-acciones">
-            <button type="button" className="pagina-btn pagina-btn-lleno" onClick={onAgendar} disabled={!onAgendar}>
-              Agendar
-            </button>
-            <button
-              type="button"
-              className={`pagina-btn pagina-btn-borde ${siguiendo ? "siguiendo" : ""}`}
-              onClick={onSeguir}
-              disabled={!onSeguir}
-              aria-pressed={siguiendo}
-            >
-              {siguiendo ? "✓ Siguiendo" : "Seguir"}
-            </button>
+          <div className="pagina-acciones-wrap">
+            <div className="pagina-acciones">
+              {mostrarAgendar && (
+                <button type="button" className="pagina-btn pagina-btn-lleno" onClick={onAgendar} disabled={!onAgendar}>
+                  Agendar
+                </button>
+              )}
+              <button
+                type="button"
+                className={`pagina-btn pagina-btn-borde ${siguiendo ? "siguiendo" : ""}`}
+                onClick={onSeguir}
+                disabled={!onSeguir}
+                aria-pressed={siguiendo}
+              >
+                {siguiendo ? "✓ Siguiendo" : "Seguir"}
+              </button>
+            </div>
           </div>
         </div>
 

@@ -7,7 +7,6 @@ import UsuarioEntity from "../entities/usuario.entity.js";
 import SeguimientoEntity from "../entities/seguimiento.entity.js";
 import { PREFIJO_URL_PAGINA } from "../config/paginaEstilos.js";
 import { asegurarTarjetaDeUsuario, buscarPorSlug, cambiosPorNombre } from "./tarjeta.services.js";
-import { contarAgendasDelMesService } from "./citaResidente.services.js";
 
 const paginaRepository = AppDataSource.getRepository(PaginaResidenteEntity);
 const residenteRepository = AppDataSource.getRepository(ResidenteEntity);
@@ -101,7 +100,7 @@ export const getMiPaginaService = async (id_usuario) => {
         estadisticas: {
             visitas_mes: Number(fila?.visitas?.[mesActual()] || 0),
             seguidores,
-            agendas: await contarAgendasDelMesService(residente.id_residente),
+            agendas: null,
         },
         residente: datosDeResidente(residente),
         usuario,
@@ -125,6 +124,15 @@ export const updateMiPaginaService = async (id_usuario, data) => {
     const cambiosTarjeta = {};
     if (nombre !== undefined) Object.assign(cambiosTarjeta, await cambiosPorNombre(residente, nombre));
     if (descripcion !== undefined) cambiosTarjeta.descripcion = String(descripcion).trim() || null;
+
+    if ("foto" in cambiosPagina) {
+        if (cambiosPagina.foto) {
+            cambiosTarjeta.imagen = cambiosPagina.foto;
+        } else {
+            const cuenta = await usuarioRepository.findOne({ where: { id_usuario }, select: { avatar: true } });
+            cambiosTarjeta.imagen = cuenta?.avatar || null;
+        }
+    }
 
     if (resultado.publicada) {
         const descripcionFinal = "descripcion" in cambiosTarjeta ? cambiosTarjeta.descripcion : residente.descripcion;

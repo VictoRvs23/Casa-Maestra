@@ -9,19 +9,19 @@ import { User, Lock, Calendar, Heart, Pencil } from "@sketchicon/lucide";
 import Icono from "../components/Icono.jsx";
 import DatosPersonales from "../components/perfil/DatosPersonales.jsx";
 import Seguridad from "../components/perfil/Seguridad.jsx";
-import MisReservas from "../components/perfil/MisReservas.jsx";
+import MisCitas from "../components/perfil/MisCitas.jsx";
 import Seguidos from "../components/perfil/Seguidos.jsx";
 import AvatarCropper from "../components/perfil/AvatarCropper.jsx";
 import "../styles/Perfil.css";
 
-const TABS_VALIDAS = ["datos-personales", "seguridad", "reservas", "seguidos"];
+const TABS_VALIDAS = ["datos-personales", "seguridad", "citas", "seguidos"];
 
 export default function Perfil() {
   const { user } = useAuth();
   const { alerta } = useAlerta();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const tabDesdeUrl = (valor) => (valor === "datos" ? "datos-personales" : valor);
+  const tabDesdeUrl = (valor) => (valor === "datos" ? "datos-personales" : valor === "reservas" ? "citas" : valor);
 
   const tabInicial = TABS_VALIDAS.includes(tabDesdeUrl(searchParams.get("tab")))
     ? tabDesdeUrl(searchParams.get("tab"))
@@ -137,8 +137,8 @@ export default function Perfil() {
             <button className={tab === "seguridad" ? "active" : ""} onClick={() => cambiarTab("seguridad")}>
               <Icono icon={Lock} size={17} /> Seguridad
             </button>
-            <button className={tab === "reservas" ? "active" : ""} onClick={() => cambiarTab("reservas")}>
-              <Icono icon={Calendar} size={17} /> Mis reservas
+            <button className={tab === "citas" ? "active" : ""} onClick={() => cambiarTab("citas")}>
+              <Icono icon={Calendar} size={17} /> Mis citas
             </button>
             <button className={tab === "seguidos" ? "active" : ""} onClick={() => cambiarTab("seguidos")}>
               <Icono icon={Heart} size={17} /> Seguidos
@@ -149,7 +149,7 @@ export default function Perfil() {
         <div className="perfil-content">
           {tab === "datos-personales" && <DatosPersonales perfil={perfil} onGuardado={setPerfil} />}
           {tab === "seguridad" && <Seguridad userId={perfil.id_usuario} />}
-          {tab === "reservas" && <MisReservas />}
+          {tab === "citas" && <MisCitas />}
           {tab === "seguidos" && <Seguidos />}
         </div>
       </div>

@@ -84,8 +84,8 @@ const Navbar = () => {
                                 <Link to="/perfil?tab=seguridad" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
                                     Seguridad
                                 </Link>
-                                <Link to="/perfil?tab=reservas" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
-                                    Mis Reservas
+                                <Link to="/perfil?tab=citas" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
+                                    Mis Citas
                                 </Link>
                                 <Link to="/perfil?tab=seguidos" className="account-dropdown-item" onClick={() => setMenuOpen(false)}>
                                     Mis Seguidos
