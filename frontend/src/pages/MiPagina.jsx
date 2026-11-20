@@ -54,7 +54,6 @@ const AYUDA_BLOQUE = {
 };
 
 const PESTANAS = [
-  { id: "tarjeta", label: "Tarjeta" },
   { id: "bloques", label: "Bloques" },
   { id: "estilo", label: "Estilo" },
   { id: "resumen", label: "Resumen" },
@@ -157,7 +156,7 @@ export default function MiPagina() {
   const [eliminado, setEliminado] = useState(null);
   const temporizadorDeshacer = useRef(null);
 
-  const [pestana, setPestana] = useState("tarjeta");
+  const [pestana, setPestana] = useState("bloques");
   const [panelAbierto, setPanelAbierto] = useState(false);
   const [nuevoId, setNuevoId] = useState(null);
   const [arrastrandoId, setArrastrandoId] = useState(null);
@@ -397,9 +396,14 @@ export default function MiPagina() {
     if (url) cambiar({ foto: url });
   };
 
+  const enfocar = (selector) => {
+    setVista("editar");
+    setTimeout(() => document.querySelector(selector)?.focus(), 0);
+  };
+
   const handleGuardar = async () => {
     if (form.publicada && !form.descripcion.trim()) {
-      setPestana("tarjeta");
+      enfocar(".pagina-categoria-input");
       alerta("Para publicar, escribe una descripción corta de tu trabajo. Aparece en tu tarjeta de Residentes.", {
         tipo: "error",
       });
@@ -489,8 +493,8 @@ export default function MiPagina() {
   const abrirArchivo = (selector) => () => document.querySelector(selector)?.click();
 
   const pasos = [
-    { id: "nombre", label: "Nombre artístico", ok: Boolean(form.nombre.trim()), onClick: () => setPestana("tarjeta") },
-    { id: "descripcion", label: "Descripción corta", ok: Boolean(form.descripcion.trim()), onClick: () => setPestana("tarjeta") },
+    { id: "nombre", label: "Nombre artístico", ok: Boolean(form.nombre.trim()), onClick: () => enfocar(".pagina-nombre-input") },
+    { id: "descripcion", label: "Descripción corta", ok: Boolean(form.descripcion.trim()), onClick: () => enfocar(".pagina-categoria-input") },
     { id: "foto", label: "Foto de tu página", ok: Boolean(form.foto), onClick: abrirArchivo(".pagina-avatar-edit input") },
     { id: "portada", label: "Portada", ok: Boolean(form.portada), onClick: abrirArchivo(".pagina-portada-btn input") },
     { id: "bloques", label: "Al menos un bloque", ok: form.bloques.length > 0, onClick: () => setPestana("bloques") },
@@ -628,6 +632,11 @@ export default function MiPagina() {
               </section>
             )}
 
+            <p className="mp-enlace">
+              Tu enlace: <strong>/residentes/{slugDe(form.nombre)}</strong>
+              {slugDe(form.nombre) !== residente.slug && " (cambiará al guardar; los enlaces anteriores seguirán funcionando)"}
+            </p>
+
             <div className="lateral-tabs" role="tablist" aria-label="Secciones de herramientas" onKeyDown={teclaPestanas}>
               {PESTANAS.map((p) => (
                 <button
@@ -645,52 +654,6 @@ export default function MiPagina() {
                 </button>
               ))}
             </div>
-
-            {/* Tarjeta */}
-            {pestana === "tarjeta" && (
-              <div role="tabpanel" id="mp-panel-tarjeta" aria-labelledby="mp-tab-tarjeta">
-                <p className="lateral-ayuda">
-                  Así te verá la gente en Residentes. Tu página se publica junto con tu tarjeta, así que ambas deben
-                  estar completas.
-                </p>
-
-                <div className="tarjeta-campo">
-                  <label htmlFor="tarjeta-nombre">Nombre artístico</label>
-                  <input
-                    id="tarjeta-nombre"
-                    type="text"
-                    value={form.nombre}
-                    maxLength={80}
-                    onChange={(e) => cambiar({ nombre: e.target.value })}
-                  />
-                  <small>
-                    Tu enlace será <strong>/residentes/{slugDe(form.nombre)}</strong>.
-                    {slugDe(form.nombre) !== residente.slug && " Si lo cambias, los enlaces anteriores seguirán funcionando."}
-                  </small>
-                </div>
-
-                <div className="tarjeta-campo">
-                  <label htmlFor="tarjeta-descripcion">Descripción corta</label>
-                  <input
-                    id="tarjeta-descripcion"
-                    type="text"
-                    value={form.descripcion}
-                    maxLength={150}
-                    placeholder="Ej: Piercings y Tatuajes"
-                    onChange={(e) => cambiar({ descripcion: e.target.value })}
-                  />
-                  <small>
-                    {form.descripcion.length}/150 · Obligatoria para publicar. La foto de tu página (el círculo junto a tu
-                    nombre) se usa como imagen de tu tarjeta en Residentes.
-                  </small>
-                </div>
-
-                <p className="tarjeta-requisitos" role="note">
-                  Para publicar necesitas: nombre artístico {form.nombre.trim() ? "✓" : "✗"} · descripción{" "}
-                  {form.descripcion.trim() ? "✓" : "✗"}
-                </p>
-              </div>
-            )}
 
             {/* Bloques */}
             {pestana === "bloques" && (
