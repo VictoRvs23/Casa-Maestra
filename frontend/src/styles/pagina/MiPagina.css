@@ -491,7 +491,7 @@
 .pagina-avatar-edit {
   position: absolute;
   right: 10px;
-  bottom: 10px;
+  bottom: 20px;
   width: 32px;
   height: 32px;
   border: 2px solid var(--fondo-pagina);
@@ -520,8 +520,8 @@
 
 .pagina-avatar-quitar {
   position: absolute;
-  left: 10px;
-  bottom: 10px;
+  left: 20px;
+  bottom: 20px;
   width: 32px;
   height: 32px;
   padding: 0;
@@ -1450,4 +1450,9 @@
     right: auto;
     left: 0;
   }
+}
+
+.lateral-tab {
+  min-width: 0;
+  white-space: nowrap;
 }
