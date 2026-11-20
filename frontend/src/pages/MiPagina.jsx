@@ -632,11 +632,6 @@ export default function MiPagina() {
               </section>
             )}
 
-            <p className="mp-enlace">
-              Tu enlace: <strong>/residentes/{slugDe(form.nombre)}</strong>
-              {slugDe(form.nombre) !== residente.slug && " (cambiará al guardar; los enlaces anteriores seguirán funcionando)"}
-            </p>
-
             <div className="lateral-tabs" role="tablist" aria-label="Secciones de herramientas" onKeyDown={teclaPestanas}>
               {PESTANAS.map((p) => (
                 <button
