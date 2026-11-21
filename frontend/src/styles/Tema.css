@@ -404,3 +404,12 @@ body {
   border-color: var(--deshabilitado);
   cursor: not-allowed;
 }
+
+@media (max-width: 640px) {
+  .modal-overlay { padding: 0.8rem; }
+  .modal-box { padding: 1.4rem 1.2rem; max-height: 92vh; }
+  .modal-box h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+  .modal-actions { flex-wrap: wrap; }
+  .modal-actions > * { flex: 1 1 auto; }
+  .pie-pagina-contenido { flex-direction: column; gap: 0.8rem; padding: 1rem 1rem 2rem; text-align: center; }
+}
