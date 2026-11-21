@@ -81,3 +81,17 @@
   position: relative;
   z-index: 1;
 }
+
+@media (max-width: 900px) {
+  .auth-layout-backdrop { padding: 1rem; align-items: flex-start; }
+  .auth-modal-box { flex-direction: column; min-height: 0; }
+  .auth-layout-left { flex: none; padding: 1.2rem 0; }
+  .auth-layout-logo { max-width: 110px; }
+  .auth-layout-right { flex: none; padding: 2rem 1.4rem 2.2rem; }
+  .close-modal-btn { top: 0.8rem; right: 0.8rem; color: #ffffff; }
+}
+
+@media (max-width: 480px) {
+  .auth-layout-backdrop { padding: 0.6rem; }
+  .auth-layout-right { padding: 1.6rem 1.1rem 1.8rem; }
+}
