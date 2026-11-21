@@ -264,3 +264,14 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+@media (max-width: 480px) {
+  .ag-overlay { padding: 0.5rem; align-items: flex-end; }
+  .ag-modal { padding: 1.4rem 1rem 1.2rem; box-shadow: 4px 4px 0 var(--cafe, #845736); }
+  .ag-opcion { grid-template-columns: 52px 1fr; gap: 0.7rem; }
+  .ag-foto { width: 52px; }
+  .ag-resumen { flex-wrap: wrap; }
+  .ag-dia { flex-basis: 58px; }
+  .ag-acciones { flex-direction: column-reverse; }
+  .ag-acciones > * { width: 100%; }
+}
