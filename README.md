@@ -47,3 +47,72 @@ Dependencias de Desarrollo:
 - eslint (^8.57.0): Herramienta de análisis de código estático para identificar problemas y estandarizar la escritura del código.
 - eslint-plugin-react (^7.34.1), eslint-plugin-react-hooks (^4.6.0), eslint-plugin-react-refresh (^0.4.6): Reglas específicas de ESLint para asegurar las buenas prácticas en React.
 - vite (^7.0.0): Entorno de desarrollo local ultrarrápido y empaquetador (bundler) para la construcción final a producción.
+
+# Distribución
+
+--------------------
+Backend 
+--------------------
+
+├── backend/
+│   ├── node_modules/
+│   ├── src/
+│   │   ├── config/          (configDb.js, variables de entorno)
+│   │   ├── controllers/     (reciben la petición y responden)
+│   │   ├── entities/        (esquemas TypeORM: usuario, residente, estudio, cita, token de recuperación…)
+│   │   ├── helpers/         (funciones auxiliares)
+│   │   ├── middleware/      (autenticación JWT, roles, módulo Talleres)
+│   │   ├── routes/          (index.routes.js y rutas por módulo)
+│   │   ├── services/        (lógica de negocio: auth, usuarios, citas, notificaciones…)
+│   │   ├── tests/           (Vitest + Supertest: unitarios e integración)
+│   │   ├── upload/          (configuración de multer)
+│   │   ├── validations/     (esquemas Joi)
+│   │   └── index.js         (punto de entrada)
+|   |
+│   ├── uploads/             (imágenes subidas)
+│   ├── .dockerignore
+│   ├── .env
+│   ├── .gitignore
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── package-lock.json
+│   └── vitest.config.js
+
+
+
+--------------------
+Frontend 
+--------------------
+
+├── frontend/
+│   ├── node_modules/
+│   ├── public/
+│   ├── cypress/
+│   │   └── e2e/             
+│   ├── src/
+│   │   ├── assets/          (logo, hojaArrugada.jpg, separador.png…)
+│   │   ├── components/
+│   │   │   ├── pagina/      (PaginaLienzo, BloqueEditor, BloqueVista, Iconos, Redes)
+│   │   │   ├── perfil/      (AvatarCropper, DatosPersonales, Seguridad, Seguidos, MisCitas)
+│   │   │   ├── Navbar.jsx, Footer.jsx, Notificaciones.jsx, AuthLayout.jsx,
+│   │   │   ├── CampoContrasena.jsx, CitasLista.jsx, AgendarModal.jsx, Icono.jsx…
+|   |   | 
+│   │   ├── constants/       (paginaEstilos.js)
+│   │   ├── context/         (AuthContext, AlertaContext)
+│   │   ├── hooks/           (useSwitchModulo.js…)
+│   │   ├── pages/           (Inicio, Login, Registro, Residente, PaginaResidente, MiPagina,
+│   │   │                     MiAgenda, Estudio, Estudio0, Taller, Soporte, Usuario, Perfil,
+│   │   │                     RecuperarContrasena, RestablecerContrasena…)
+|   |   |
+│   │   ├── services/        
+│   │   ├── styles/
+│   │   │   ├── pagina/      (MiPagina, PaginaLienzo, PaginaResidente)
+│   │   │   ├── perfil/      (DatosPersonales, Seguridad, Seguidos, MisCitas, AvatarCropper)
+│   │   │   └── Tema.css, Navbar.css, Inicio.css, Login.css, Registro.css, index.css…
+|   |   |
+│   │   ├── App.jsx          
+│   │   └── main.jsx         
+│   ├── Dockerfile
+│   ├── package.json
+│   └── vite.config.js
+
