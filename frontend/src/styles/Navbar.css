@@ -202,3 +202,56 @@
 .account-dropdown-logout:hover {
   background-color: var(--error-bg);
 }
+
+.navbar-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--nav-negro);
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.navbar-toggle:hover { background-color: var(--nav-negro-hover); }
+
+@media (max-width: 1100px) {
+  .navbar-container { padding: 0.8rem 1.5rem; }
+  .navbar-left { gap: 1rem; }
+  .navbar-logo { width: 60px; height: 60px; }
+  .navbar-toggle { display: inline-flex; }
+
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.3rem;
+    padding: 0.8rem 1.5rem 1.2rem;
+    background-color: var(--papel-claro);
+    border-bottom: 2px solid var(--nav-negro);
+    box-shadow: 0 6px 0 rgba(26, 26, 26, 0.12);
+  }
+
+  .navbar-links.abierto { display: flex; }
+  .navbar-links a { padding: 0.8rem 1rem; text-align: center; }
+}
+
+@media (max-width: 600px) {
+  .navbar-container { padding: 0.6rem 0.8rem; }
+  .navbar-left { gap: 0.6rem; }
+  .navbar-logo { width: 48px; height: 48px; }
+  .navbar-right { gap: 0.5rem; }
+  .nav-account-btn, .nav-login-btn { height: 36px; padding: 0 0.9rem; border-radius: 18px; font-size: 0.8rem; }
+  .campana-btn, .navbar-toggle { width: 36px; height: 36px; }
+  .nav-login-btn { text-align: center; line-height: 1.1; }
+  .account-dropdown { min-width: 190px; }
+}

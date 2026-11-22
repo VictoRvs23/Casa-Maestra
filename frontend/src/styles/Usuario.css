@@ -300,3 +300,12 @@ table.usuarios-table tbody td.celda-email {
     gap: 0;
   }
 }
+
+@media (max-width: 760px) {
+  .usuarios-hero { padding: 2rem 1rem 1rem; }
+  .usuarios-hero h1 { font-size: 2.1rem; letter-spacing: 2px; }
+  .usuarios-wrap { padding: 1rem 1rem 3rem; }
+  .usuarios-toolbar { flex-wrap: wrap; gap: 0.8rem; }
+  table.usuarios-table { min-width: 640px; }
+  .filter-popover { width: min(280px, calc(100vw - 2rem)); }
+}

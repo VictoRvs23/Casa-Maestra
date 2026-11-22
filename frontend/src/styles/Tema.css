@@ -404,3 +404,45 @@ body {
   border-color: var(--deshabilitado);
   cursor: not-allowed;
 }
+
+@media (max-width: 640px) {
+  .modal-overlay { padding: 0.8rem; }
+  .modal-box { padding: 1.4rem 1.2rem; max-height: 92vh; }
+  .modal-box h2 { font-size: 1.4rem; margin-bottom: 1rem; }
+  .modal-actions { flex-wrap: wrap; }
+  .modal-actions > * { flex: 1 1 auto; }
+  .pie-pagina-contenido { flex-direction: column; gap: 0.8rem; padding: 1rem 1rem 2rem; text-align: center; }
+}
+
+.btn-primary.btn-primary:not(:disabled) {
+  padding: 0.7rem 1.6rem;
+  border: 2px solid var(--cafe);
+  border-radius: 22px 18px 24px 20px / 20px 24px 18px 22px;
+  background-color: var(--cafe);
+  color: #ffffff;
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 3px 3px 0 var(--verde);
+}
+
+.btn-primary.btn-primary:not(:disabled):hover {
+  background-color: var(--cafe-hover);
+  box-shadow: 4px 4px 0 var(--verde);
+}
+
+.btn-ghost.btn-ghost {
+  padding: 0.7rem 1.4rem;
+  border: 2px solid var(--cafe);
+  border-radius: 20px 24px 18px 22px / 24px 18px 22px 20px;
+  background: transparent;
+  color: var(--cafe-oscuro);
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.btn-ghost.btn-ghost:hover {
+  background-color: var(--beige-claro);
+  color: var(--cafe-oscuro);
+}

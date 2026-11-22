@@ -5,6 +5,7 @@ import Footer from "../components/Footer.jsx";
 import Icono from "../components/Icono.jsx";
 import PaginaLienzo from "../components/pagina/PaginaLienzo.jsx";
 import BloqueEditor from "../components/pagina/BloqueEditor.jsx";
+import BloqueVista from "../components/pagina/BloqueVista.jsx";
 import {
   IconoTexto,
   IconoImagen,
@@ -21,6 +22,7 @@ import { Pencil } from "@sketchicon/lucide";
 import AvatarCropper from "../components/perfil/AvatarCropper.jsx";
 import { useAlerta } from "../context/AlertaContext.jsx";
 import { getMiPagina, updateMiPagina, subirImagenPagina, getImagenUrl } from "../services/pagina.services.js";
+import { getMisServicios, getMisHorarios, getCitasResidente } from "../services/agendaResidente.services.js";
 import {
   FUENTES,
   COLORES_ACENTO,
@@ -52,7 +54,6 @@ const AYUDA_BLOQUE = {
 };
 
 const PESTANAS = [
-  { id: "tarjeta", label: "Tarjeta" },
   { id: "bloques", label: "Bloques" },
   { id: "estilo", label: "Estilo" },
   { id: "resumen", label: "Resumen" },
@@ -114,6 +115,25 @@ const borrarBorrador = (slug) => {
   }
 };
 
+function InsertarBloque({ abierto, onAlternar, onElegir }) {
+  return (
+    <div className={`insertar-bloque ${abierto ? "abierto" : ""}`}>
+      <button type="button" aria-label="Insertar un bloque aquí" aria-expanded={abierto} onClick={onAlternar}>
+        <Icono icon={IconoMas} size={16} />
+      </button>
+      {abierto && (
+        <div className="insertar-opciones" role="group" aria-label="Tipo de bloque">
+          {TIPOS_BLOQUE.map(({ tipo, label }) => (
+            <button type="button" key={tipo} onClick={() => onElegir(tipo)}>
+              <Icono icon={ICONOS_BLOQUE[tipo]} size={16} /> {label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function MiPagina() {
   const { alerta, confirmar } = useAlerta();
 
@@ -126,10 +146,17 @@ export default function MiPagina() {
   const [guardando, setGuardando] = useState(false);
   const [subiendoClave, setSubiendoClave] = useState(null);
   const [recorte, setRecorte] = useState(null);
+  const [agenda, setAgenda] = useState(null);
+  const [vista, setVista] = useState("editar");
+  const [dispositivo, setDispositivo] = useState("escritorio");
+  const [menuCompartir, setMenuCompartir] = useState(false);
+  const [insertarEn, setInsertarEn] = useState(null);
+  const [checklistAbierto, setChecklistAbierto] = useState(true);
+  const menuRef = useRef(null);
   const [eliminado, setEliminado] = useState(null);
   const temporizadorDeshacer = useRef(null);
 
-  const [pestana, setPestana] = useState("tarjeta");
+  const [pestana, setPestana] = useState("bloques");
   const [panelAbierto, setPanelAbierto] = useState(false);
   const [nuevoId, setNuevoId] = useState(null);
   const [arrastrandoId, setArrastrandoId] = useState(null);
@@ -173,6 +200,35 @@ export default function MiPagina() {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelado = false;
+    Promise.all([getMisServicios(), getMisHorarios(), getCitasResidente()])
+      .then(([s, h, c]) => {
+        if (cancelado) return;
+        setAgenda({
+          servicios: s.servicios.filter((x) => x.activo).length,
+          horarios: h.bloques.length,
+          pendientes: c.citas.filter((x) => x.estado === "pendiente" && !x.pasada).length,
+        });
+      })
+      .catch(() => {});
+    return () => {
+      cancelado = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!menuCompartir) return;
+    const fuera = (e) => !menuRef.current?.contains(e.target) && setMenuCompartir(false);
+    const tecla = (e) => e.key === "Escape" && setMenuCompartir(false);
+    document.addEventListener("mousedown", fuera);
+    document.addEventListener("keydown", tecla);
+    return () => {
+      document.removeEventListener("mousedown", fuera);
+      document.removeEventListener("keydown", tecla);
+    };
+  }, [menuCompartir]);
+
   const hayCambios = form && JSON.stringify(form) !== JSON.stringify(guardado);
 
   useEffect(() => {
@@ -214,15 +270,21 @@ export default function MiPagina() {
       ),
     }));
 
-  const agregarBloque = (tipo) => {
+  const agregarBloque = (tipo, indice = null) => {
     if (form.bloques.length >= MAX_BLOQUES) {
       alerta(`Puedes agregar hasta ${MAX_BLOQUES} bloques.`, { tipo: "advertencia" });
       return;
     }
     const bloque = crearBloque(tipo);
-    setForm((f) => ({ ...f, bloques: [...f.bloques, bloque] }));
+    setForm((f) => {
+      const bloques = [...f.bloques];
+      if (indice === null) bloques.push(bloque);
+      else bloques.splice(indice, 0, bloque);
+      return { ...f, bloques };
+    });
     setNuevoId(bloque.id);
     setPanelAbierto(false);
+    setInsertarEn(null);
   };
 
   const moverBloque = (id, direccion) =>
@@ -302,7 +364,6 @@ export default function MiPagina() {
       return null;
     }
 
-    // La persona encuadra la imagen antes de subirla; si cancela, no se sube nada.
     const recortada = await pedirRecorte(archivo, clave);
     if (!recortada) return null;
 
@@ -335,13 +396,27 @@ export default function MiPagina() {
     if (url) cambiar({ foto: url });
   };
 
+  const enfocar = (selector) => {
+    setVista("editar");
+    setTimeout(() => document.querySelector(selector)?.focus(), 0);
+  };
+
   const handleGuardar = async () => {
     if (form.publicada && !form.descripcion.trim()) {
-      setPestana("tarjeta");
+      enfocar(".pagina-categoria-input");
       alerta("Para publicar, escribe una descripción corta de tu trabajo. Aparece en tu tarjeta de Residentes.", {
         tipo: "error",
       });
       return;
+    }
+
+    const slugNuevo = slugDe(form.nombre);
+    if (slugNuevo !== info.residente.slug) {
+      const ok = await confirmar(
+        `Tu enlace cambiará de /residentes/${info.residente.slug} a /residentes/${slugNuevo}. Los enlaces anteriores seguirán funcionando. ¿Guardar los cambios?`,
+        { textoConfirmar: "Guardar" }
+      );
+      if (!ok) return;
     }
 
     setGuardando(true);
@@ -414,6 +489,21 @@ export default function MiPagina() {
     .join("")
     .toUpperCase();
 
+  const agendaLista = Boolean(agenda && agenda.servicios > 0 && agenda.horarios > 0);
+  const abrirArchivo = (selector) => () => document.querySelector(selector)?.click();
+
+  const pasos = [
+    { id: "nombre", label: "Nombre artístico", ok: Boolean(form.nombre.trim()), onClick: () => enfocar(".pagina-nombre-input") },
+    { id: "descripcion", label: "Descripción corta", ok: Boolean(form.descripcion.trim()), onClick: () => enfocar(".pagina-categoria-input") },
+    { id: "foto", label: "Foto de tu página", ok: Boolean(form.foto), onClick: abrirArchivo(".pagina-avatar-edit input") },
+    { id: "portada", label: "Portada", ok: Boolean(form.portada), onClick: abrirArchivo(".pagina-portada-btn input") },
+    { id: "bloques", label: "Al menos un bloque", ok: form.bloques.length > 0, onClick: () => setPestana("bloques") },
+    { id: "agenda", label: "Servicios y horarios", ok: agendaLista, ayuda: "en Mi agenda", enlace: "/mi-agenda" },
+  ];
+  const completados = pasos.filter((p) => p.ok).length;
+
+  const enPrevia = vista === "previa";
+
   return (
     <div className="mipagina-page">
       <Navbar />
@@ -421,30 +511,51 @@ export default function MiPagina() {
       {/* Estado y Acciones Principales */}
       <div className="mipagina-barra">
         <div className="mipagina-barra-titulo">
-          <h1>Mi página</h1>
-          <span className={`mipagina-estado ${hayCambios ? "pendiente" : ""}`} role="status">
-            {hayCambios ? "Cambios sin guardar" : "Todo guardado"}
-          </span>
-        </div>
+          <div className="mipagina-barra-linea">
+            <h1>Mi página</h1>
+            <span className={`mipagina-estado ${hayCambios ? "pendiente" : ""}`} role="status">
+              {hayCambios ? "Cambios sin guardar" : "Todo guardado"}
+            </span>
+          </div>
 
-        <p className="mipagina-aviso-publicacion" role="note">
-          {form.publicada && guardado.publicada && "Tu página está publicada: cualquier persona con el enlace puede verla."}
-          {form.publicada && !guardado.publicada && "Activaste «Publicada», pero falta guardar para que el público la vea."}
-          {!form.publicada && !guardado.publicada && "Tu página está en borrador: solo tú puedes verla. Activa «Publicada» y guarda para mostrarla."}
-          {!form.publicada && guardado.publicada && "Al guardar, tu página dejará de verse para el público."}
-          {!residente.activa && " El equipo ocultó tu tarjeta temporalmente: no aparece en Residentes."}
-        </p>
+          <p className="mipagina-aviso-publicacion" role="note">
+            {form.publicada && guardado.publicada && "Tu página está publicada: cualquier persona con el enlace puede verla."}
+            {form.publicada && !guardado.publicada && "Activaste «Publicada», pero falta guardar para que el público la vea."}
+            {!form.publicada && !guardado.publicada && "Tu página está en borrador: solo tú puedes verla. Activa «Publicada» y guarda para mostrarla."}
+            {!form.publicada && guardado.publicada && "Al guardar, tu página dejará de verse para el público."}
+            {!residente.activa && " El equipo ocultó tu tarjeta temporalmente: no aparece en Residentes."}
+          </p>
+        </div>
 
         <div className="mipagina-prev-acciones">
           {guardado.publicada && (
-            <Link to={`/residentes/${residente.slug}`} className="mipagina-ver-link">
-              Ver mi página
-            </Link>
-          )}
-          {guardado.publicada && (
-            <button type="button" className="mipagina-copiar" onClick={copiarEnlace}>
-              Copiar enlace
-            </button>
+            <div className="mipagina-compartir" ref={menuRef}>
+              <button
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded={menuCompartir}
+                onClick={() => setMenuCompartir((v) => !v)}
+              >
+                Compartir ▾
+              </button>
+              {menuCompartir && (
+                <div className="mipagina-menu" role="menu">
+                  <Link to={`/residentes/${residente.slug}`} role="menuitem" onClick={() => setMenuCompartir(false)}>
+                    Ver mi página
+                  </Link>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setMenuCompartir(false);
+                      copiarEnlace();
+                    }}
+                  >
+                    Copiar enlace
+                  </button>
+                </div>
+              )}
+            </div>
           )}
 
           <div className="mipagina-publicar">
@@ -462,12 +573,13 @@ export default function MiPagina() {
           </div>
 
           <button type="button" className="btn-primary" disabled={!hayCambios || guardando} onClick={handleGuardar}>
-            {guardando ? "Guardando..." : "Guardar cambios"}
+            {guardando ? "Guardando..." : hayCambios ? "Guardar cambios" : "Guardado"}
           </button>
         </div>
       </div>
 
       <div className="mipagina-editor">
+        {/* SideBar Herramientas */}
         <aside className={`mipagina-lateral ${panelAbierto ? "abierto" : ""}`} aria-label="Herramientas de la página">
           <button
             type="button"
@@ -481,6 +593,45 @@ export default function MiPagina() {
           </button>
 
           <div className="mipagina-lateral-contenido" id="mp-lateral-contenido">
+            {completados < pasos.length && (
+              <section className="mp-checklist" aria-label="Pasos para completar tu página">
+                <button
+                  type="button"
+                  className="mp-checklist-cab"
+                  aria-expanded={checklistAbierto}
+                  onClick={() => setChecklistAbierto((v) => !v)}
+                >
+                  <span>
+                    Tu página: {completados} de {pasos.length}
+                  </span>
+                  <span aria-hidden="true">{checklistAbierto ? "–" : "+"}</span>
+                </button>
+                <div className="mp-progreso" role="progressbar" aria-valuemin={0} aria-valuemax={pasos.length} aria-valuenow={completados}>
+                  <span style={{ width: `${(completados / pasos.length) * 100}%` }} />
+                </div>
+                {checklistAbierto && (
+                  <ul>
+                    {pasos.map((p) => (
+                      <li key={p.id}>
+                        {p.enlace ? (
+                          <Link to={p.enlace} className={`mp-paso ${p.ok ? "listo" : ""}`}>
+                            <span className="mp-marca" aria-hidden="true">✓</span>
+                            {p.label}
+                            {!p.ok && <small>{p.ayuda}</small>}
+                          </Link>
+                        ) : (
+                          <button type="button" className={`mp-paso ${p.ok ? "listo" : ""}`} onClick={p.onClick}>
+                            <span className="mp-marca" aria-hidden="true">✓</span>
+                            {p.label}
+                          </button>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            )}
+
             <div className="lateral-tabs" role="tablist" aria-label="Secciones de herramientas" onKeyDown={teclaPestanas}>
               {PESTANAS.map((p) => (
                 <button
@@ -498,52 +649,6 @@ export default function MiPagina() {
                 </button>
               ))}
             </div>
-
-            {/* Tarjeta */}
-            {pestana === "tarjeta" && (
-              <div role="tabpanel" id="mp-panel-tarjeta" aria-labelledby="mp-tab-tarjeta">
-                <p className="lateral-ayuda">
-                  Así te verá la gente en Residentes. Tu página se publica junto con tu tarjeta, así que ambas deben
-                  estar completas.
-                </p>
-
-                <div className="tarjeta-campo">
-                  <label htmlFor="tarjeta-nombre">Nombre artístico</label>
-                  <input
-                    id="tarjeta-nombre"
-                    type="text"
-                    value={form.nombre}
-                    maxLength={80}
-                    onChange={(e) => cambiar({ nombre: e.target.value })}
-                  />
-                  <small>
-                    Tu enlace será <strong>/residentes/{slugDe(form.nombre)}</strong>.
-                    {slugDe(form.nombre) !== residente.slug && " Si lo cambias, los enlaces anteriores seguirán funcionando."}
-                  </small>
-                </div>
-
-                <div className="tarjeta-campo">
-                  <label htmlFor="tarjeta-descripcion">Descripción corta</label>
-                  <input
-                    id="tarjeta-descripcion"
-                    type="text"
-                    value={form.descripcion}
-                    maxLength={150}
-                    placeholder="Ej: Piercings y Tatuajes"
-                    onChange={(e) => cambiar({ descripcion: e.target.value })}
-                  />
-                  <small>
-                    {form.descripcion.length}/150 · Obligatoria para publicar. Tu foto de perfil se usa como imagen de la
-                    tarjeta.
-                  </small>
-                </div>
-
-                <p className="tarjeta-requisitos" role="note">
-                  Para publicar necesitas: nombre artístico {form.nombre.trim() ? "✓" : "✗"} · descripción{" "}
-                  {form.descripcion.trim() ? "✓" : "✗"}
-                </p>
-              </div>
-            )}
 
             {/* Bloques */}
             {pestana === "bloques" && (
@@ -681,6 +786,14 @@ export default function MiPagina() {
                     </article>
                   ))}
                 </div>
+                <Link
+                  to={agenda?.pendientes > 0 ? "/mi-agenda?tab=citas" : "/mi-agenda"}
+                  className={`mipagina-agenda-link ${agenda?.pendientes > 0 ? "pendiente" : ""}`}
+                >
+                  {agenda?.pendientes > 0
+                    ? `Tienes ${agenda.pendientes} ${agenda.pendientes === 1 ? "solicitud pendiente" : "solicitudes pendientes"} → Ver citas`
+                    : "Ir a Mi agenda →"}
+                </Link>
                 <p className="mipagina-nota">
                   Las visitas se cuentan una vez por persona y por sesión, sin sumar las tuyas. Las agendas son las
                   citas que aceptaste este mes.
@@ -692,96 +805,157 @@ export default function MiPagina() {
 
         {/* Vista Usuarios */}
         <main className="mipagina-lienzo-wrap">
-          <PaginaLienzo
-            editor
-            estilo={form}
-            nombre={form.nombre}
-            descripcion={form.descripcion}
-            avatarUrl={form.foto ? getImagenUrl(form.foto) : null}
-            iniciales={iniciales}
-            accionPortada={
-              <div className="pagina-portada-acciones">
-                <label className="pagina-portada-btn">
-                  <Icono icon={IconoCamara} size={15} />
-                  {subiendoClave === "portada" ? "Subiendo..." : "Cambiar portada"}
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    disabled={subiendoClave === "portada"}
-                    onChange={handlePortada}
-                  />
-                </label>
-                {form.portada && (
-                  <button type="button" className="pagina-portada-btn" onClick={() => cambiar({ portada: null })}>
-                    <Icono icon={IconoCerrar} size={15} /> Quitar
-                  </button>
-                )}
-              </div>
-            }
-            accionAvatar={
-              <>
-                <label
-                  className="pagina-avatar-edit"
-                  title="Cambiar la foto de tu página"
-                  aria-label="Cambiar la foto de tu página"
+          <div className="mipagina-modos">
+            <div className="mipagina-segmento" role="group" aria-label="Modo de la página">
+              <button type="button" className={!enPrevia ? "activo" : ""} aria-pressed={!enPrevia} onClick={() => setVista("editar")}>
+                Editar
+              </button>
+              <button type="button" className={enPrevia ? "activo" : ""} aria-pressed={enPrevia} onClick={() => setVista("previa")}>
+                Vista previa
+              </button>
+            </div>
+            {enPrevia && (
+              <div className="mipagina-segmento" role="group" aria-label="Dispositivo">
+                <button
+                  type="button"
+                  className={dispositivo === "escritorio" ? "activo" : ""}
+                  aria-pressed={dispositivo === "escritorio"}
+                  onClick={() => setDispositivo("escritorio")}
                 >
-                  <Icono icon={Pencil} size={14} />
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp"
-                    disabled={subiendoClave === "foto"}
-                    onChange={handleFoto}
-                  />
-                </label>
-                {form.foto && (
-                  <button
-                    type="button"
-                    className="pagina-avatar-quitar"
-                    title="Quitar la foto"
-                    aria-label="Quitar la foto de la página"
-                    onClick={() => cambiar({ foto: null })}
-                  >
-                    <Icono icon={IconoCerrar} size={14} />
-                  </button>
-                )}
-              </>
-            }
-          >
-            {form.bloques.length === 0 && (
-              <p className="mipagina-vacio">
-                Todavía no hay bloques. Agrega el primero desde el panel de herramientas.
-              </p>
+                  Escritorio
+                </button>
+                <button
+                  type="button"
+                  className={dispositivo === "celular" ? "activo" : ""}
+                  aria-pressed={dispositivo === "celular"}
+                  onClick={() => setDispositivo("celular")}
+                >
+                  Celular
+                </button>
+              </div>
             )}
+          </div>
+          {enPrevia && (
+            <p className="mipagina-nota-previa">Así verán tu página los demás. Los botones no funcionan en la vista previa.</p>
+          )}
 
-            {form.bloques.map((bloque, i) => (
-              <BloqueEditor
-                key={bloque.id}
-                bloque={bloque}
-                esPrimero={i === 0}
-                esUltimo={i === form.bloques.length - 1}
-                subiendoClave={subiendoClave}
-                arrastrando={arrastrandoId === bloque.id}
-                sobre={sobreId === bloque.id}
-                onCambiar={(cambios) => cambiarBloque(bloque.id, cambios)}
-                onSubirImagen={subirImagen}
-                onMover={(direccion) => moverBloque(bloque.id, direccion)}
-                onEliminar={() => eliminarBloque(bloque)}
-                onArrastrar={() => setArrastrandoId(bloque.id)}
-                onArrastrarSobre={(e) => {
-                  if (!arrastrandoId || arrastrandoId === bloque.id) return;
-                  e.preventDefault();
-                  e.dataTransfer.dropEffect = "move";
-                  setSobreId(bloque.id);
-                }}
-                onSoltar={(e) => {
-                  e.preventDefault();
-                  if (arrastrandoId) reordenarBloque(arrastrandoId, bloque.id);
-                  terminarArrastre();
-                }}
-                onTerminarArrastre={terminarArrastre}
-              />
-            ))}
-          </PaginaLienzo>
+          <div className={`mipagina-marco ${enPrevia && dispositivo === "celular" ? "previa-movil" : ""}`}>
+            <PaginaLienzo
+              editor={!enPrevia}
+              estilo={form}
+              nombre={form.nombre}
+              descripcion={form.descripcion}
+              onCambiarNombre={enPrevia ? undefined : (valor) => cambiar({ nombre: valor })}
+              onCambiarDescripcion={enPrevia ? undefined : (valor) => cambiar({ descripcion: valor })}
+              mostrarAgendar={enPrevia ? !agenda || agendaLista : true}
+              avatarUrl={form.foto ? getImagenUrl(form.foto) : null}
+              iniciales={iniciales}
+              accionPortada={
+                enPrevia ? null : (
+                  <div className="pagina-portada-acciones">
+                    <label className="pagina-portada-btn" title="Funciona mejor con una imagen ancha">
+                      <Icono icon={IconoCamara} size={15} />
+                      {subiendoClave === "portada" ? "Subiendo..." : "Cambiar portada"}
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        disabled={subiendoClave === "portada"}
+                        onChange={handlePortada}
+                      />
+                    </label>
+                    {form.portada && (
+                      <button type="button" className="pagina-portada-btn" onClick={() => cambiar({ portada: null })}>
+                        <Icono icon={IconoCerrar} size={15} /> Quitar
+                      </button>
+                    )}
+                  </div>
+                )
+              }
+              accionAvatar={
+                enPrevia ? null : (
+                  <>
+                    <label
+                      className="pagina-avatar-edit"
+                      title="Cambiar la foto de tu página"
+                      aria-label="Cambiar la foto de tu página"
+                    >
+                      <Icono icon={Pencil} size={14} />
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        disabled={subiendoClave === "foto"}
+                        onChange={handleFoto}
+                      />
+                    </label>
+                    {form.foto && (
+                      <button
+                        type="button"
+                        className="pagina-avatar-quitar"
+                        title="Quitar la foto"
+                        aria-label="Quitar la foto de la página"
+                        onClick={() => cambiar({ foto: null })}
+                      >
+                        <Icono icon={IconoCerrar} size={14} />
+                      </button>
+                    )}
+                  </>
+                )
+              }
+            >
+              {enPrevia && form.bloques.map((bloque) => <BloqueVista key={bloque.id} bloque={bloque} />)}
+
+              {!enPrevia && form.bloques.length === 0 && (
+                <div className="mipagina-vacio">
+                  <p>Tu página aún no tiene contenido. Empieza agregando un bloque:</p>
+                  <div className="mipagina-vacio-botones">
+                    {TIPOS_BLOQUE.map(({ tipo, label }) => (
+                      <button type="button" key={tipo} onClick={() => agregarBloque(tipo)}>
+                        <Icono icon={ICONOS_BLOQUE[tipo]} size={16} /> {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {!enPrevia &&
+                form.bloques.map((bloque, i) => (
+                  <React.Fragment key={bloque.id}>
+                    {i > 0 && (
+                      <InsertarBloque
+                        abierto={insertarEn === i}
+                        onAlternar={() => setInsertarEn(insertarEn === i ? null : i)}
+                        onElegir={(tipo) => agregarBloque(tipo, i)}
+                      />
+                    )}
+                    <BloqueEditor
+                      bloque={bloque}
+                      esPrimero={i === 0}
+                      esUltimo={i === form.bloques.length - 1}
+                      subiendoClave={subiendoClave}
+                      arrastrando={arrastrandoId === bloque.id}
+                      sobre={sobreId === bloque.id}
+                      onCambiar={(cambios) => cambiarBloque(bloque.id, cambios)}
+                      onSubirImagen={subirImagen}
+                      onMover={(direccion) => moverBloque(bloque.id, direccion)}
+                      onEliminar={() => eliminarBloque(bloque)}
+                      onArrastrar={() => setArrastrandoId(bloque.id)}
+                      onArrastrarSobre={(e) => {
+                        if (!arrastrandoId || arrastrandoId === bloque.id) return;
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = "move";
+                        setSobreId(bloque.id);
+                      }}
+                      onSoltar={(e) => {
+                        e.preventDefault();
+                        if (arrastrandoId) reordenarBloque(arrastrandoId, bloque.id);
+                        terminarArrastre();
+                      }}
+                      onTerminarArrastre={terminarArrastre}
+                    />
+                  </React.Fragment>
+                ))}
+            </PaginaLienzo>
+          </div>
         </main>
       </div>
 

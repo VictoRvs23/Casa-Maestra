@@ -187,6 +187,8 @@ export const getOfertaPublicaService = async (slug) => {
     return {
         residente: { nombre: residente.nombre, slug: residente.slug },
         servicios,
-        agenda_abierta: tieneHorarios && servicios.length > 0,
+        agenda_abierta:
+            servicios.some((s) => s.tipo === "producto") ||
+            (tieneHorarios && servicios.some((s) => s.tipo === "servicio")),
     };
 };

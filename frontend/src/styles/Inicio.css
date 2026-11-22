@@ -140,3 +140,17 @@
   gap: 0.6rem;
   margin-top: 0.8rem;
 }
+
+@media (max-width: 900px) {
+  .hero-title { font-size: 3.2rem; letter-spacing: 3px; }
+  .categories-section { padding: 1.5rem 5% 4rem; }
+}
+
+@media (max-width: 560px) {
+  .hero-section { padding: 2.5rem 1.2rem 2rem; }
+  .hero-title { font-size: 2.3rem; letter-spacing: 2px; }
+  .hero-subtitle { font-size: 1rem; margin-bottom: 1.6rem; }
+  .hero-buttons { gap: 1rem; }
+  .categories-grid { gap: 3rem 1.5rem; }
+  .category-card { width: 100%; max-width: 300px; }
+}

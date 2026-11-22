@@ -373,3 +373,21 @@
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+
+@media (max-width: 900px) {
+  .estudios-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .estudios-lista { gap: 3rem; }
+  .estudios-wrap { padding: 1rem 1.2rem 3rem; }
+}
+
+@media (max-width: 560px) {
+  .estudios-hero { padding: 2rem 1rem 1rem; }
+  .estudios-hero h1 { font-size: 2.1rem; letter-spacing: 2px; }
+  .estudios-filters { flex-direction: column; align-items: stretch; }
+  .filter-field { min-width: 0; }
+  .create-btn { margin-left: 0; }
+  .estudio-img { height: 170px; }
+  .estudio-h-datos { gap: 0.1rem 1rem; }
+  .estudio-footer { flex-wrap: wrap; gap: 0.8rem; }
+  .estudio-h .estudio-precio { font-size: 1.25rem; }
+}
