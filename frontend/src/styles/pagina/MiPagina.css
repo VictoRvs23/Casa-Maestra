@@ -490,8 +490,6 @@
 
 .pagina-avatar-edit {
   position: absolute;
-  right: 10px;
-  bottom: 20px;
   width: 32px;
   height: 32px;
   border: 2px solid var(--fondo-pagina);
@@ -520,8 +518,6 @@
 
 .pagina-avatar-quitar {
   position: absolute;
-  left: 20px;
-  bottom: 20px;
   width: 32px;
   height: 32px;
   padding: 0;
@@ -1455,4 +1451,42 @@
 .lateral-tab {
   min-width: 0;
   white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .mipagina-barra-linea { flex-wrap: wrap; gap: 0.3rem 0.8rem; }
+  .mipagina-barra-titulo h1 { font-size: 1.35rem; }
+  .mipagina-prev-acciones { gap: 0.6rem 0.8rem; }
+  .mipagina-publicar { flex-wrap: wrap; }
+  .mipagina-paletas { grid-template-columns: 1fr; }
+  .mipagina-modos { padding: 0.6rem 0.5rem; }
+  .mipagina-marco.previa-movil { margin: 0.8rem; width: auto; max-width: 390px; }
+  .pagina-portada-acciones { top: 8px; right: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .pagina-portada-btn { padding: 0.35rem 0.6rem; font-size: 0.72rem; }
+  .bloque-galeria-editor { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; }
+  .slot-foto.slot-grande { height: 200px; }
+  .bloque-herramientas { right: 6px; }
+  .bloque-redes-editor label { flex-wrap: wrap; }
+  .mipagina-deshacer { width: calc(100% - 1.5rem); justify-content: space-between; bottom: 4.2rem; }
+  .insertar-opciones { max-width: 88vw; }
+}
+
+.mipagina-barra .btn-primary:not(:disabled) {
+  padding: 0.7rem 1.6rem;
+  border: 2px solid var(--cafe);
+  border-radius: 22px 18px 24px 20px / 20px 24px 18px 22px;
+  background-color: var(--cafe);
+  color: #ffffff;
+  box-shadow: 3px 3px 0 var(--verde);
+}
+
+.mipagina-barra .btn-primary:not(:disabled):hover {
+  background-color: var(--cafe-hover);
+}
+
+@media (max-width: 560px) {
+  .mipagina-prev-acciones { justify-content: space-between; align-items: center; gap: 0.9rem 0.8rem; }
+  .mipagina-compartir { order: 1; }
+  .mipagina-publicar { order: 2; margin-left: auto; flex-wrap: nowrap; }
+  .mipagina-prev-acciones > .btn-primary { order: 3; flex: 1 1 100%; width: 100%; }
 }

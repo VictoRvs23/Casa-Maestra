@@ -411,3 +411,18 @@
   font-size: 0.9rem;
   white-space: pre-line;
 }
+ 
+@media (max-width: 700px) {
+  .soporte-hero { padding: 2rem 1rem 1rem; }
+  .soporte-hero h1 { font-size: 2.1rem; letter-spacing: 2px; }
+  .soporte-wrap { padding: 1rem 1rem 3rem; }
+  .soporte-tabs { flex-wrap: wrap; }
+  .soporte-tab { padding: 0.55rem 1.1rem; font-size: 0.88rem; }
+  .soporte-pregunta { font-size: 1rem; padding: 1rem; }
+  .soporte-respuesta { padding: 0 1rem 1rem; }
+  .ticket-card { padding: 1rem; }
+  .ticket-card-head { flex-direction: column; gap: 0.6rem; }
+  .tickets-tabla-wrap { overflow-x: auto; }
+  .tickets-tabla { min-width: 620px; }
+  .tickets-filtros input, .tickets-filtros select { flex: 1 1 100%; min-width: 0; width: 100%; }
+}

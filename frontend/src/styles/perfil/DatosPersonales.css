@@ -41,3 +41,8 @@
   color: var(--cafe-oscuro);
   cursor: default;
 }
+
+@media (max-width: 560px) {
+  .perfil-content-head { gap: 0.8rem; margin-bottom: 1.2rem; }
+  .perfil-content .form-row { flex-direction: column; gap: 0; }
+}

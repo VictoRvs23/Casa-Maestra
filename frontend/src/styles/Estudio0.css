@@ -1198,3 +1198,22 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+@media (max-width: 640px) {
+  .e0-hero { padding: 4.2rem 1rem 1rem; }
+  .e0-panel { padding: 1.3rem 1rem 1.2rem; box-shadow: 5px 5px 0 var(--cafe); }
+  .e0-card { box-shadow: 5px 5px 0 var(--cafe); }
+  .e0-lista { font-size: 1.05rem; }
+  .e0-precio { font-size: 1.5rem; }
+  .e0-datos { align-items: stretch; }
+  .e0-botones { width: 100%; }
+  .e0-botones > * { flex: 1; }
+  .e0-unico .estudio-img { height: 220px; }
+  .e0-reserva { padding: 1rem; }
+  .e0-reserva:nth-child(odd), .e0-reserva:nth-child(even) { transform: none; }
+  .e0-fila-dia { flex-direction: column; }
+  .e0-interruptor { width: auto; }
+  .e0-bloques { min-width: 0; width: 100%; }
+  .e0-cal-semana { font-size: 0.66rem; }
+  .e0-resumen-acciones { flex-direction: column; align-items: stretch; }
+}

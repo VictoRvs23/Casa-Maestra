@@ -74,3 +74,7 @@
     justify-content: center;
   }
 }
+
+@media (max-width: 560px) {
+  .switch-modulo { flex-wrap: wrap; justify-content: center; border-radius: 18px; text-align: center; }
+}

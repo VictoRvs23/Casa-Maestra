@@ -1,7 +1,6 @@
 .perfil-page {
   background-color: var(--papel);
   min-height: 100vh;
-  /* Columna a pantalla completa: el pie queda siempre al fondo. */
   display: flex;
   flex-direction: column;
   font-family: var(--fuente-texto);
@@ -24,7 +23,6 @@
   pointer-events: none;
 }
 
-/* El pie baja al fondo cuando el contenido es corto. */
 .perfil-page > .pie-pagina {
   margin-top: auto;
 }
@@ -35,10 +33,8 @@
 }
 
 .perfil-wrap {
-  /* Ocupa el espacio entre la barra y el pie, y centra los dos contenedores. */
   flex: 1;
   align-content: center;
-  /* Alto mínimo igual en todas las pestañas: no saltan al cambiar de una a otra. */
   grid-auto-rows: minmax(520px, auto);
   padding: 2.5rem max(2rem, calc((100% - 1000px) / 2));
   display: grid;
@@ -180,4 +176,15 @@
 .perfil-content select,
 .perfil-content textarea {
   font-family: inherit;
+}
+
+@media (max-width: 860px) {
+  .perfil-hero { padding: 2rem 1rem 1rem; }
+  .perfil-wrap { grid-template-columns: 1fr; grid-auto-rows: auto; gap: 1.5rem; padding: 1.5rem 1rem 2.5rem; }
+  .perfil-sidebar { padding: 1.6rem 1.2rem; }
+  .perfil-avatar-wrap { margin-bottom: 1.2rem; }
+  .perfil-tabs { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 0.5rem; padding-top: 1.1rem; }
+  .perfil-tabs button { padding: 0.6rem 0.9rem; font-size: 0.88rem; }
+  .perfil-content { padding: 1.4rem 1.1rem; }
+  .perfil-content h2 { font-size: 1.4rem; }
 }

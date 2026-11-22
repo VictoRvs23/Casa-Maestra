@@ -783,3 +783,15 @@
   background: var(--verde);
   border-radius: 10px;
 }
+
+@media (max-width: 640px) {
+  .ma-hero { padding: 2rem 1rem 1rem; }
+  .ma-panel { padding: 1.3rem 1rem 1.2rem; box-shadow: 5px 5px 0 var(--cafe); }
+  .ma-card { min-width: 0; }
+  .ma-bloque { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto; }
+  .ma-barra { flex-direction: column; align-items: stretch; }
+  .ma-acciones { flex-direction: column-reverse; align-items: stretch; }
+  .ma-tab { padding: 0.5rem 1rem; font-size: 0.85rem; }
+  .ma-modal { padding: 1.3rem 1.1rem; }
+  .ma-modal-acciones { flex-wrap: wrap; }
+}

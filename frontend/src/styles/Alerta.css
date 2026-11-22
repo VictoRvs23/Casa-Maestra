@@ -138,3 +138,10 @@
 .alerta-btn-ghost:hover {
   background-color: var(--beige-claro);
 }
+
+@media (max-width: 480px) {
+  .alerta-box { padding: 1.6rem 1.3rem; }
+  .alerta-titulo { font-size: 1.4rem; }
+  .alerta-acciones { flex-direction: column-reverse; }
+  .alerta-btn { width: 100%; }
+}

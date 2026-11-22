@@ -357,13 +357,13 @@
 }
 
 .pagina-avatar-edit {
-  right: 10px;
-  bottom: 20px;
+  right: 9px;
+  bottom: 9px;
 }
 
 .pagina-avatar-quitar {
-  left: 20px;
-  bottom: 20px;
+  left: 9px;
+  bottom: 9px;
 }
 
 .pagina-nombre-input,
@@ -461,4 +461,13 @@
   grid-column: 1 / -1;
   width: calc(50% - 0.45rem);
   justify-self: center;
+}
+
+@media (max-width: 460px) {
+  .pagina-portada { height: 140px; }
+  .pagina-cabecera { justify-content: center; text-align: center; }
+  .pagina-acciones, .pagina-acciones-wrap { width: 100%; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .pagina-nombre { font-size: 1.5rem; }
+  .bloque-texto { font-size: 1rem; }
+  .bloque-video.formato-vertical { width: 100%; }
 }

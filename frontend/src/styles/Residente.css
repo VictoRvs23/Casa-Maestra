@@ -161,3 +161,14 @@
 .residente-estado.borrador {
   background: #8a6d1d;
 }
+
+@media (max-width: 760px) {
+  .residentes-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .residentes-wrap { padding: 1rem 1.2rem 3rem; }
+  .residentes-hero { padding: 2rem 1rem 1rem; }
+  .residentes-hero h1 { font-size: 2.1rem; letter-spacing: 2px; }
+}
+
+@media (max-width: 420px) {
+  .residente-info-fila { flex-wrap: wrap; }
+}

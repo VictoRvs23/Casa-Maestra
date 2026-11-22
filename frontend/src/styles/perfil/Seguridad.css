@@ -40,3 +40,8 @@
   background-color: var(--error-fg);
   color: #ffffff;
 }
+
+@media (max-width: 560px) {
+  .zona-peligro h3 { font-size: 1.15rem; }
+  .btn-danger { width: 100%; }
+}
