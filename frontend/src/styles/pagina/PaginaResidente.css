@@ -179,3 +179,15 @@
 .pagina-publica-page.cabecera-clara .navbar-container::before {
   display: none;
 }
+@media (max-width: 1100px) {
+  .pagina-publica-page.con-pagina .navbar-links { background-color: var(--papel-claro); }
+  .pagina-publica-page.con-pagina .navbar-links a { color: var(--cafe-oscuro); }
+  .pagina-publica-page.con-pagina .navbar-links a:hover,
+  .pagina-publica-page.con-pagina .navbar-links a.activo { color: var(--cafe-oscuro); background-color: var(--beige-claro); }
+  .pagina-publica-page.con-pagina .navbar-toggle { background-color: var(--tinta); color: var(--texto-boton); }
+}
+
+@media (max-width: 600px) {
+  .pagina-publica-page { --cabecera-alto: 112px; }
+  .pagina-publica-estado { padding: 2rem 1rem; text-align: center; }
+}
