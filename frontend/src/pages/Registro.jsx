@@ -101,32 +101,31 @@ const Registro = () => {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="email">Correo Electrónico</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="tu@correo.com"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="telefono">Teléfono</label>
-              <input
-                id="telefono"
-                name="telefono"
-                type="tel"
-                placeholder="912345678"
-                maxLength={9}
-                value={formData.telefono}
-                onChange={handleChange}
-                required
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="email">Correo Electrónico</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="tu@correo.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="telefono">Teléfono</label>
+            <input
+              id="telefono"
+              name="telefono"
+              type="tel"
+              placeholder="912345678"
+              maxLength={9}
+              value={formData.telefono}
+              onChange={handleChange}
+              required
+            />
           </div>
 
           <div className="form-row">
@@ -135,7 +134,7 @@ const Registro = () => {
               <CampoContrasena
                 id="contraseña"
                 name="contraseña"
-                placeholder="Mínimo 8 Caracteres"
+                placeholder="Contraseña"
                 autoComplete="new-password"
                 value={formData.contraseña}
                 onChange={handleChange}
@@ -156,6 +155,8 @@ const Registro = () => {
               />
             </div>
           </div>
+
+          <small className="registro-ayuda">La contraseña debe tener al menos 8 caracteres.</small>
 
           <button type="submit" className="registro-btn">
             Crear cuenta
