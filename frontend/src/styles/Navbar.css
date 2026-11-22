@@ -56,12 +56,12 @@
 
 .navbar-links a {
   display: block;
-  padding: 0.4rem 0.8rem;
-  border-radius: 16px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 18px;
   text-decoration: none;
   color: var(--nav-negro);
   font-weight: 700;
-  font-size: 0.84rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   transition: color 0.3s, background-color 0.3s;
@@ -88,8 +88,8 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -106,10 +106,9 @@
   background-color: var(--nav-negro);
   color: white;
   text-decoration: none;
-  height: 36px;
-  padding: 0 1.15rem;
-  border-radius: 18px;
-  font-size: 0.85rem;
+  height: 42px;
+  padding: 0 1.5rem;
+  border-radius: 21px;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -130,12 +129,12 @@
   background-color: var(--nav-negro);
   color: white;
   border: none;
-  height: 36px;
-  padding: 0 1.15rem;
-  border-radius: 18px;
+  height: 42px;
+  padding: 0 1.5rem;
+  border-radius: 21px;
   font-weight: 600;
   font-family: var(--fuente-texto);
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -208,8 +207,8 @@
   display: none;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   padding: 0;
   border: none;
   border-radius: 50%;
@@ -251,8 +250,8 @@
   .navbar-left { gap: 0.6rem; }
   .navbar-logo { width: 48px; height: 48px; }
   .navbar-right { gap: 0.5rem; }
-  .nav-account-btn, .nav-login-btn { height: 34px; padding: 0 0.8rem; font-size: 0.78rem; }
-  .campana-btn, .navbar-toggle { width: 34px; height: 34px; }
+  .nav-account-btn, .nav-login-btn { height: 36px; padding: 0 0.9rem; border-radius: 18px; font-size: 0.8rem; }
+  .campana-btn, .navbar-toggle { width: 36px; height: 36px; }
   .nav-login-btn { text-align: center; line-height: 1.1; }
   .account-dropdown { min-width: 190px; }
 }
