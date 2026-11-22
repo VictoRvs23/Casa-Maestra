@@ -413,3 +413,36 @@ body {
   .modal-actions > * { flex: 1 1 auto; }
   .pie-pagina-contenido { flex-direction: column; gap: 0.8rem; padding: 1rem 1rem 2rem; text-align: center; }
 }
+
+.btn-primary.btn-primary:not(:disabled) {
+  padding: 0.7rem 1.6rem;
+  border: 2px solid var(--cafe);
+  border-radius: 22px 18px 24px 20px / 20px 24px 18px 22px;
+  background-color: var(--cafe);
+  color: #ffffff;
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 0.9rem;
+  box-shadow: 3px 3px 0 var(--verde);
+}
+
+.btn-primary.btn-primary:not(:disabled):hover {
+  background-color: var(--cafe-hover);
+  box-shadow: 4px 4px 0 var(--verde);
+}
+
+.btn-ghost.btn-ghost {
+  padding: 0.7rem 1.4rem;
+  border: 2px solid var(--cafe);
+  border-radius: 20px 24px 18px 22px / 24px 18px 22px 20px;
+  background: transparent;
+  color: var(--cafe-oscuro);
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.btn-ghost.btn-ghost:hover {
+  background-color: var(--beige-claro);
+  color: var(--cafe-oscuro);
+}
