@@ -1217,3 +1217,75 @@
   .e0-cal-semana { font-size: 0.66rem; }
   .e0-resumen-acciones { flex-direction: column; align-items: stretch; }
 }
+
+.e0-semana .e0-cinta {
+  display: none;
+}
+
+.e0-fila-dia {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  align-items: start;
+  gap: 0.6rem 1.4rem;
+  min-height: 3.6rem;
+  padding: 0.9rem 0;
+  border-bottom: 1.5px dashed #d9c6a3;
+}
+
+.e0-interruptor {
+  width: 100%;
+  font-weight: 600;
+}
+
+.e0-bloques {
+  flex: none;
+  min-width: 0;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.e0-bloque {
+  display: grid;
+  grid-template-columns: 100px auto 100px auto auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.e0-bloque select {
+  width: 100%;
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--cafe-oscuro);
+  background: #fff;
+  border: 2px solid var(--cafe);
+  border-radius: 6px;
+  padding: 0.45rem 0.6rem;
+  box-sizing: border-box;
+}
+
+.e0-bloque small {
+  min-width: 0;
+  font-size: 0.85rem;
+}
+
+.e0-quitar {
+  font-size: 1.2rem;
+  padding: 0.2rem 0.5rem;
+}
+
+.e0-mas {
+  font-family: inherit;
+}
+
+.e0-acciones {
+  margin-top: 1.6rem;
+}
+
+@media (max-width: 640px) {
+  .e0-fila-dia { grid-template-columns: 1fr; }
+  .e0-bloques { width: 100%; }
+}
