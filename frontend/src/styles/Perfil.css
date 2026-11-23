@@ -78,6 +78,14 @@
 
 .perfil-avatar-img {
   object-fit: cover;
+  overflow: hidden;
+  font-family: var(--fuente-texto);
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  padding: 1.2rem;
+  box-sizing: border-box;
 }
 
 .perfil-avatar-edit {
