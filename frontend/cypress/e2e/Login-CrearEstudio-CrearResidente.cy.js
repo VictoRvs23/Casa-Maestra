@@ -1,24 +1,28 @@
 import { iniciarSesion, usuarios } from "../support/login";
 import { cerrarAlerta } from "../support/alertas";
 
-describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
+describe("Flujo 2 - El Fundador crea un taller (espacio) y un residente", () => {
   const sufijo = Date.now();
-  const nombreEstudio = `Estudio Cypress ${sufijo}`;
+  const nombreTaller = `Taller Cypress ${sufijo}`;
   const nombreResidente = `Residente Cypress ${sufijo}`;
 
-  it("debe iniciar sesión con AdminDemo, crear un estudio y crear un residente", () => {
-    // 1) Login con AdminDemo
-    iniciarSesion(usuarios.admin);
+  beforeEach(() => {
+    cy.viewport(1600, 900);
+  });
+
+  it("debe iniciar sesión como Fundador, crear un taller y crear un residente", () => {
+    // 1) Login con el Fundador
+    iniciarSesion(usuarios.fundador);
     cy.contains("Mi Cuenta").should("be.visible");
 
-    // 2) Crear estudio
-    cy.contains("a", "Estudios").click();
-    cy.url().should("include", "/estudios");
-    cy.contains("button", "+ Crear estudio").click();
+    // 2) Crear taller (espacio que se arrienda)
+    cy.contains("a", "Talleres").click();
+    cy.url().should("include", "/talleres");
+    cy.contains("button", "+ Crear taller").click();
 
     cy.get(".modal-box").within(() => {
-      cy.contains("h2", "Crear estudio").should("be.visible");
-      cy.get('input[name="nombre"]').type(nombreEstudio);
+      cy.contains("h2", "Crear taller").should("be.visible");
+      cy.get('input[name="nombre"]').type(nombreTaller);
       cy.get('textarea[name="descripcion"]').type("Creado desde Cypress");
       cy.get('input[name="capacidad"]').type("4");
       cy.get('input[name="precio"]').type("200000");
@@ -27,9 +31,9 @@ describe("Flujo 2 - Admin crea estudio y contenedor de residente", () => {
       cy.get('button[type="submit"]').click();
     });
 
-    //Alerta de creación de estudio exitoso (solo si el estudio se guardó bien)
+    //Alerta de creación exitosa (solo si el taller se guardó bien)
     cy.get(".modal-box").should("not.exist");
-    cy.contains(".alerta-box", "El estudio se creó correctamente").should("be.visible");
+    cy.contains(".alerta-box", /se creó correctamente/).should("be.visible");
     cerrarAlerta();
 
     // 3) Crear contenedor de residente
