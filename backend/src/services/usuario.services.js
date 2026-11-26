@@ -55,6 +55,34 @@ export const getUsuariosService = async (query) => {
     };
 };
 
+export const createUsuarioService = async ({ nombre_usuario, nombre, apellido, email, telefono, contraseña, rol }) => {
+    const correoExistente = await usuarioRepository.findOneBy({ email });
+    if (correoExistente) throw { status: 409, message: "El correo ya está registrado." };
+
+    const nombreExistente = await usuarioRepository.findOneBy({ nombre_usuario });
+    if (nombreExistente) throw { status: 409, message: "El nombre de usuario ya está en uso." };
+
+    const contraseñaEncriptada = await bcrypt.hash(contraseña, 10);
+
+    const nuevoUsuario = usuarioRepository.create({
+        nombre_usuario,
+        nombre,
+        apellido,
+        email,
+        telefono,
+        contraseña: contraseñaEncriptada,
+        rol,
+    });
+    const guardado = await usuarioRepository.save(nuevoUsuario);
+
+    if (guardado.rol !== "Cliente") {
+        await sincronizarTarjetaConRol(guardado, "Cliente");
+    }
+
+    const { contraseña: _omitida, ...usuarioPublico } = guardado;
+    return usuarioPublico;
+};
+
 export const updateUsuarioService = async (id_usuario, data) => {
     const usuario = await usuarioRepository.findOneBy({ id_usuario: parseInt(id_usuario) });
 
