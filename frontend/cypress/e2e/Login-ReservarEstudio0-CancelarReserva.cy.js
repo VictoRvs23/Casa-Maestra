@@ -1,14 +1,18 @@
 import { iniciarSesion, usuarios } from "../support/login";
 import { cerrarAlerta, aceptarConfirmacion } from "../support/alertas";
 
-describe("Flujo e2e: reservar una hora en el Estudio 0", () => {
+describe("Flujo e2e: reservar una hora en el Taller 0", () => {
+  beforeEach(() => {
+    cy.viewport(1600, 900);
+  });
+
   it("un cliente reserva una hora desde la agenda y luego la cancela", () => {
     // 1. Inicia sesión como cliente
     iniciarSesion(usuarios.cliente);
-    cy.intercept("GET", "**/estudio0/disponibilidad*").as("disponibilidad");
+    cy.intercept("GET", "**/disponibilidad*").as("disponibilidad");
 
-    // 2. Entra al Estudio 0 y abre la agenda.
-    cy.contains("nav a, .navbar-links a", "Estudio 0").click();
+    // 2. Entra al Taller 0 y abre la agenda.
+    cy.contains("a", "Taller 0").click();
     cy.contains("button", "Ver agenda").click();
     cy.wait("@disponibilidad");
 
@@ -27,7 +31,8 @@ describe("Flujo e2e: reservar una hora en el Estudio 0", () => {
     cerrarAlerta();
 
     // 6. La reserva aparece en "Mis reservas" como confirmada.
-    cy.visit("/estudio0/reservas");
+    cy.contains("a", "Taller 0").click();
+    cy.contains("Mis reservas").click();
     cy.get(".e0-reserva").last().find(".e0-pill").should("contain", "Confirmada");
 
     // 7. La cancela y se muestra el aviso.

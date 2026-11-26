@@ -13,6 +13,10 @@ describe("Flujo e2e: el Fundador crea un taller y un usuario nuevo", () => {
     contraseña: "Cypress123",
   };
 
+  beforeEach(() => {
+    cy.viewport(1600, 900);
+  });
+
   it("debe crear un taller en el inicio y luego crear un usuario nuevo", () => {
     // 1. Inicia sesión como Fundador
     iniciarSesion(usuarios.fundador);
